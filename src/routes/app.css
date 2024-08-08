@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.splitpanes.custom-splitpanes-theme {
+          .splitpanes__pane {
+                    background-color: white;
+          }
+
+          .splitpanes__splitter {
+                    background-color: rgb(226 232 240);
+                    position: relative;
+                    flex-shrink: 0;
+
+                    &:after {
+                              content: '';
+                              position: absolute;
+                              top: 50%;
+                              left: 0;
+                              background-color: rgb(203 213 225);
+                              transition: background-color 0.3s;
+                    }
+
+                    &:hover:after {
+                              background-color: rgba(0, 0, 0, 0.25);
+                    }
+
+                    &:first-child {
+                              cursor: auto;
+                    }
+          }
+}
+
+.custom-splitpanes-theme {
+          &.splitpanes .splitpanes .splitpanes__splitter {
+                    z-index: 1;
+          }
+
+          &.splitpanes--vertical>.splitpanes__splitter,
+          .splitpanes--vertical>.splitpanes__splitter {
+                    width: 2px;
+                    cursor: col-resize;
+
+                    &:after {
+                              width: 4px;
+                              height: 20px;
+                    }
+
+                    &:after {
+                              margin-left: -1px;
+                    }
+          }
+
+          &.splitpanes--horizontal>.splitpanes__splitter,
+          .splitpanes--horizontal>.splitpanes__splitter {
+                    height: 7px;
+                    border-top: 1px solid #eee;
+                    cursor: row-resize;
+
+                    &:before,
+                    &:after {
+                              transform: translateX(-50%);
+                              width: 30px;
+                              height: 1px;
+                    }
+
+                    &:before {
+                              margin-top: -2px;
+                    }
+
+                    &:after {
+                              margin-top: 1px;
+                    }
+          }
+}
