@@ -5,7 +5,9 @@
 	import Icon from '@iconify/svelte';
 	import { StateHistory } from 'runed';
 
-	let { fields = $bindable() } = $props();
+	let { form = $bindable() }: { form: any } = $props();
+
+	let fields = $state(form.fields);
 
 	const history = new StateHistory(
 		() => fields,
@@ -18,14 +20,14 @@
 
 	<div class="p-1">
 		{#if !isPreview.state}
-			<div class="flex">
+			<div class="flex space-x-1">
 				<button class="rounded-md bg-slate-100 p-1 text-center outline-none" onclick={() => history.redo()} disabled={!history.canRedo}>
 					<Icon icon="solar:undo-left-round-square-line-duotone" class="size-5 {history.canRedo ? 'text-blue-900' : 'text-slate-400'} scale-x-[-1]" />
 				</button>
 				<button class="rounded-md bg-slate-100 p-1 text-center outline-none" onclick={() => history.undo()} disabled={!history.canUndo}>
 					<Icon icon="solar:undo-left-round-square-line-duotone" class="size-5 {history.canUndo ? 'text-blue-900' : 'text-slate-400'}" />
 				</button>
-				<p class="text-slate-200 px-2">|</p>
+				<p class="text-slate-200 px-1">|</p>
 				<button class="rounded-md bg-slate-100 p-1 text-center outline-none" onclick={() => showLPane.toggle()}>
 					<Icon icon="mynaui:panel-left" class="size-5  {showLPane.state ? 'text-blue-900' : 'text-slate-400'}" />
 				</button>
