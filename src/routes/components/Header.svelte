@@ -5,12 +5,10 @@
 	import Icon from '@iconify/svelte';
 	import { StateHistory } from 'runed';
 
-	let { form = $bindable() }: { form: any } = $props();
-
-	let fields = $state(form.fields);
+	let { fields = $bindable() }: { fields: any[] } = $props();
 
 	const history = new StateHistory(
-		() => fields,
+		() => $state.snapshot(fields),
 		(c) => (fields = c)
 	);
 </script>
