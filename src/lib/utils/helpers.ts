@@ -1,5 +1,3 @@
-import { generateRandomId } from './generator';
-
 export function cloner(source, processed = new Map()) {
 	if (!source || typeof source !== 'object') {
 		return source;
@@ -54,6 +52,16 @@ export function cloner(source, processed = new Map()) {
 
 export function getByElementTypes(elements, type) {
 	return elements.filter((ele) => ele.category === type);
+}
+
+export function generateRandomId(): string {
+	const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+	let randomId = '';
+	for (let i = 0; i < 10; i++) {
+		const randomIndex = Math.floor(Math.random() * characters.length);
+		randomId += characters[randomIndex];
+	}
+	return randomId;
 }
 
 export function newFieldSequence(fields, newField) {

@@ -1,8 +1,8 @@
 <script lang="ts">
+	import { cloner, newFieldSequence, generateRandomId } from '$lib/utils/helpers';
 	import { ELEMENT_TYPES, SORTABLEJS } from '$lib/utils/enums';
 	import { isPreview, isDragging } from '$lib/utils/flags.svelte';
 	import { type Options, type SortableEvent } from 'sortablejs';
-	import { cloner, newFieldSequence } from '$lib/utils/helpers';
 	import { type FormManager } from './FormManager.svelte';
 	import { fieldClick } from '$lib/utils/actions';
 	import elements from '$lib/elements';
@@ -22,7 +22,9 @@
 	const prepareField = (type: string): any => {
 		let newField = cloner(elements.find((f) => f.type === type));
 		delete newField.component;
-		// Only generate label and name for form fields not for UI & containers elements
+		// Assign unique id to the new field
+		newField.id = `${newField.type}-${generateRandomId()}`;
+		// Only generate label and name for form fields not for UI/Container elements
 		if (newField.category === ELEMENT_TYPES.FORMFIELDS) {
 			return newFieldSequence(form.fields, newField);
 		}
