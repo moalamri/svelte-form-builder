@@ -4,7 +4,7 @@
 	import { isPreview, isDragging } from '$lib/utils/flags.svelte';
 	import { type Options, type SortableEvent } from 'sortablejs';
 	import { type FormManager } from './FormManager.svelte';
-	import { fieldClick } from '$lib/utils/actions';
+	import { elementClick } from '$lib/utils/actions';
 	import elements from '$lib/elements';
 	import { slide } from 'svelte/transition';
 	import type { Component } from 'svelte';
@@ -121,7 +121,7 @@
 					class:shadow-sm={!isPreview.state}
 					class="flex {isActive ? 'border-blue-600' : 'border-slate-300'} rounded-sm"
 					data-fieldid={field.id}
-					use:fieldClick={() => setActiveElement(field)}
+					use:elementClick={() => setActiveElement(field)}
 				>
 					{#if !isPreview.state}
 						<div

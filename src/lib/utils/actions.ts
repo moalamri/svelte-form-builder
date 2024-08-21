@@ -1,4 +1,4 @@
-export function fieldClick(node: any, callback: () => void) {
+export function elementClick(node: any, callback: () => void) {
 	const handleClick = (event) => {
 		if (node.contains(event.target)) {
 			callback();
