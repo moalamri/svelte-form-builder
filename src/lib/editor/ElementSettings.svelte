@@ -12,9 +12,7 @@
 </script>
 
 <div class="flex flex-col space-y-2.5">
-	{#each settings as section (section[0])}
-		{@const sectionName = section[0]}
-		{@const sectionProps = section[1]}
+	{#each settings as [sectionName, sectionProps]}
 		{@const sectionSettingFields = Object.values<any>(sectionProps.settingFields)}
 		<div class="flex-col space-y-1">
 			<div class="bg-slate-400/10 py-1.5 px-2 rounded-sm">
