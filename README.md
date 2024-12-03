@@ -5,8 +5,3 @@ You can use this project as a starting point to build your Svelte DND Form Build
 
 ### WIP
 Still under development
-
-### Todo:
-- [ ] Changelog and versioning
-- [ ] Ability to inject custom components?
-- [ ] Typescript
