@@ -1,10 +1,12 @@
 [![Deploy to Cloudflare Pages](https://github.com/moalamri/svelte-form-builder/actions/workflows/publish.yml/badge.svg)](https://github.com/moalamri/svelte-form-builder/actions/workflows/publish.yml)
 
+### Svelte Drag-and-Drop Form Builder
+You can use this project as a starting point to build your Svelte DND Form Builder based on your needs.
+
 ### WIP
-Still under development before publishing to npm
+Still under development
 
 ### Todo:
-- [ ] Make component editor dynamic based on defined properties
 - [ ] Changelog and versioning
-- [ ] Ability to inject custom components
+- [ ] Ability to inject custom components?
 - [ ] Typescript
