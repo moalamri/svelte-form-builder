@@ -114,7 +114,7 @@
 		{/if}
 		<Dropzone fields={form.fields} options={dropzoneOptions}>
 			{#snippet formfield(field)}
-				{@const component = getFieldComponent(field.type)}
+				{@const FormComponent = getFieldComponent(field.type)}
 				{@const isActive = activeElement && activeElement.id === field.id}
 				<div
 					class:border={!isPreview.state}
@@ -138,7 +138,7 @@
 						{#if field.category === ELEMENT_TYPES.FORMFIELDS}
 							<Label {field} />
 						{/if}
-						<svelte:component this={component} {field} updator={form.updator} />
+						<FormComponent {field} updator={form.updator} />
 					</div>
 				</div>
 			{/snippet}
