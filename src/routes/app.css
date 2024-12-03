@@ -12,17 +12,23 @@
                     position: relative;
                     flex-shrink: 0;
 
+                    &:hover {
+                              background-color: rgb(37 99 235);
+                              transition: background-color 0.3s;
+                    }
+
                     &:after {
                               content: '';
                               position: absolute;
                               top: 50%;
-                              left: 0;
+                              left: 0.05px;
                               background-color: rgb(203 213 225);
                               transition: background-color 0.3s;
+                              border-radius: 2px;
                     }
 
                     &:hover:after {
-                              background-color: rgba(0, 0, 0, 0.25);
+                              background-color: rgb(30 85 135);
                     }
 
                     &:first-child {
