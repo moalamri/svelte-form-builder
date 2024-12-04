@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { cloner, newFieldSequence, generateRandomId } from '$lib/utils/helpers';
 	import { ELEMENT_TYPES, SORTABLEJS } from '$lib/utils/enums';
-	import { isPreview, isDragging } from '$lib/utils/flags.svelte';
+	import { isPreview, isDragging } from '$lib/stores/flags.svelte';
 	import { type Options, type SortableEvent } from 'sortablejs';
-	import { type FormManager } from './FormManager.svelte';
+	import { form } from '$lib/stores/form.svelte';
 	import { elementClick } from '$lib/utils/actions';
 	import elements from '$lib/elements';
 	import { slide } from 'svelte/transition';
@@ -14,9 +14,6 @@
 	import Dropzone from '$lib/sortablejs/Dropzone.svelte';
 	import Label from '$lib/elements/Label.svelte';
 	import Icon from '@iconify/svelte';
-
-	// Props
-	let { activeElement = $bindable(), form }: { activeElement: any; form: FormManager } = $props();
 
 	// Assign new properties to the new field
 	const prepareField = (type: string): any => {
@@ -57,15 +54,16 @@
 	};
 
 	// Set active field.
-	const setActiveElement = (field): void => {
-		activeElement = field;
-	};
+	// const setActiveElement = (field): void => {
+	// 	activeElement = field;
+	// };
 
 	// Remove field.
 	const removeField = (fieldId: string): void => {
-		if (activeElement) {
-			activeElement = null;
-		}
+		// if (activeElement) {
+		// 	activeElement = null;
+		// }
+		form.activeElement = null;
 		form.fields = form.fields.filter((f) => f.id !== fieldId);
 	};
 
@@ -80,7 +78,10 @@
 			const field = prepareField(event.item.dataset.type);
 			const { newIndex } = event;
 			form.fields = [...form.fields.slice(0, newIndex), field, ...form.fields.slice(newIndex)];
-			setActiveElement(field);
+			// sleep for 100ms to allow the new field to be added to the DOM
+			setTimeout(() => {
+				form.activeElement = field;
+			}, 100);
 		},
 		onRemove(event: SortableEvent) {
 			const { oldDraggableIndex } = event;
@@ -115,13 +116,13 @@
 		<Dropzone fields={form.fields} options={dropzoneOptions}>
 			{#snippet formfield(field)}
 				{@const FormComponent = getFieldComponent(field.type)}
-				{@const isActive = activeElement && activeElement.id === field.id}
+				{@const isActive = form.activeElement && form.activeElement.id === field.id}
 				<div
 					class:border={!isPreview.state}
 					class:shadow-sm={!isPreview.state}
 					class="flex {isActive ? 'border-blue-600' : 'border-slate-300'} rounded-sm"
 					data-fieldid={field.id}
-					use:elementClick={() => setActiveElement(field)}
+					use:elementClick={() => (form.activeElement = field)}
 				>
 					{#if !isPreview.state}
 						<div

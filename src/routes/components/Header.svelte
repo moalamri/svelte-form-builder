@@ -1,15 +1,14 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
-	import { showLPane, showRPane } from '$lib/utils/flags.svelte';
-	import { isJsonModalOpen, isPreview } from '$lib/utils/flags.svelte';
+	import { showLPane, showRPane } from '$lib/stores/flags.svelte';
+	import { isJsonModalOpen, isPreview } from '$lib/stores/flags.svelte';
 	import Icon from '@iconify/svelte';
 	import { StateHistory } from 'runed';
-
-	let { fields = $bindable() }: { fields: any[] } = $props();
+	import { form } from '$lib/stores/form.svelte';
 
 	const history = new StateHistory(
-		() => $state.snapshot(fields),
-		(c) => (fields = c)
+		() => $state.snapshot(form.fields),
+		(c) => (form.fields = c)
 	);
 </script>
 

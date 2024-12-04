@@ -6,9 +6,9 @@
 	import eleSettings from '$lib/elements/settings';
 	import Icon from '@iconify/svelte';
 
-	let { activeElement = $bindable() }: { activeElement: any } = $props();
+	import { form } from '$lib/stores/form.svelte';
 
-	const settings = $derived(Object.entries<any>(eleSettings[activeElement.type]));
+	const settings = $derived(Object.entries<any>(eleSettings[form.activeElement.type]));
 </script>
 
 <div class="flex flex-col space-y-2.5">
@@ -20,26 +20,27 @@
 			</div>
 			<div class="flex flex-col space-y-0.5">
 				{#each sectionSettingFields as settingField (settingField)}
+					{@const settingFieldName = settingField.name}
 					{#if settingField.type === 'text' || settingField.type === 'number'}
 						<p class="px-0.5 md:px-1 text-xs text-slate-700">{settingField.label}</p>
-						<Input bind:activeElement {settingField} section={sectionName} />
+						<Input {settingFieldName} section={sectionName} />
 					{:else if settingField.type === 'checkbox'}
 						<div class="flex items-center justify-between w-[90%] mx-auto">
-							<label class="text-xs text-slate-700" for={settingField.name}>{settingField.label}</label>
-							<Checkbox bind:activeElement {settingField} section={sectionName} />
+							<label class="text-xs text-slate-700" for={settingFieldName}>{settingField.label}</label>
+							<Checkbox {settingFieldName} section={sectionName} />
 						</div>
 					{:else if settingField.type === 'select'}
 						<select
-							class="w-full p-1 border border-slate-300 rounded-sm"
-							value={settingField.value}
-							onchange={(e) => (settingField.value = (e.target as HTMLSelectElement).value)}
+							class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-none hover:border-slate-400 bg-white text-slate-700"
+							value={form.activeElement.settings[sectionName][settingFieldName]}
+							onchange={(e) => (form.activeElement.settings[sectionName][settingFieldName] = (e.target as HTMLSelectElement).value)}
 						>
 							{#each settingField.options as option (option)}
 								<option value={option.value}>{option.label}</option>
 							{/each}
 						</select>
 					{:else if settingField.type === 'array'}
-						{#each activeElement.settings[settingField.name] as item, index (item)}
+						{#each form.activeElement.settings[settingField.name] as item, index (item)}
 							{#each Object.values<any>(settingField.settingFields) as arrayField (arrayField)}
 								<p class="text-xs text-slate-700">{arrayField.label}</p>
 								{#if arrayField.type === 'text'}
@@ -70,9 +71,9 @@
 							type="button"
 							onclick={() =>
 								// Update the settings object and the activeElement settings
-								activeElement.settings[settingField.name].push({
-									label: 'Item ' + ((activeElement.settings[settingField.name].length || 0) + 1),
-									value: `${(activeElement.settings[settingField.name].length || 0) + 1}`
+								form.activeElement.settings[settingField.name].push({
+									label: 'Item ' + ((form.activeElement.settings[settingField.name].length || 0) + 1),
+									value: `${(form.activeElement.settings[settingField.name].length || 0) + 1}`
 								})}
 						>
 							<Icon icon="fluent:add-24-filled" class="text-green-500" />

@@ -1,6 +1,6 @@
 export enum SORTABLEJS {
 	// Drag and drop shared group name
-	GROUPNAME = ' formbuilder'
+	GROUPNAME = 'formgroup',
 }
 
 export enum ELEMENT_TYPES {

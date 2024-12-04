@@ -2,8 +2,7 @@
 	import ElementSettings from '$lib/editor/ElementSettings.svelte';
 	import { slide } from 'svelte/transition';
 	import Icon from '@iconify/svelte';
-
-	let { activeElement = $bindable() }: { activeElement: any } = $props();
+	import { form } from '$lib/stores/form.svelte';
 </script>
 
 <div class="flex flex-col w-full h-full space-y-1">
@@ -11,9 +10,9 @@
 		<Icon icon="fluent:options-20-regular" class="size-0 md:size-4 text-slate-500" />
 		<p class="text-sm md:text-md font-semibold text-slate-800">Editor</p>
 	</div>
-	{#if activeElement}
+	{#if form.activeElement}
 		<div transition:slide={{ duration: 100 }} class="pb-2">
-			<ElementSettings {activeElement} />
+			<ElementSettings />
 		</div>
 	{:else}
 		<div class="flex flex-col items-center justify-center w-full h-full">

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { isJsonModalOpen } from '$lib/utils/flags.svelte';
+	import { isJsonModalOpen } from '$lib/stores/flags.svelte';
+	import { form } from '$lib/stores/form.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import json from 'svelte-highlight/languages/json';
 	import Highlight from 'svelte-highlight';
 	import Icon from '@iconify/svelte';
-	const { content } = $props();
 </script>
 
 <div
@@ -18,10 +18,10 @@
 			</button>
 		</div>
 		<div class="text-sm relative p-1 antialiased overflow-auto max-h-[65vh] bg-slate-900">
-			<Highlight language={json} code={JSON.stringify(content, null, 2)} />
+			<Highlight language={json} code={JSON.stringify(form.fields, null, 2)} />
 		</div>
 		<div class="flex justify-end border-t border-t-slate-400 p-2">
-			<Button text="COPY" onclick={() => navigator.clipboard.writeText(JSON.stringify(content, null, 2))} />
+			<Button text="COPY" onclick={() => navigator.clipboard.writeText(JSON.stringify(form.fields, null, 2))} />
 		</div>
 	</div>
 </div>

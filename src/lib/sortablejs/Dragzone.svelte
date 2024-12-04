@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Sortable, { type SortableEvent } from 'sortablejs';
 	import { SORTABLEJS } from '$lib/utils/enums';
-	import { isDragging } from '$lib/utils/flags.svelte';
+	import { isDragging } from '$lib/stores/flags.svelte';
 
 	let { elements, title, dragComponent }: { elements: any[] | any; title: string; dragComponent: any } = $props();
 
