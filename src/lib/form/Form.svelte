@@ -53,17 +53,9 @@
 		e.preventDefault();
 	};
 
-	// Set active field.
-	// const setActiveElement = (field): void => {
-	// 	activeElement = field;
-	// };
-
 	// Remove field.
 	const removeField = (fieldId: string): void => {
-		// if (activeElement) {
-		// 	activeElement = null;
-		// }
-		form.activeElement = null;
+				form.activeElement = null;
 		form.fields = form.fields.filter((f) => f.id !== fieldId);
 	};
 
