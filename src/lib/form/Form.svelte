@@ -70,10 +70,7 @@
 			const field = prepareField(event.item.dataset.type);
 			const { newIndex } = event;
 			form.fields = [...form.fields.slice(0, newIndex), field, ...form.fields.slice(newIndex)];
-			// sleep for 100ms to allow the new field to be added to the DOM
-			setTimeout(() => {
-				form.activeElement = field;
-			}, 100);
+							form.activeElement = form.fields[newIndex];
 		},
 		onRemove(event: SortableEvent) {
 			const { oldDraggableIndex } = event;
