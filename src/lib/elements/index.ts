@@ -9,8 +9,6 @@ import Radio from './fields/Radio.svelte';
 // Import ui elements
 import Divider from './ui/Divider.svelte';
 import Title from './ui/Title.svelte';
-import { properties } from 'svelte-highlight/languages';
-
 
 const elements = [
 	{
