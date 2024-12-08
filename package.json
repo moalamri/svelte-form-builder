@@ -35,7 +35,6 @@
 		"runed": "^0.16.1",
 		"sass": "^1.81.1",
 		"sortablejs": "^1.15.6",
-		"svelte-splitpanes": "^8.0.9",
 		"tailwind-merge": "^2.5.5",
 		"tailwindcss": "^3.4.15",
 		"ui-ingredients": "^0.18.2"

@@ -2,13 +2,19 @@
 	import { isJsonModalOpen, isMobile, isPreview, showLPane, showRPane } from '$lib/stores/flags.svelte';
 	import ElementsList from '$lib/ElementsList.svelte';
 	import ElementEditor from '$lib/ElementEditor.svelte';
-	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import JsonModal from '$lib/components/JsonModal.svelte';
+	import PaneResizer from './components/PaneResizer.svelte';
 	import Header from './components/Header.svelte';
 	import Form from '$lib/form/Form.svelte';
+	import { Splitter } from 'ui-ingredients';
+	import { SPLITTER_IDS } from '$lib/utils/enums';
 
-	let showL = $derived(!isPreview.state && showLPane.state);
-	let showR = $derived(!isPreview.state && showRPane.state);
+	let activeResizer = $state();
+
+	const showLeftPane = $derived(!isPreview.state && showLPane.state);
+	const showRightPane = $derived(!isPreview.state && showRPane.state);
+	const activeResizerLeft = $derived(activeResizer === SPLITTER_IDS.TRIGGER_ELEMENTS_TO_FORM);
+	const activeResizerRight = $derived(activeResizer === SPLITTER_IDS.TRIGGER_FORM_TO_EDITOR);
 
 	$effect(() => {
 		if (isMobile.state) {
@@ -29,24 +35,37 @@
 	<JsonModal />
 {/if}
 
-<Splitpanes style="height: calc(100vh - 42px); justify-content: center;" horizontal={false} theme="custom-splitpanes-theme" pushOtherPanes={false}>
-	{#if showL}
-		<Pane size={30} minSize={25}>
-			<div class="h-full p-1 overflow-auto bg-slate-100/50">
-				<ElementsList />
-			</div>
-		</Pane>
+<Splitter.Root
+	size={[
+		{ id: SPLITTER_IDS.ELEMENTS, size: 20, minSize: 15 },
+		{ id: SPLITTER_IDS.FORM, size: 60, minSize: 60 },
+		{ id: SPLITTER_IDS.EDITOR, size: 20, minSize: 15 }
+	]}
+	style="height: calc(100vh - 38px); justify-content: center;"
+	onSizeChange={(details) => {
+		activeResizer = details.activeHandleId;
+	}}
+	onSizeChangeEnd={(_) => {
+		activeResizer = undefined;
+	}}
+>
+	{#if showLeftPane}
+		<Splitter.Panel id={SPLITTER_IDS.ELEMENTS} class="relative p-1 overflow-auto bg-slate-100/50">
+			<ElementsList />
+		</Splitter.Panel>
 	{/if}
-	<Pane size={100} minSize={100}>
-		<div class="h-full overflow-auto p-1.5">
-			<Form />
-		</div>
-	</Pane>
-	{#if showR}
-		<Pane size={30} minSize={25}>
-			<div class="h-full p-1 overflow-auto bg-slate-100/50">
-				<ElementEditor />
-			</div>
-		</Pane>
+	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_ELEMENTS_TO_FORM} class="focus:outline-none pe-1">
+		<PaneResizer isActive={activeResizerLeft} />
+	</Splitter.ResizeTrigger>
+	<Splitter.Panel id={SPLITTER_IDS.FORM} class="relative overflow-auto p-1.5">
+		<Form />
+	</Splitter.Panel>
+	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_FORM_TO_EDITOR} class="focus:outline-none ps-1">
+		<PaneResizer isActive={activeResizerRight} />
+	</Splitter.ResizeTrigger>
+	{#if showRightPane}
+		<Splitter.Panel id={SPLITTER_IDS.EDITOR} class="relative p-1 overflow-auto bg-slate-100/50">
+			<ElementEditor />
+		</Splitter.Panel>
 	{/if}
-</Splitpanes>
+</Splitter.Root>
