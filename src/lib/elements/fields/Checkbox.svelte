@@ -14,8 +14,6 @@
 			updator(field.id, selected);
 		}
 	}
-
-	console.log(field.settings?.layout?.fields?.inline.value);
 </script>
 
 <div class="relative flex w-full" class:flex-col={field.settings?.layout?.fields?.inline.value === false}>
