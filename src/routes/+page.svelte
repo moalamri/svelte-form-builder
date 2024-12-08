@@ -37,9 +37,9 @@
 
 <Splitter.Root
 	size={[
-		{ id: SPLITTER_IDS.ELEMENTS, size: 20, minSize: 15 },
-		{ id: SPLITTER_IDS.FORM, size: 60, minSize: 60 },
-		{ id: SPLITTER_IDS.EDITOR, size: 20, minSize: 15 }
+		{ id: SPLITTER_IDS.ELEMENTS, size: 20, minSize: 15, maxSize: 25 },
+		{ id: SPLITTER_IDS.FORM, size: 60, minSize: 50, maxSize: 100 },
+		{ id: SPLITTER_IDS.EDITOR, size: 20, minSize: 15, maxSize: 25 }
 	]}
 	style="height: calc(100vh - 38px); justify-content: center;"
 	onSizeChange={(details) => {
