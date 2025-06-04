@@ -15,7 +15,7 @@
 	{#each settings as [sectionName, sectionProps]}
 		{@const sectionSettingFields = Object.values<any>(sectionProps.settingFields)}
 		<div class="flex-col space-y-1">
-			<div class="bg-slate-400/10 py-1.5 px-2 rounded-sm">
+			<div class="bg-slate-400/10 py-1.5 px-2 rounded-xs">
 				<p class="text-xs font-semibold text-slate-700">{sectionProps.label}</p>
 			</div>
 			<div class="flex flex-col space-y-0.5">
@@ -31,7 +31,7 @@
 						</div>
 					{:else if settingField.type === 'select'}
 						<select
-							class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-none hover:border-slate-400 bg-white text-slate-700"
+							class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-hidden hover:border-slate-400 bg-white text-slate-700"
 							value={form.activeElement.settings[sectionName][settingFieldName]}
 							onchange={(e) => (form.activeElement.settings[sectionName][settingFieldName] = (e.target as HTMLSelectElement).value)}
 						>
@@ -46,21 +46,21 @@
 								{#if arrayField.type === 'text'}
 									<input
 										type="text"
-										class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-none hover:border-slate-400 bg-white text-slate-700"
+										class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-hidden hover:border-slate-400 bg-white text-slate-700"
 										value={item[arrayField.name]}
 										oninput={(e) => (item[arrayField.name] = (e.target as HTMLInputElement).value)}
 									/>
 								{:else if arrayField.type === 'number'}
 									<input
 										type="number"
-										class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-none hover:border-slate-400 bg-white text-slate-700"
+										class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-hidden hover:border-slate-400 bg-white text-slate-700"
 										value={item[arrayField.name]}
 										oninput={(e) => (item[arrayField.name] = Number((e.target as HTMLInputElement).value))}
 									/>
 								{:else if arrayField.type === 'checkbox'}
 									<input
 										type="checkbox"
-										class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-none hover:border-slate-400 bg-white text-slate-700"
+										class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-hidden hover:border-slate-400 bg-white text-slate-700"
 										checked={item[arrayField.name]}
 										onchange={() => (item[arrayField.name] = !item[arrayField.name])}
 									/>

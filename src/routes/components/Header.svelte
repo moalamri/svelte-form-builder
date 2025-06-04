@@ -18,17 +18,17 @@
 	<div class="p-1">
 		{#if !isPreview.state}
 			<div class="flex space-x-1">
-				<button class="rounded-md bg-slate-100 p-1 text-center outline-none" onclick={() => history.undo()} disabled={!history.canUndo}>
+				<button class="rounded-md bg-slate-100 p-1 text-center outline-hidden" onclick={() => history.undo()} disabled={!history.canUndo}>
 					<Icon icon="solar:undo-left-round-square-line-duotone" class="size-5 {history.canUndo ? 'text-blue-900' : 'text-slate-400'}" />
 				</button>
-				<button class="rounded-md bg-slate-100 p-1 text-center outline-none" onclick={() => history.redo()} disabled={!history.canRedo}>
+				<button class="rounded-md bg-slate-100 p-1 text-center outline-hidden" onclick={() => history.redo()} disabled={!history.canRedo}>
 					<Icon icon="solar:undo-left-round-square-line-duotone" class="size-5 {history.canRedo ? 'text-blue-900' : 'text-slate-400'} scale-x-[-1]" />
 				</button>
 				<p class="text-slate-200 px-1">|</p>
-				<button class="rounded-md bg-slate-100 p-1 text-center outline-none" onclick={() => showLPane.toggle()}>
+				<button class="rounded-md bg-slate-100 p-1 text-center outline-hidden" onclick={() => showLPane.toggle()}>
 					<Icon icon="mynaui:panel-left" class="size-5  {showLPane.state ? 'text-blue-900' : 'text-slate-400'}" />
 				</button>
-				<button class="rounded-md bg-slate-100 p-1 text-center outline-none" onclick={() => showRPane.toggle()}>
+				<button class="rounded-md bg-slate-100 p-1 text-center outline-hidden" onclick={() => showRPane.toggle()}>
 					<Icon icon="mynaui:panel-right" class="size-5 {showRPane.state ? 'text-blue-900' : 'text-slate-400'}" />
 				</button>
 			</div>
@@ -36,7 +36,7 @@
 	</div>
 
 	<div class="p-1">
-		<Button text="JSON" onclick={() => (isJsonModalOpen.state = true)} />
-		<Button text={isPreview.state ? 'Edit' : 'Preview'} onclick={() => isPreview.toggle()} />
+		<Button onclick={() => (isJsonModalOpen.state = true)}>JSON</Button>
+		<Button onclick={() => isPreview.toggle()}>{isPreview.state ? 'Edit' : 'Preview'}</Button>
 	</div>
 </header>

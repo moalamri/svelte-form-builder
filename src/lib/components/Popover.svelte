@@ -8,7 +8,7 @@
 
 	let { title, description, children, trigger, class: cls, ...rest }: Props = $props();
 
-	const defaultClass = 'bg-white rounded border border-slate-400 shadow-sm text-sm z-50';
+	const defaultClass = 'bg-white rounded-sm border border-slate-400 shadow-xs text-sm z-50';
 	const contentClass = twMerge(defaultClass, cls);
 </script>
 

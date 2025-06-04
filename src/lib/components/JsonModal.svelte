@@ -8,7 +8,7 @@
 </script>
 
 <div
-	class="fixed inset-0 z-[999] grid h-screen w-screen place-items-center bg-black bg-opacity-60 opacity-100 backdrop-blur-sm transition-opacity duration-300"
+	class="fixed inset-0 z-999 grid h-screen w-screen place-items-center bg-black bg-opacity-60 opacity-100 backdrop-blur-xs transition-opacity duration-300"
 >
 	<div class="relative m-4 w-2/5 min-w-[90%] rounded-lg bg-white antialiased shadow-2xl">
 		<div class="flex items-center border-b border-b-slate-400 justify-between p-2 text-md font-semibold">
@@ -21,7 +21,7 @@
 			<Highlight language={json} code={JSON.stringify(form.fields, null, 2)} />
 		</div>
 		<div class="flex justify-end border-t border-t-slate-400 p-2">
-			<Button text="COPY" onclick={() => navigator.clipboard.writeText(JSON.stringify(form.fields, null, 2))} />
+			<Button onclick={() => navigator.clipboard.writeText(JSON.stringify(form.fields, null, 2))}>COPY</Button>
 		</div>
 	</div>
 </div>

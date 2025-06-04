@@ -41,7 +41,7 @@
 </script>
 
 <div class="flex flex-col w-full space-y-2">
-	<div class="bg-slate-400/10 py-1.5 px-2 rounded-sm">
+	<div class="bg-slate-400/10 py-1.5 px-2 rounded-xs">
 		<p class="text-xs font-semibold text-slate-700">{title}</p>
 	</div>
 	<div bind:this={dragArae} class="lg:grid lg:grid-cols-3 flex flex-col gap-4">

@@ -34,13 +34,6 @@
 		return field.component.render;
 	};
 
-	const submitBtn = {
-		text: 'Submit'
-	};
-	const resetBtn = {
-		text: 'Reset'
-	};
-
 	// Inspect and log form changes
 	$inspect(form).with(console.log);
 
@@ -93,10 +86,10 @@
 <form
 	onsubmit={onSubmit}
 	onreset={onReset}
-	class="relative border-slate-200 shadow-sm border rounded-sm p-1 md:p-2 mb-1 select-none mx-auto"
+	class="relative border-slate-200 shadow-xs border rounded-xs p-1 md:p-2 mb-1 select-none mx-auto"
 	class:md:max-w-[80%]={isPreview.state}
 >
-	<div class="relative p-2 border {isDragging.state ? 'shadow-inner rounded-sm bg-yellow-100/20' : 'border-transparent'}">
+	<div class="relative p-2 border {isDragging.state ? 'shadow-inner rounded-xs bg-yellow-100/20' : 'border-transparent'}">
 		<!-- Empty form -->
 		{#if form.fields.length === 0}
 			<div class="flex items-center justify-center">
@@ -110,23 +103,23 @@
 				<div
 					class:border={!isPreview.state}
 					class:shadow-sm={!isPreview.state}
-					class="relative flex {isActive ? 'border-blue-600' : 'border-slate-300'} rounded-sm"
+					class="relative flex {isActive ? 'border-blue-600' : 'border-slate-300'} rounded-xs"
 					data-fieldid={field.id}
 					use:elementClick={() => (form.activeElement = field)}
 				>
 					{#if !isPreview.state}
 						<div
-							class="flex flex-col border-e border-slate-300 bg-slate-50/50 hover:bg-slate-100 rounded-sm p-1 gap-2"
+							class="flex flex-col border-e border-slate-300 bg-slate-50/50 hover:bg-slate-100 rounded-xs p-1 gap-2"
 							transition:slide={{ axis: 'x', duration: 100 }}
 						>
 							<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
-							<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-sm">
+							<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-xs">
 								{#snippet trigger()}
 									<Icon icon="material-symbols:delete-outline-rounded" class="text-slate-600" />
 								{/snippet}
 								<div class="flex items-center space-x-2 p-1">
 									<p class="text-white text-xs leading-none">Remove this field?</p>
-									<Button size="sm" class="min-w-10" onclick={() => removeField(field.id)} text="Yes" variant="danger" />
+									<Button size="sm" class="min-w-10" onclick={() => removeField(field.id)} variant="danger">Yes</Button>
 								</div>
 							</Popover>
 						</div>
@@ -142,7 +135,7 @@
 		</Dropzone>
 	</div>
 	<div class="flex space-x-2 mt-2">
-		<Button variant="primary" text={submitBtn.text} />
-		<Button variant="secondary" text={resetBtn.text} />
+		<Button variant="primary">Submit</Button>
+		<Button variant="secondary">Reset</Button>
 	</div>
 </form>

@@ -36,16 +36,17 @@
 {/if}
 
 <Splitter.Root
-	size={[
-		{ id: SPLITTER_IDS.ELEMENTS, size: 20, minSize: 15, maxSize: 25 },
-		{ id: SPLITTER_IDS.FORM, size: 60, minSize: 50, maxSize: 100 },
-		{ id: SPLITTER_IDS.EDITOR, size: 20, minSize: 15, maxSize: 25 }
+	panels={[
+		{ id: SPLITTER_IDS.ELEMENTS, minSize: 15, maxSize: 25 },
+		{ id: SPLITTER_IDS.FORM, minSize: 50, maxSize: 100 },
+		{ id: SPLITTER_IDS.EDITOR, minSize: 15, maxSize: 25 }
 	]}
+	defaultSize={[20, 60, 20]}
 	style="height: calc(100vh - 38px); justify-content: center;"
-	onSizeChange={(details) => {
-		activeResizer = details.activeHandleId;
+	onResize={(details) => {
+		activeResizer = details.resizeTriggerId;
 	}}
-	onSizeChangeEnd={(_) => {
+	onResizeEnd={(_) => {
 		activeResizer = undefined;
 	}}
 >
@@ -54,13 +55,13 @@
 			<ElementsList />
 		</Splitter.Panel>
 	{/if}
-	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_ELEMENTS_TO_FORM} class="focus:outline-none pe-1">
+	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_ELEMENTS_TO_FORM} class="focus:outline-hidden pe-1">
 		<PaneResizer isActive={activeResizerLeft} />
 	</Splitter.ResizeTrigger>
 	<Splitter.Panel id={SPLITTER_IDS.FORM} class="relative overflow-auto p-1.5">
 		<Form />
 	</Splitter.Panel>
-	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_FORM_TO_EDITOR} class="focus:outline-none ps-1">
+	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_FORM_TO_EDITOR} class="focus:outline-hidden ps-1">
 		<PaneResizer isActive={activeResizerRight} />
 	</Splitter.ResizeTrigger>
 	{#if showRightPane}
