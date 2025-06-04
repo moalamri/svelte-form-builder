@@ -36,7 +36,7 @@
 		"sass": "^1.81.1",
 		"sortablejs": "^1.15.6",
 		"tailwind-merge": "^2.5.5",
-		"tailwindcss": "^3.4.15",
+		"tailwindcss": "^4.1.8",
 		"ui-ingredients": "^0.18.2"
 	}
 }
