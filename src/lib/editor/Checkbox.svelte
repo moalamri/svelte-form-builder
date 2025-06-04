@@ -9,7 +9,7 @@
 	}
 </script>
 
-<button type="button" onclick={handleValueChange} class="flex justify-end outline-none w-full">
+<button type="button" onclick={handleValueChange} class="flex justify-end outline-hidden w-full">
 	<Icon
 		icon={form.activeElement.settings[section][settingFieldName] === true
 			? 'fluent:checkbox-checked-20-regular'

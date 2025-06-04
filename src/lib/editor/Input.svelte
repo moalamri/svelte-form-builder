@@ -11,7 +11,7 @@
 
 <input
 	type={form.activeElement.settings[section][settingFieldName]?.type}
-	class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-none hover:border-slate-400 bg-white text-slate-700"
+	class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-hidden hover:border-slate-400 bg-white text-slate-700"
 	value={form.activeElement.settings[section][settingFieldName]}
 	oninput={handleValueChange}
 />

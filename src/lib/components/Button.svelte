@@ -11,7 +11,7 @@
 
 	let { text = 'Button', disabled = false, size = 'md', variant = 'primary', class: cls = '', onclick = () => {} }: Props = $props();
 
-	const defaultClass = 'rounded text-center outline-none min-w-20';
+	const defaultClass = 'rounded-sm text-center outline-hidden min-w-20';
 	const sizeClass =
 		variant === 'ghost' ? '' : size === 'xs' ? 'py-0.5 px-1' : size === 'sm' ? 'py-1 px-1.5' : size === 'md' ? 'py-1 px-2' : 'py-1.5 px-3';
 	const textSizeClass = size === 'lg' ? 'text-base' : size === 'xs' || size === 'sm' ? 'text-xs' : 'text-sm';
