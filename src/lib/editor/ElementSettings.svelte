@@ -6,7 +6,7 @@
 	import eleSettings from '$lib/elements/settings';
 	import Icon from '@iconify/svelte';
 
-	import { form } from '$lib/stores/form.svelte';
+	import form from '$lib/stores/form.svelte';
 
 	const settings = $derived(Object.entries<any>(eleSettings[form.activeElement.type]));
 </script>

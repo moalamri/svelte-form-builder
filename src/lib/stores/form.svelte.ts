@@ -1,4 +1,4 @@
-export type FormManager = {
+export type FormStore = {
 	fields: any[];
 	values: Record<string, any>;
 	valid: boolean;
@@ -6,7 +6,7 @@ export type FormManager = {
 	activeElement: any;
 };
 
-export default function createFormManager(): FormManager {
+function createFormStore(): FormStore {
 	let form = $state({
 		fields: [],
 		values: {},
@@ -43,4 +43,4 @@ export default function createFormManager(): FormManager {
 	};
 }
 
-export const form = createFormManager();
+export default createFormStore();

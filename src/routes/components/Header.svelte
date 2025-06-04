@@ -4,7 +4,7 @@
 	import { isJsonModalOpen, isPreview } from '$lib/stores/flags.svelte';
 	import Icon from '@iconify/svelte';
 	import { StateHistory } from 'runed';
-	import { form } from '$lib/stores/form.svelte';
+	import form from '$lib/stores/form.svelte';
 
 	const history = new StateHistory(
 		() => $state.snapshot(form.fields),
@@ -18,19 +18,19 @@
 	<div class="p-1">
 		{#if !isPreview.state}
 			<div class="flex space-x-1">
-				<button class="rounded-md bg-slate-100 p-1 text-center outline-hidden" onclick={() => history.undo()} disabled={!history.canUndo}>
+				<Button variant="secondary" size="xs" onclick={() => history.undo()} disabled={!history.canUndo}>
 					<Icon icon="solar:undo-left-round-square-line-duotone" class="size-5 {history.canUndo ? 'text-blue-900' : 'text-slate-400'}" />
-				</button>
-				<button class="rounded-md bg-slate-100 p-1 text-center outline-hidden" onclick={() => history.redo()} disabled={!history.canRedo}>
+				</Button>
+				<Button variant="secondary" size="xs" onclick={() => history.redo()} disabled={!history.canRedo}>
 					<Icon icon="solar:undo-left-round-square-line-duotone" class="size-5 {history.canRedo ? 'text-blue-900' : 'text-slate-400'} scale-x-[-1]" />
-				</button>
-				<p class="text-slate-200 px-1">|</p>
-				<button class="rounded-md bg-slate-100 p-1 text-center outline-hidden" onclick={() => showLPane.toggle()}>
+				</Button>
+				<div class="bg-slate-200/60 w-[1px] min-h-full"></div>
+				<Button variant="secondary" size="xs" onclick={() => showLPane.toggle()}>
 					<Icon icon="mynaui:panel-left" class="size-5  {showLPane.state ? 'text-blue-900' : 'text-slate-400'}" />
-				</button>
-				<button class="rounded-md bg-slate-100 p-1 text-center outline-hidden" onclick={() => showRPane.toggle()}>
+				</Button>
+				<Button variant="secondary" size="xs" onclick={() => showRPane.toggle()}>
 					<Icon icon="mynaui:panel-right" class="size-5 {showRPane.state ? 'text-blue-900' : 'text-slate-400'}" />
-				</button>
+				</Button>
 			</div>
 		{/if}
 	</div>

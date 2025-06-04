@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { form } from '$lib/stores/form.svelte';
+	import form from '$lib/stores/form.svelte';
 
 	let { settingFieldName, section }: { settingFieldName: any; section: any } = $props();
 

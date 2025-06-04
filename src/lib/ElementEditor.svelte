@@ -2,7 +2,7 @@
 	import ElementSettings from '$lib/editor/ElementSettings.svelte';
 	import { slide } from 'svelte/transition';
 	import Icon from '@iconify/svelte';
-	import { form } from '$lib/stores/form.svelte';
+	import form from '$lib/stores/form.svelte';
 </script>
 
 <div class="flex flex-col w-full h-full space-y-1">

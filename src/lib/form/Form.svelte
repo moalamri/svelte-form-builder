@@ -3,7 +3,7 @@
 	import { ELEMENT_TYPES, SORTABLEJS } from '$lib/utils/enums';
 	import { isPreview, isDragging } from '$lib/stores/flags.svelte';
 	import { type Options, type SortableEvent } from 'sortablejs';
-	import { form } from '$lib/stores/form.svelte';
+	import form from '$lib/stores/form.svelte';
 	import { elementClick } from '$lib/utils/actions';
 	import elements from '$lib/elements';
 	import { slide } from 'svelte/transition';
