@@ -21,7 +21,7 @@
 			<Highlight language={json} code={JSON.stringify(form.fields, null, 2)} />
 		</div>
 		<div class="flex justify-end border-t border-t-slate-400 p-2">
-			<Button text="COPY" onclick={() => navigator.clipboard.writeText(JSON.stringify(form.fields, null, 2))} />
+			<Button onclick={() => navigator.clipboard.writeText(JSON.stringify(form.fields, null, 2))}>COPY</Button>
 		</div>
 	</div>
 </div>

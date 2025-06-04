@@ -34,13 +34,6 @@
 		return field.component.render;
 	};
 
-	const submitBtn = {
-		text: 'Submit'
-	};
-	const resetBtn = {
-		text: 'Reset'
-	};
-
 	// Inspect and log form changes
 	$inspect(form).with(console.log);
 
@@ -126,7 +119,7 @@
 								{/snippet}
 								<div class="flex items-center space-x-2 p-1">
 									<p class="text-white text-xs leading-none">Remove this field?</p>
-									<Button size="sm" class="min-w-10" onclick={() => removeField(field.id)} text="Yes" variant="danger" />
+									<Button size="sm" class="min-w-10" onclick={() => removeField(field.id)} variant="danger">Yes</Button>
 								</div>
 							</Popover>
 						</div>
@@ -142,7 +135,7 @@
 		</Dropzone>
 	</div>
 	<div class="flex space-x-2 mt-2">
-		<Button variant="primary" text={submitBtn.text} />
-		<Button variant="secondary" text={resetBtn.text} />
+		<Button variant="primary">Submit</Button>
+		<Button variant="secondary">Reset</Button>
 	</div>
 </form>

@@ -36,7 +36,7 @@
 	</div>
 
 	<div class="p-1">
-		<Button text="JSON" onclick={() => (isJsonModalOpen.state = true)} />
-		<Button text={isPreview.state ? 'Edit' : 'Preview'} onclick={() => isPreview.toggle()} />
+		<Button onclick={() => (isJsonModalOpen.state = true)}>JSON</Button>
+		<Button onclick={() => isPreview.toggle()}>{isPreview.state ? 'Edit' : 'Preview'}</Button>
 	</div>
 </header>

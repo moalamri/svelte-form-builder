@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { twMerge } from 'tailwind-merge';
 	type Props = {
-		text: string;
 		disabled?: boolean;
 		size?: 'xs' | 'sm' | 'md' | 'lg';
 		variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
 		class?: string;
+		children: any;
 		onclick?: () => void;
 	};
 
-	let { text = 'Button', disabled = false, size = 'md', variant = 'primary', class: cls = '', onclick = () => {} }: Props = $props();
+	let { disabled = false, size = 'md', variant = 'primary', class: cls = '', onclick = () => {}, children }: Props = $props();
 
 	const defaultClass = 'rounded-sm text-center outline-hidden min-w-20';
 	const sizeClass =
@@ -33,4 +33,4 @@
 	const buttonClass = twMerge(defaultClass, sizeClass, textSizeClass, variantClass, cls);
 </script>
 
-<button {disabled} onclick={handleClick} class={buttonClass}>{text}</button>
+<button {disabled} onclick={handleClick} class={buttonClass}>{@render children()}</button>
