@@ -36,16 +36,17 @@
 {/if}
 
 <Splitter.Root
-	size={[
-		{ id: SPLITTER_IDS.ELEMENTS, size: 20, minSize: 15, maxSize: 25 },
-		{ id: SPLITTER_IDS.FORM, size: 60, minSize: 50, maxSize: 100 },
-		{ id: SPLITTER_IDS.EDITOR, size: 20, minSize: 15, maxSize: 25 }
+	panels={[
+		{ id: SPLITTER_IDS.ELEMENTS, minSize: 15, maxSize: 25 },
+		{ id: SPLITTER_IDS.FORM, minSize: 50, maxSize: 100 },
+		{ id: SPLITTER_IDS.EDITOR, minSize: 15, maxSize: 25 }
 	]}
+	defaultSize={[20, 60, 20]}
 	style="height: calc(100vh - 38px); justify-content: center;"
-	onSizeChange={(details) => {
-		activeResizer = details.activeHandleId;
+	onResize={(details) => {
+		activeResizer = details.resizeTriggerId;
 	}}
-	onSizeChangeEnd={(_) => {
+	onResizeEnd={(_) => {
 		activeResizer = undefined;
 	}}
 >
