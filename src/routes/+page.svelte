@@ -58,7 +58,7 @@
 	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_ELEMENTS_TO_FORM} class="focus:outline-hidden pe-1">
 		<PaneResizer isActive={activeResizerLeft} />
 	</Splitter.ResizeTrigger>
-	<Splitter.Panel id={SPLITTER_IDS.FORM} class="relative overflow-auto p-1.5">
+	<Splitter.Panel id={SPLITTER_IDS.FORM} class="relative !overflow-auto p-1.5">
 		<Form />
 	</Splitter.Panel>
 	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_FORM_TO_EDITOR} class="focus:outline-hidden ps-1">
