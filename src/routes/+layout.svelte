@@ -1,5 +1,5 @@
 <script lang="ts">
-	import './app.css';
+	import '../app.css';
 	import { isMobile } from '$lib/stores/flags.svelte';
 	import nightOwl from 'svelte-highlight/styles/night-owl';
 
