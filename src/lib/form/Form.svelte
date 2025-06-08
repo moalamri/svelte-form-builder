@@ -7,6 +7,7 @@
 	import type { Component } from 'svelte';
 	import Popover from '$lib/components/Popover.svelte';
 	import elements from '$lib/elements';
+	import { twMerge } from 'tailwind-merge';
 
 	// Components
 	import Button from '$lib/components/Button.svelte';
@@ -62,11 +63,12 @@
 					use:elementClick={() => (form.activeElement = field)}
 				>
 					<div
-						class={[
-							'relative flex rounded-sm border shadow-xs shadow-slate-200 hover:shadow-sm',
+						class={twMerge(
+							'relative flex rounded-sm border shadow-xs shadow-slate-200 hover:shadow-sm bg-white',
 							isActive ? 'border-blue-600' : 'border-slate-200',
+							isPreview.state && 'border-slate-50',
 							isSorting && 'opacity-0'
-						]}
+						)}
 					>
 						<div
 							class="flex flex-col items-center border-e border-slate-300 bg-slate-50 hover:bg-slate-100 rounded-s-sm p-1 gap-2 w-6"
