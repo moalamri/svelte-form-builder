@@ -1,33 +1,18 @@
 <script lang="ts">
-	import { cloner, newFieldSequence, generateRandomId } from '$lib/utils/helpers';
-	import { ELEMENT_TYPES, SORTABLEJS } from '$lib/utils/enums';
+	import { ELEMENT_TYPES } from '$lib/utils/enums';
 	import { isPreview, isDragging } from '$lib/stores/flags.svelte';
-	import { type Options, type SortableEvent } from 'sortablejs';
 	import form from '$lib/stores/form.svelte';
 	import { elementClick } from '$lib/utils/actions';
-	import elements from '$lib/elements';
 	import { slide } from 'svelte/transition';
 	import type { Component } from 'svelte';
 	import Popover from '$lib/components/Popover.svelte';
+	import elements from '$lib/elements';
 
 	// Components
 	import Button from '$lib/components/Button.svelte';
 	import Dropzone from '$lib/sortablejs/Dropzone.svelte';
 	import Label from '$lib/elements/Label.svelte';
 	import Icon from '@iconify/svelte';
-
-	// Assign new properties to the new field
-	const prepareField = (type: string): any => {
-		let newField = cloner(elements.find((f) => f.type === type));
-		delete newField.component;
-		// Assign unique id to the new field
-		newField.id = `${newField.type}-${generateRandomId()}`;
-		// Only generate label and name for form fields not for UI/Container elements
-		if (newField.category === ELEMENT_TYPES.FORMFIELDS) {
-			return newFieldSequence(form.fields, newField);
-		}
-		return newField;
-	};
 
 	const getFieldComponent = (type: string): Component => {
 		const field = elements.find((f) => f.type === type);
@@ -52,35 +37,6 @@
 		form.activeElement = null;
 		form.fields = form.fields.filter((f) => f.id !== fieldId);
 	};
-
-	const dropzoneOptions: Options = {
-		group: SORTABLEJS.GROUPNAME,
-		animation: 150,
-		handle: '.handle',
-		onStart() {
-			isDragging.state = true;
-		},
-		onAdd(event: SortableEvent) {
-			const field = prepareField(event.item.dataset.type);
-			const { newIndex } = event;
-			form.fields = [...form.fields.slice(0, newIndex), field, ...form.fields.slice(newIndex)];
-			form.activeElement = form.fields[newIndex];
-		},
-		onRemove(event: SortableEvent) {
-			const { oldDraggableIndex } = event;
-			form.fields = form.fields.filter((_, index) => index !== oldDraggableIndex);
-		},
-		onUpdate(event: SortableEvent) {
-			const currFields = [...form.fields];
-			const { oldIndex, newIndex } = event;
-			const movedElement = currFields.splice(oldIndex, 1)[0];
-			currFields.splice(newIndex, 0, movedElement);
-			form.fields = currFields;
-		},
-		onEnd() {
-			isDragging.state = false;
-		}
-	};
 </script>
 
 <form
@@ -96,14 +52,14 @@
 				<p class="text-sm text-slate-700 -mb-10">Drag and drop fields here</p>
 			</div>
 		{/if}
-		<Dropzone fields={form.fields} options={dropzoneOptions}>
+		<Dropzone fields={form.fields}>
 			{#snippet formfield(field)}
 				{@const FormComponent = getFieldComponent(field.type)}
 				{@const isActive = form.activeElement && form.activeElement.id === field.id}
 				<div
 					class:border={!isPreview.state}
 					class:shadow-sm={!isPreview.state}
-					class="relative flex {isActive ? 'border-blue-600' : 'border-slate-300'} rounded-xs"
+					class="relative flex {isActive ? 'border-blue-600' : 'border-slate-200'} rounded-xs"
 					data-fieldid={field.id}
 					use:elementClick={() => (form.activeElement = field)}
 				>
@@ -123,6 +79,7 @@
 							</div>
 						</Popover>
 					</div>
+					<div class="relative flex flex-col justify-center p-2 w-full bg-white rounded-xs">
 						{#if field.category === ELEMENT_TYPES.FORMFIELDS}
 							<Label {field} />
 						{/if}
