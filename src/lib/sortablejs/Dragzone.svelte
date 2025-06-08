@@ -2,12 +2,13 @@
 	import Sortable, { type SortableEvent } from 'sortablejs';
 	import { SORTABLEJS } from '$lib/utils/enums';
 	import { isDragging } from '$lib/stores/flags.svelte';
+	import { onMount } from 'svelte';
 
 	let { elements, title, dragComponent }: { elements: any[] | any; title: string; dragComponent: any } = $props();
 
 	let dragArae: HTMLElement;
 
-	$effect(() => {
+	onMount(() => {
 		const sortable = new Sortable(dragArae, {
 			group: {
 				name: SORTABLEJS.GROUPNAME,
@@ -19,21 +20,13 @@
 			onStart() {
 				isDragging.state = true;
 			},
-			onEnd() {
+			onEnd(event: SortableEvent) {
+				const { from, item, clone } = event;
+				// insert the dragged element back to the dragzone
+				from.insertBefore(item, clone);
+				// Self remove the copied clone element from dragzone
+				from.removeChild(clone);
 				isDragging.state = false;
-			},
-			onRemove(event: SortableEvent) {
-				// To remove the dragged element (Component Card) from the dropzone and avoid double components (act as pull : 'clone' in sortablejs).
-				const { from, item, oldIndex, pullMode, clone } = event;
-				if (pullMode === 'clone') {
-					// Insert the node
-					const refElement = from.children[oldIndex];
-					from.insertBefore(item, refElement);
-					// Self remove the copied clone element from dragzone
-					if (clone.parentNode) {
-						clone.parentNode.removeChild(clone);
-					}
-				}
 			}
 		});
 		return () => sortable?.destroy();
