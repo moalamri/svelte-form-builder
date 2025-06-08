@@ -20,7 +20,7 @@
 	};
 
 	// Inspect and log form changes
-	$inspect(form).with(console.log);
+	$inspect(form.fields);
 
 	// Submit form.
 	const onSubmit = async (e: Event): Promise<void> => {
@@ -45,45 +45,51 @@
 	class="relative border-slate-200 shadow-xs border rounded-xs p-1 md:p-2 mb-1 select-none mx-auto"
 	class:md:max-w-[80%]={isPreview.state}
 >
-	<div class="relative p-2 border {isDragging.state ? 'shadow-inner rounded-xs bg-yellow-100/20' : 'border-transparent'}">
+	<div class={['relative p-2 border', isDragging.state ? 'border-blue-200 rounded-sm bg-blue-50/50' : 'border-transparent']}>
 		<!-- Empty form -->
 		{#if form.fields.length === 0}
 			<div class="flex items-center justify-center">
 				<p class="text-sm text-slate-700 -mb-10">Drag and drop fields here</p>
 			</div>
 		{/if}
-		<Dropzone fields={form.fields}>
-			{#snippet formfield(field)}
+		<Dropzone>
+			{#snippet formfield(field, isSorting)}
 				{@const FormComponent = getFieldComponent(field.type)}
 				{@const isActive = form.activeElement && form.activeElement.id === field.id}
 				<div
-					class:border={!isPreview.state}
-					class:shadow-sm={!isPreview.state}
-					class="relative flex {isActive ? 'border-blue-600' : 'border-slate-200'} rounded-xs"
+					class="relative {isSorting && 'ring-2 ring-blue-600/80 rounded-sm'}"
 					data-fieldid={field.id}
 					use:elementClick={() => (form.activeElement = field)}
 				>
 					<div
-						class="flex flex-col border-e border-slate-300 bg-slate-50/50 hover:bg-slate-100 rounded-xs p-1 gap-2"
-						class:hidden={isPreview.state}
-						transition:slide={{ axis: 'x', duration: 100 }}
+						class={[
+							'relative flex rounded-sm border shadow-xs shadow-slate-200 hover:shadow-sm',
+							isActive ? 'border-blue-600' : 'border-slate-200',
+							isSorting && 'opacity-0'
+						]}
 					>
-						<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
-						<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-xs">
-							{#snippet trigger()}
-								<Icon icon="material-symbols:delete-outline-rounded" class="text-slate-600" />
-							{/snippet}
-							<div class="flex items-center space-x-2 p-1">
-								<p class="text-white text-xs leading-none">Remove this field?</p>
-								<Button size="sm" class="min-w-10" onclick={() => removeField(field.id)} variant="danger">Yes</Button>
-							</div>
-						</Popover>
-					</div>
-					<div class="relative flex flex-col justify-center p-2 w-full bg-white rounded-xs">
-						{#if field.category === ELEMENT_TYPES.FORMFIELDS}
-							<Label {field} />
-						{/if}
-						<FormComponent {field} updator={form.updator} />
+						<div
+							class="flex flex-col items-center border-e border-slate-300 bg-slate-50 hover:bg-slate-100 rounded-s-sm p-1 gap-2 w-6"
+							class:hidden={isPreview.state}
+							transition:slide={{ axis: 'x', duration: 100 }}
+						>
+							<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
+							<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-xs">
+								{#snippet trigger()}
+									<Icon icon="material-symbols:delete-outline-rounded" class="text-slate-600" />
+								{/snippet}
+								<div class="flex items-center space-x-2 p-1">
+									<p class="text-white text-xs leading-none">Remove this field?</p>
+									<Button size="sm" class="min-w-10" onclick={() => removeField(field.id)} variant="danger">Yes</Button>
+								</div>
+							</Popover>
+						</div>
+						<div class="relative flex flex-col justify-center p-2 w-full bg-white rounded-e-sm">
+							{#if field.category === ELEMENT_TYPES.FORMFIELDS}
+								<Label {field} />
+							{/if}
+							<FormComponent {field} updator={form.updator} />
+						</div>
 					</div>
 				</div>
 			{/snippet}

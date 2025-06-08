@@ -1,18 +1,22 @@
 <script lang="ts">
+	import { generateRandomId, newFieldSequence } from '$lib/utils/helpers';
 	import Sortable, { type SortableEvent } from 'sortablejs';
 	import { SORTABLEJS } from '$lib/utils/enums';
 	import { isDragging } from '$lib/stores/flags.svelte';
 	import form from '$lib/stores/form.svelte';
 	import { onMount } from 'svelte';
 	import elements from '$lib/elements';
-	import { generateRandomId } from '$lib/utils/helpers';
 	import { ELEMENT_TYPES } from '$lib/utils/enums';
-	import clone from 'clone'
-	import { newFieldSequence } from '$lib/utils/helpers';
+	import clone from 'clone';
 
-	let { fields = $bindable(), formfield }: { fields: any[]; formfield: any } = $props();
+	type Props = {
+		formfield: (field: any, isSorting: boolean) => any;
+	};
+
+	let { formfield }: Props = $props();
 
 	let element: HTMLElement;
+	let sorting = $state();
 
 	// Assign new properties to the new field
 	const prepareField = (type: string): any => {
@@ -30,14 +34,16 @@
 	onMount(() => {
 		const sortable = new Sortable(element, {
 			group: SORTABLEJS.GROUPNAME,
-			animation: 150,
+			animation: 200,
 			handle: '.handle',
-			onStart() {
+			onStart(event: SortableEvent) {
+				const { item } = event;
 				isDragging.state = true;
+				sorting = item.dataset.fieldid;
 			},
 			onAdd(event: SortableEvent) {
-				const field = prepareField(event.item.dataset.type);
 				const { newIndex } = event;
+				const field = prepareField(event.item.dataset.type);
 				form.fields = [...form.fields.slice(0, newIndex), field, ...form.fields.slice(newIndex)];
 				form.activeElement = form.fields[newIndex];
 			},
@@ -46,22 +52,24 @@
 				form.fields = form.fields.filter((_, index) => index !== oldDraggableIndex);
 			},
 			onUpdate(event: SortableEvent) {
-				const currFields = [...form.fields];
 				const { oldIndex, newIndex } = event;
-				const movedElement = currFields.splice(oldIndex, 1)[0];
-				currFields.splice(newIndex, 0, movedElement);
-				form.fields = currFields;
+				const movedElement = form.fields.splice(oldIndex, 1)[0];
+				form.fields.splice(newIndex, 0, movedElement);
 			},
 			onEnd() {
 				isDragging.state = false;
+				sorting = null;
 			}
 		});
 		return () => sortable?.destroy();
 	});
 </script>
 
-<div bind:this={element} class="flex flex-col space-y-1.5 min-h-10">
-	{#each fields as field (field.id)}
-		{@render formfield(field)}
+<div bind:this={element} class="relative flex flex-col space-y-1.5 min-h-10">
+	{#each form.fields as field (field.id)}
+		{#key field.id}
+			{@const isSorting = field.id === sorting}
+			{@render formfield(field, isSorting)}
+		{/key}
 	{/each}
 </div>
