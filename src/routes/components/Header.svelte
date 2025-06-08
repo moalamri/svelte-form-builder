@@ -37,6 +37,6 @@
 
 	<div class="p-1">
 		<Button class="min-w-18" onclick={() => (isJsonModalOpen.state = true)}>JSON</Button>
-		<Button class="min-w-18" onclick={() => isPreview.toggle()}>{isPreview.state ? 'Edit' : 'Preview'}</Button>
+		<Button class="min-w-18" onclick={isPreview.toggle}>{isPreview.state ? 'Edit' : 'Preview'}</Button>
 	</div>
 </header>
