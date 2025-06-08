@@ -23,7 +23,7 @@ const elements = [
 		settings: {
 			properties: {
 				name: 'input-0',
-				label: 'Input',
+				label: 'Input'
 			},
 			attributes: {
 				placeholder: 'Enter input text'
@@ -71,7 +71,7 @@ const elements = [
 								type: 'checkbox',
 								value: false
 							}
-						},
+						}
 					}
 				},
 				values: [
@@ -84,7 +84,7 @@ const elements = [
 						label: 'Option 2',
 						value: '2'
 					}
-				],
+				]
 			},
 			layout: {
 				name: 'layout',
@@ -141,12 +141,12 @@ const elements = [
 		settings: {
 			properties: {
 				name: 'textarea-0',
-				label: 'Textarea',
+				label: 'Textarea'
 			},
 			attributes: {
 				placeholder: 'Enter text',
 				rows: 3
-			},
+			}
 		}
 	},
 	{
@@ -161,7 +161,7 @@ const elements = [
 		},
 		settings: {
 			properties: {
-				height: "1"
+				height: '1'
 			}
 		}
 	},
@@ -177,11 +177,11 @@ const elements = [
 		},
 		settings: {
 			properties: {
-				text: "Title",
+				text: 'Title'
 			},
 			fontStyle: {
-				fontWeight: "500",
-				fontSize: "18",
+				fontWeight: '500',
+				fontSize: '18'
 			}
 		}
 	}

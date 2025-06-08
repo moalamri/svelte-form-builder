@@ -3,19 +3,19 @@ export enum SPLITTER_IDS {
 	FORM = 'form',
 	EDITOR = 'editor',
 	TRIGGER_ELEMENTS_TO_FORM = 'elements:form',
-	TRIGGER_FORM_TO_EDITOR = 'form:editor',
+	TRIGGER_FORM_TO_EDITOR = 'form:editor'
 }
 
 export enum SORTABLEJS {
 	// Drag and drop shared group name
-	GROUPNAME = 'formgroup',
+	GROUPNAME = 'formgroup'
 }
 
 export enum ELEMENT_TYPES {
 	// Element types
 	FORMFIELDS = 'formfields',
 	UI = 'ui',
-	CONTAINERS = 'containers',
+	CONTAINERS = 'containers'
 }
 
 export enum SETTING_FIELDS {
@@ -28,5 +28,5 @@ export enum SETTING_FIELDS {
 	CHECKBOX = 'checkbox',
 	SLIDER = 'slider',
 	COLOR = 'color',
-	DATE = 'date',
+	DATE = 'date'
 }
