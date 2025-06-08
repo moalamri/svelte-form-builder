@@ -107,24 +107,22 @@
 					data-fieldid={field.id}
 					use:elementClick={() => (form.activeElement = field)}
 				>
-					{#if !isPreview.state}
-						<div
-							class="flex flex-col border-e border-slate-300 bg-slate-50/50 hover:bg-slate-100 rounded-xs p-1 gap-2"
-							transition:slide={{ axis: 'x', duration: 100 }}
-						>
-							<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
-							<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-xs">
-								{#snippet trigger()}
-									<Icon icon="material-symbols:delete-outline-rounded" class="text-slate-600" />
-								{/snippet}
-								<div class="flex items-center space-x-2 p-1">
-									<p class="text-white text-xs leading-none">Remove this field?</p>
-									<Button size="sm" class="min-w-10" onclick={() => removeField(field.id)} variant="danger">Yes</Button>
-								</div>
-							</Popover>
-						</div>
-					{/if}
-					<div class="relative flex flex-col justify-center p-2 w-full bg-white">
+					<div
+						class="flex flex-col border-e border-slate-300 bg-slate-50/50 hover:bg-slate-100 rounded-xs p-1 gap-2"
+						class:hidden={isPreview.state}
+						transition:slide={{ axis: 'x', duration: 100 }}
+					>
+						<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
+						<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-xs">
+							{#snippet trigger()}
+								<Icon icon="material-symbols:delete-outline-rounded" class="text-slate-600" />
+							{/snippet}
+							<div class="flex items-center space-x-2 p-1">
+								<p class="text-white text-xs leading-none">Remove this field?</p>
+								<Button size="sm" class="min-w-10" onclick={() => removeField(field.id)} variant="danger">Yes</Button>
+							</div>
+						</Popover>
+					</div>
 						{#if field.category === ELEMENT_TYPES.FORMFIELDS}
 							<Label {field} />
 						{/if}
