@@ -51,7 +51,7 @@
 	}}
 >
 	{#if showLeftPane}
-		<Splitter.Panel id={SPLITTER_IDS.ELEMENTS} class="relative p-1 overflow-auto bg-slate-100/50">
+		<Splitter.Panel id={SPLITTER_IDS.ELEMENTS} class="relative p-1 !overflow-auto bg-slate-100/50">
 			<ElementsList />
 		</Splitter.Panel>
 	{/if}
@@ -65,7 +65,7 @@
 		<PaneResizer isActive={activeResizerRight} />
 	</Splitter.ResizeTrigger>
 	{#if showRightPane}
-		<Splitter.Panel id={SPLITTER_IDS.EDITOR} class="relative p-1 overflow-auto bg-slate-100/50">
+		<Splitter.Panel id={SPLITTER_IDS.EDITOR} class="relative p-1 !overflow-auto bg-slate-100/50">
 			<ElementEditor />
 		</Splitter.Panel>
 	{/if}
