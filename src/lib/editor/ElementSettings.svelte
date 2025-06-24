@@ -27,7 +27,11 @@
 					{:else if settingField.type === 'checkbox'}
 						<div class="flex items-center justify-between w-[90%] mx-auto">
 							<label class="text-xs text-slate-700" for={settingFieldName}>{settingField.label}</label>
-							<Checkbox {settingFieldName} section={sectionName} />
+							<Checkbox
+								value={form.activeElement.settings[sectionName][settingFieldName]}
+								onchange={() =>
+									(form.activeElement.settings[sectionName][settingFieldName] = !form.activeElement.settings[sectionName][settingFieldName])}
+							/>
 						</div>
 					{:else if settingField.type === 'select'}
 						<select
@@ -40,44 +44,48 @@
 							{/each}
 						</select>
 					{:else if settingField.type === 'array'}
-						{#each form.activeElement.settings[settingField.name] as item, index (item)}
-							{#each Object.values<any>(settingField.settingFields) as arrayField (arrayField)}
-								<p class="text-xs text-slate-700">{arrayField.label}</p>
-								{#if arrayField.type === 'text'}
-									<input
-										type="text"
-										class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-hidden hover:border-slate-400 bg-white text-slate-700"
-										value={item[arrayField.name]}
-										oninput={(e) => (item[arrayField.name] = (e.target as HTMLInputElement).value)}
-									/>
-								{:else if arrayField.type === 'number'}
-									<input
-										type="number"
-										class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-hidden hover:border-slate-400 bg-white text-slate-700"
-										value={item[arrayField.name]}
-										oninput={(e) => (item[arrayField.name] = Number((e.target as HTMLInputElement).value))}
-									/>
-								{:else if arrayField.type === 'checkbox'}
-									<input
-										type="checkbox"
-										class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-hidden hover:border-slate-400 bg-white text-slate-700"
-										checked={item[arrayField.name]}
-										onchange={() => (item[arrayField.name] = !item[arrayField.name])}
-									/>
-								{/if}
+						<div class="flex flex-col space-y-1">
+							{#each form.activeElement.settings[settingField.name] as item, index (item)}
+								<div class="flex flex-col space-y-1 bg-white/80 border border-slate-200 rounded-md p-2">
+									{#each Object.values<any>(settingField.settingFields) as arrayField (arrayField)}
+										<div class="flex flex-col gap-1 {arrayField.type === 'checkbox' && 'flex-row items-center justify-between'}">
+											<label class="text-xs text-slate-700" for={arrayField.name}>{arrayField.label}</label>
+											{#if arrayField.type === 'text'}
+												<input
+													type="text"
+													class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-hidden hover:border-slate-400 bg-white text-slate-700"
+													value={item[arrayField.name]}
+													oninput={(e) => (item[arrayField.name] = (e.target as HTMLInputElement).value)}
+												/>
+											{:else if arrayField.type === 'number'}
+												<input
+													type="number"
+													class="w-full py-0.5 px-1 m-0 text-sm rounded-md border border-slate-300 focus:border-blue-600 focus:outline-hidden hover:border-slate-400 bg-white text-slate-700"
+													value={item[arrayField.name]}
+													oninput={(e) => (item[arrayField.name] = Number((e.target as HTMLInputElement).value))}
+												/>
+											{:else if arrayField.type === 'checkbox'}
+												<Checkbox value={item[arrayField.name]} onchange={() => (item[arrayField.name] = !item[arrayField.name])} />
+											{/if}
+										</div>
+									{/each}
+									<button class="self-end" type="button" onclick={() => form.activeElement.settings[settingField.name].splice(index, 1)}>
+										<Icon icon="material-symbols:delete-outline-rounded" class="text-slate-600 hover:text-red-600" />
+									</button>
+								</div>
 							{/each}
-						{/each}
-						<button
-							type="button"
-							onclick={() =>
-								// Update the settings object and the activeElement settings
-								form.activeElement.settings[settingField.name].push({
-									label: 'Item ' + ((form.activeElement.settings[settingField.name].length || 0) + 1),
-									value: `${(form.activeElement.settings[settingField.name].length || 0) + 1}`
-								})}
-						>
-							<Icon icon="fluent:add-24-filled" class="text-green-500" />
-						</button>
+							<button
+								type="button"
+								onclick={() =>
+									// Update the settings object and the activeElement settings
+									form.activeElement.settings[settingField.name].push({
+										label: 'Item ' + ((form.activeElement.settings[settingField.name].length || 0) + 1),
+										value: `${(form.activeElement.settings[settingField.name].length || 0) + 1}`
+									})}
+							>
+								<Icon icon="fluent:add-24-filled" class="text-green-500" />
+							</button>
+						</div>
 					{/if}
 				{/each}
 			</div>

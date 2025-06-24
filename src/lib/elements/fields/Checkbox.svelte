@@ -2,8 +2,6 @@
 	let { field, updator }: { field: any; updator: Function } = $props();
 	let selected = $state([]);
 
-	const items = field.settings.data.values;
-
 	function handleUpdate(event) {
 		const checked = event.target.checked;
 		if (checked) {
@@ -16,8 +14,8 @@
 	}
 </script>
 
-<div class="relative flex w-full" class:flex-col={field.settings?.layout?.fields?.inline.value === false}>
-	{#each items as item}
+<div class="relative flex w-full" class:flex-col={field.settings?.layout?.inline === false}>
+	{#each field.settings.items as item}
 		<div class="flex items-center justify-start">
 			<input
 				type="checkbox"

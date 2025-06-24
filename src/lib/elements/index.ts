@@ -44,59 +44,18 @@ const elements = [
 				name: 'checkbox-0',
 				label: 'Checkbox'
 			},
-			data: {
-				name: 'data',
-				label: 'Data',
-				fields: {
-					items: {
-						name: 'items',
-						label: 'Items',
-						type: 'array',
-						fields: {
-							label: {
-								name: 'label',
-								label: 'Label',
-								type: 'text',
-								value: ''
-							},
-							value: {
-								name: 'value',
-								label: 'Value',
-								type: 'text',
-								value: ''
-							},
-							checked: {
-								name: 'checked',
-								label: 'Checked',
-								type: 'checkbox',
-								value: false
-							}
-						}
-					}
+			items: [
+				{
+					value: '1',
+					label: 'Item 1'
 				},
-				values: [
-					{
-						label: 'Option 1',
-						value: '1',
-						checked: true
-					},
-					{
-						label: 'Option 2',
-						value: '2'
-					}
-				]
-			},
-			layout: {
-				name: 'layout',
-				label: 'Layout',
-				fields: {
-					inline: {
-						name: 'inline',
-						label: 'Inline',
-						type: 'checkbox',
-						value: true
-					}
+				{
+					value: '2',
+					label: 'Item 2'
 				}
+			],
+			layout: {
+				inline: true // Required
 			}
 		}
 	},
