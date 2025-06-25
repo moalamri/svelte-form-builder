@@ -5,6 +5,7 @@ A modern, drag-and-drop form builder built with Svelte 5, featuring an intuitive
 [![Deploy to Cloudflare Pages](https://github.com/moalamri/svelte-form-builder/actions/workflows/deploy.yml/badge.svg)](https://github.com/moalamri/svelte-form-builder/actions/workflows/deploy.yml)
 [![Playwright Tests](https://github.com/moalamri/svelte-form-builder/actions/workflows/test.yml/badge.svg)](https://github.com/moalamri/svelte-form-builder/actions/workflows/test.yml)
 
+---
 
 > [!IMPORTANT]
 > This project is currently under active development. Many things may change as I continue to improve the form builder.
@@ -89,5 +90,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [Svelte](https://svelte.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
-
----
