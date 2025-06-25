@@ -13,8 +13,12 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: latest
+    - name: Install dependencies with bun
+      run: bun install
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
