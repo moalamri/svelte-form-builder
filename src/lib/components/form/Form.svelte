@@ -2,7 +2,7 @@
 	import { ELEMENT_TYPES } from '$lib/utils/enums';
 	import { isPreview, isDragging } from '$lib/stores/flags.svelte';
 	import form from '$lib/stores/form.svelte';
-	import { elementClick } from '$lib/utils/actions';
+	import { elementClick } from '$lib/actions/elementClick';
 	import { slide } from 'svelte/transition';
 	import type { Component } from 'svelte';
 	import Popover from '$lib/components/Popover.svelte';
