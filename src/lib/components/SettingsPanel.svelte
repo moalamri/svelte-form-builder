@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ElementSettings from '$lib/editor/ElementSettings.svelte';
+	import ElementSettings from '$lib/components/editor/ElementSettings.svelte';
 	import { slide } from 'svelte/transition';
 	import Icon from '@iconify/svelte';
 	import form from '$lib/stores/form.svelte';

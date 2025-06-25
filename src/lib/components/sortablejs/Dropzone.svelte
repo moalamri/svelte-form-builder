@@ -5,7 +5,7 @@
 	import { isDragging } from '$lib/stores/flags.svelte';
 	import form from '$lib/stores/form.svelte';
 	import { onMount } from 'svelte';
-	import elements from '$lib/elements';
+	import elements from '$lib/components/elements';
 	import { ELEMENT_TYPES } from '$lib/utils/enums';
 	import clone from 'clone';
 

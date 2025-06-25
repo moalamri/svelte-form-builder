@@ -1,9 +1,9 @@
 <script lang="ts">
 	// Import settings components
-	import Input from './Input.svelte';
-	import Checkbox from './Checkbox.svelte';
+	import Input from './components/Input.svelte';
+	import Checkbox from './components/Checkbox.svelte';
 
-	import eleSettings from '$lib/elements/settings';
+	import eleSettings from '$lib/components/elements/settings';
 	import Icon from '@iconify/svelte';
 
 	import form from '$lib/stores/form.svelte';

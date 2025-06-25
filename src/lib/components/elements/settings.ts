@@ -1,4 +1,4 @@
-import { SETTING_FIELDS } from '../utils/enums';
+import { SETTING_FIELDS } from '$lib/utils/enums';
 
 const elementSettings = {
 	input: {

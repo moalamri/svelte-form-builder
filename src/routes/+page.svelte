@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { isJsonModalOpen, isMobile, isPreview, showLPanel, showRPanel } from '$lib/stores/flags.svelte';
-	import ElementsList from '$lib/ElementsList.svelte';
-	import ElementEditor from '$lib/ElementEditor.svelte';
+	import ElementsListPanel from '$lib/components/ElementsListPanel.svelte';
+	import SettingsPanel from '$lib/components/SettingsPanel.svelte';
 	import JsonModal from '$lib/components/JsonModal.svelte';
 	import PaneResizer from './components/PaneResizer.svelte';
 	import Header from './components/Header.svelte';
-	import Form from '$lib/form/Form.svelte';
+	import Form from '$lib/components/form/Form.svelte';
 	import { Splitter } from 'ui-ingredients';
 	import { SPLITTER_IDS } from '$lib/utils/enums';
 
@@ -52,7 +52,7 @@
 >
 	{#if showLeftPanel}
 		<Splitter.Panel id={SPLITTER_IDS.ELEMENTS} class="relative p-1 !overflow-auto bg-slate-100/50">
-			<ElementsList />
+			<ElementsListPanel />
 		</Splitter.Panel>
 	{/if}
 	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_ELEMENTS_TO_FORM} class="focus:outline-hidden pe-1">
@@ -66,7 +66,7 @@
 	</Splitter.ResizeTrigger>
 	{#if showRightPanel}
 		<Splitter.Panel id={SPLITTER_IDS.EDITOR} class="relative p-1 !overflow-auto bg-slate-100/50">
-			<ElementEditor />
+			<SettingsPanel />
 		</Splitter.Panel>
 	{/if}
 </Splitter.Root>

@@ -6,13 +6,13 @@
 	import { slide } from 'svelte/transition';
 	import type { Component } from 'svelte';
 	import Popover from '$lib/components/Popover.svelte';
-	import elements from '$lib/elements';
+	import elements from '$lib/components/elements';
 	import { twMerge } from 'tailwind-merge';
 
 	// Components
 	import Button from '$lib/components/Button.svelte';
-	import Dropzone from '$lib/sortablejs/Dropzone.svelte';
-	import Label from '$lib/elements/Label.svelte';
+	import Dropzone from '$lib/components/sortablejs/Dropzone.svelte';
+	import Label from '$lib/components/elements/Label.svelte';
 	import Icon from '@iconify/svelte';
 
 	const getFieldComponent = (type: string): Component => {

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Draggable from '$lib/sortablejs/Dragzone.svelte';
-	import ElementCard from '$lib/elements/ElementCard.svelte';
-	import elements from '$lib/elements';
+	import Draggable from '$lib/components/sortablejs/Dragzone.svelte';
+	import ElementCard from '$lib/components/elements/ElementCard.svelte';
+	import elements from '$lib/components/elements';
 	import Icon from '@iconify/svelte';
 	import { ELEMENT_TYPES } from '$lib/utils/enums';
 	import { getByElementTypes } from '$lib/utils/helpers';
