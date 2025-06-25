@@ -10,7 +10,8 @@
 		"test:report": "playwright show-report",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
-		"check": "svelte-check src"
+		"check": "svelte-check src",
+		"prepare": "svelte-kit sync"
 	},
 	"devDependencies": {
 		"@iconify/svelte": "^5.0.0",
