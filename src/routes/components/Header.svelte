@@ -35,7 +35,10 @@
 		{/if}
 	</div>
 
-	<div class="p-1">
+	<div class="flex items-center gap-1 p-1">
+		<a href="https://github.com/moalamri/svelte-form-builder" target="_blank" title="GitHub Repository">
+			<Icon icon="skill-icons:github-dark" width="28" />
+		</a>
 		<Button class="min-w-18" onclick={() => (isJsonModalOpen.state = true)}>JSON</Button>
 		<Button class="min-w-18" onclick={isPreview.toggle}>{isPreview.state ? 'Edit' : 'Preview'}</Button>
 	</div>
