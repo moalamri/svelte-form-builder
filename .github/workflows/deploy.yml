@@ -17,26 +17,78 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch full history to compare changes
+
+      - name: Check for app code changes
+        id: check-changes
+        run: |
+          # Get the commit SHA of the previous successful deployment
+          # If this is the first deployment, we'll deploy anyway
+          PREVIOUS_COMMIT="${{ github.event.workflow_run.head_sha }}"
+          
+          # Check for changes in app-related directories and files
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+          
+          # Define app code patterns to check
+          APP_PATTERNS=(
+            "src/**"
+            "package.json"
+            "package-lock.json"
+            "pnpm-lock.yaml"
+            "bun.lockb"
+            "svelte.config.js"
+            "vite.config.ts"
+            "tsconfig.json"
+            "postcss.config.js"
+            "tailwind.config.js"
+            "app.html"
+            "app.css"
+          )
+          
+          # Check if any changed files match our app patterns
+          HAS_APP_CHANGES=false
+          
+          if [ -n "$CHANGED_FILES" ]; then
+            for pattern in "${APP_PATTERNS[@]}"; do
+              if echo "$CHANGED_FILES" | grep -q "$pattern"; then
+                HAS_APP_CHANGES=true
+                break
+              fi
+            done
+          else
+            # If we can't determine changes (first run), deploy anyway
+            HAS_APP_CHANGES=true
+          fi
+          
+          echo "has_app_changes=$HAS_APP_CHANGES" >> $GITHUB_OUTPUT
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+          echo "Has app changes: $HAS_APP_CHANGES"
 
       - name: Setup Node.js 20
+        if: steps.check-changes.outputs.has_app_changes == 'true'
         uses: actions/setup-node@v3
         with:
           node-version: 20
           always-auth: false
 
       - name: Setup pnpm
+        if: steps.check-changes.outputs.has_app_changes == 'true'
         uses: pnpm/action-setup@v4
         with:
           version: 'latest'
           run_install: false
 
       - name: Set pnpm store
+        if: steps.check-changes.outputs.has_app_changes == 'true'
         id: pnpm-cache
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
+        if: steps.check-changes.outputs.has_app_changes == 'true'
         name: Build Frontend
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
@@ -46,11 +98,22 @@ jobs:
       - run: |
           pnpm install --no-frozen-lockfile
           pnpm run build
+        if: steps.check-changes.outputs.has_app_changes == 'true'
 
       - name: Deploy to Cloudflare Pages
+        if: steps.check-changes.outputs.has_app_changes == 'true'
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: 'svelte-form-builder'
           directory: '.svelte-kit/cloudflare'
+
+      - name: Skip deployment
+        if: steps.check-changes.outputs.has_app_changes == 'false'
+        run: |
+          echo "No changes detected in app code. Skipping deployment."
+          echo "This deployment was skipped because no relevant changes were found in:"
+          echo "- src/ directory"
+          echo "- package.json and lock files"
+          echo "- configuration files (svelte.config.js, vite.config.ts, etc.)"
