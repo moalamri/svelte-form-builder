@@ -1,5 +1,10 @@
 name: Deploy to Cloudflare Pages
-on: [push]
+on:
+  workflow_run:
+    workflows: ["Playwright Tests"]
+    types:
+      - completed
+    branches: [main, master]
 
 jobs:
   deploy:
@@ -8,6 +13,7 @@ jobs:
       contents: read
       deployments: write
     name: Build and deploy
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
