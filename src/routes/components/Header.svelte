@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
-	import { showLPane, showRPane } from '$lib/stores/flags.svelte';
+	import { showLPanel, showRPanel } from '$lib/stores/flags.svelte';
 	import { isJsonModalOpen, isPreview } from '$lib/stores/flags.svelte';
 	import Icon from '@iconify/svelte';
 	import { StateHistory } from 'runed';

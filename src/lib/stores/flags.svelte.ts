@@ -1,5 +1,5 @@
-export const showLPane = flag(true);
-export const showRPane = flag(true);
+export const showLPanel = flag(true);
+export const showRPanel = flag(true);
 export const isJsonModalOpen = flag(false);
 export const isDragging = flag(false);
 export const isPreview = flag(false);

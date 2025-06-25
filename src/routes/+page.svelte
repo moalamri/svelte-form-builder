@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isJsonModalOpen, isMobile, isPreview, showLPane, showRPane } from '$lib/stores/flags.svelte';
+	import { isJsonModalOpen, isMobile, isPreview, showLPanel, showRPanel } from '$lib/stores/flags.svelte';
 	import ElementsList from '$lib/ElementsList.svelte';
 	import ElementEditor from '$lib/ElementEditor.svelte';
 	import JsonModal from '$lib/components/JsonModal.svelte';
@@ -11,15 +11,15 @@
 
 	let activeResizer = $state();
 
-	const showLeftPane = $derived(!isPreview.state && showLPane.state);
-	const showRightPane = $derived(!isPreview.state && showRPane.state);
+	const showLeftPanel = $derived(!isPreview.state && showLPanel.state);
+	const showRightPanel = $derived(!isPreview.state && showRPanel.state);
 	const activeResizerLeft = $derived(activeResizer === SPLITTER_IDS.TRIGGER_ELEMENTS_TO_FORM);
 	const activeResizerRight = $derived(activeResizer === SPLITTER_IDS.TRIGGER_FORM_TO_EDITOR);
 
 	$effect(() => {
 		if (isMobile.state) {
-			showLPane.state = false;
-			showRPane.state = false;
+			showLPanel.state = false;
+			showRPanel.state = false;
 		}
 	});
 </script>
@@ -50,7 +50,7 @@
 		activeResizer = undefined;
 	}}
 >
-	{#if showLeftPane}
+	{#if showLeftPanel}
 		<Splitter.Panel id={SPLITTER_IDS.ELEMENTS} class="relative p-1 !overflow-auto bg-slate-100/50">
 			<ElementsList />
 		</Splitter.Panel>
@@ -64,7 +64,7 @@
 	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_FORM_TO_EDITOR} class="focus:outline-hidden ps-1">
 		<PaneResizer isActive={activeResizerRight} />
 	</Splitter.ResizeTrigger>
-	{#if showRightPane}
+	{#if showRightPanel}
 		<Splitter.Panel id={SPLITTER_IDS.EDITOR} class="relative p-1 !overflow-auto bg-slate-100/50">
 			<ElementEditor />
 		</Splitter.Panel>
