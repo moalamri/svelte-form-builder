@@ -21,7 +21,6 @@
 		"@sveltejs/vite-plugin-svelte": "^5.1.0",
 		"@types/eslint": "^9.6.1",
 		"@types/node": "^24.0.4",
-		"@types/sortablejs": "^1.15.8",
 		"eslint": "^9.29.0",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-svelte": "^3.9.3",
