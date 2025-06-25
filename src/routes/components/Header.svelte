@@ -25,10 +25,10 @@
 					<Icon icon="solar:undo-left-round-square-line-duotone" class="size-5 {history.canRedo ? 'text-blue-900' : 'text-slate-400'} scale-x-[-1]" />
 				</Button>
 				<div class="bg-slate-200/60 w-[1px] min-h-full"></div>
-				<Button variant="secondary" size="xs" onclick={() => showLPanel.toggle()} data-testid="show-left-panel">
+				<Button variant="secondary" size="xs" onclick={() => showLPanel.toggle()} data-testid="toggle-left-panel">
 					<Icon icon="mynaui:panel-left" class="size-5  {showLPanel.state ? 'text-blue-900' : 'text-slate-400'}" />
 				</Button>
-				<Button variant="secondary" size="xs" onclick={() => showRPanel.toggle()} data-testid="show-right-panel">
+				<Button variant="secondary" size="xs" onclick={() => showRPanel.toggle()} data-testid="toggle-right-panel">
 					<Icon icon="mynaui:panel-right" class="size-5 {showRPanel.state ? 'text-blue-900' : 'text-slate-400'}" />
 				</Button>
 			</div>
