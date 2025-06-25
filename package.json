@@ -25,6 +25,7 @@
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-svelte": "^3.9.3",
 		"highlight.js": "^11.11.1",
+		"playwright-ctrf-json-reporter": "^0.0.21",
 		"prettier": "^3.6.0",
 		"prettier-plugin-svelte": "^3.4.0",
 		"svelte": "^5.34.7",

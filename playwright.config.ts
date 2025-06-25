@@ -11,7 +11,7 @@ const config: PlaywrightTestConfig = {
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
 	reporter: [
 		['html'],
-		['json', { outputFile: 'test-results/results.json' }]
+		['playwright-ctrf-json-reporter', {}]
 	]
 };
 
