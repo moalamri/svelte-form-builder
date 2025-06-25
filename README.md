@@ -19,11 +19,6 @@ A modern, drag-and-drop form builder built with Svelte 5, featuring an intuitive
 
 ## Quick Start
 
-### Prerequisites
-
-- Node.js 18+
-- npm, pnpm, yarn or bun
-
 ### Installation
 
 1. **Clone the repository**
@@ -92,8 +87,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Built with [Svelte](https://svelte.dev/)
-- Styled with [Tailwind CSS](https://tailwindcss.com/)
-- Drag & drop powered by [SortableJS](https://sortablejs.github.io/Sortable/)
+- [Svelte](https://svelte.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
 
 ---
