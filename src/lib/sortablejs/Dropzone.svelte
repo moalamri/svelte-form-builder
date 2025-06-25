@@ -65,7 +65,7 @@
 	});
 </script>
 
-<div bind:this={element} class="relative flex flex-col space-y-1.5 min-h-10">
+<div bind:this={element} class="relative flex flex-col space-y-1.5 min-h-10 p-1.5" data-testid="dropzone">
 	{#each form.fields as field (field.id)}
 		{#key field.id}
 			{@const isSorting = field.id === sorting}

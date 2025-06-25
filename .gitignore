@@ -14,3 +14,4 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 bun.lock
 svelte-form-builder.code-workspace
+test-results

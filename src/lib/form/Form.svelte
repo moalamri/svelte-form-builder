@@ -46,7 +46,11 @@
 	class="relative border-slate-200 shadow-xs border rounded-xs p-1 md:p-2 mb-1 select-none mx-auto"
 	class:md:max-w-[80%]={isPreview.state}
 >
-	<div class={['relative p-2 border', isDragging.state ? 'border-blue-200 rounded-sm bg-blue-50/50' : 'border-transparent']}>
+	<div
+		class={['relative border', isDragging.state ? 'border-blue-200 rounded-sm bg-blue-50/50' : 'border-transparent']}
+		data-isdragging={isDragging.state}
+		data-testid="form"
+	>
 		<!-- Empty form -->
 		{#if form.fields.length === 0}
 			<div class="flex items-center justify-center">
@@ -60,6 +64,9 @@
 				<div
 					class="relative {isSorting && 'ring-2 ring-blue-600/80 rounded-sm'}"
 					data-fieldid={field.id}
+					data-testid="form-field-{field.type}"
+					data-isactive={isActive.toString()}
+					id={field.id}
 					use:elementClick={() => (form.activeElement = field)}
 				>
 					<div
@@ -78,11 +85,15 @@
 							<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
 							<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-xs">
 								{#snippet trigger()}
-									<Icon icon="material-symbols:delete-outline-rounded" class="text-slate-600" />
+									<button type="button" data-testid="delete-button">
+										<Icon icon="material-symbols:delete-outline-rounded" class="text-slate-600" />
+									</button>
 								{/snippet}
-								<div class="flex items-center space-x-2 p-1">
+								<div class="flex items-center space-x-2 p-1" data-testid="delete-popover">
 									<p class="text-white text-xs leading-none">Remove this field?</p>
-									<Button size="sm" class="min-w-10" onclick={() => removeField(field.id)} variant="danger">Yes</Button>
+									<Button size="sm" class="min-w-10" onclick={() => removeField(field.id)} variant="danger" data-testid="delete-button-yes"
+										>Yes</Button
+									>
 								</div>
 							</Popover>
 						</div>

@@ -7,7 +7,7 @@
 <div
 	class="transition-all rounded-md box-border shadow-xs border border-blue-800/20 bg-white cursor-grab"
 	data-type={element.type}
-	data-testid={`element-${element.type}`}
+	data-testid="element-{element.type}"
 >
 	<div class="flex flex-col items-center p-0.5">
 		<div class="size-7 bg-blue-800/5 rounded-md p-0.5">

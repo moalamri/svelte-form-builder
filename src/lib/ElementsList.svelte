@@ -16,7 +16,7 @@
 		<Icon icon="ci:main-component" class="size-0 md:size-4 text-slate-500" />
 		<p class="text-sm md:text-md font-semibold text-slate-800">Elements</p>
 	</div>
-	<div class="flex flex-col space-y-2">
+	<div class="flex flex-col space-y-2" data-testid="elements-list">
 		<Draggable elements={fields} title="Form Fields">
 			{#snippet dragComponent(element)}
 				<ElementCard {element} />

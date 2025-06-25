@@ -4,7 +4,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
-		"preview": "vite preview",
+		"preview": "vite preview --port 4173",
 		"test": "playwright test",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
@@ -17,6 +17,7 @@
 		"@sveltejs/kit": "^2.22.0",
 		"@sveltejs/vite-plugin-svelte": "^5.1.0",
 		"@types/eslint": "^9.6.1",
+		"@types/node": "^24.0.4",
 		"@types/sortablejs": "^1.15.8",
 		"eslint": "^9.29.0",
 		"eslint-config-prettier": "^10.1.5",

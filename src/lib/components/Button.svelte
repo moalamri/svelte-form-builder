@@ -7,9 +7,10 @@
 		class?: string;
 		children: any;
 		onclick?: () => void;
+		[key: string]: any;
 	};
 
-	let { disabled = false, size = 'md', variant = 'primary', class: cls = '', onclick = () => {}, children }: Props = $props();
+	let { disabled = false, size = 'md', variant = 'primary', class: cls = '', onclick = () => {}, children, ...rest }: Props = $props();
 
 	const defaultClass = 'cursor-pointer rounded-md text-center outline-hidden';
 	const sizeClass =
@@ -33,4 +34,4 @@
 	const buttonClass = twMerge(defaultClass, sizeClass, textSizeClass, variantClass, cls);
 </script>
 
-<button {disabled} onclick={handleClick} class={buttonClass}>{@render children()}</button>
+<button {disabled} onclick={handleClick} class={buttonClass} {...rest}>{@render children()}</button>

@@ -11,11 +11,11 @@
 		<p class="text-sm md:text-md font-semibold text-slate-800">Editor</p>
 	</div>
 	{#if form.activeElement}
-		<div transition:slide={{ duration: 100 }} class="pb-2">
+		<div transition:slide={{ duration: 100 }} class="pb-2" data-testid="editor-{form.activeElement.type}">
 			<ElementSettings />
 		</div>
 	{:else}
-		<div class="flex flex-col items-center justify-center w-full h-full">
+		<div class="flex flex-col items-center justify-center w-full h-full" data-testid="editor-empty">
 			<p class="text-sm text-slate-700 mx-auto">Select a field to edit</p>
 		</div>
 	{/if}

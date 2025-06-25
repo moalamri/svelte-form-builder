@@ -13,7 +13,7 @@
 </script>
 
 <header class="flex justify-between items-center border-b-slate-200 border-b-2">
-	<div class="p-1 font-semibold text-blue-950">SFB</div>
+	<div class="p-1 font-semibold text-blue-950" data-testid="header-title">SFB</div>
 
 	<div class="p-1">
 		{#if !isPreview.state}
@@ -25,11 +25,11 @@
 					<Icon icon="solar:undo-left-round-square-line-duotone" class="size-5 {history.canRedo ? 'text-blue-900' : 'text-slate-400'} scale-x-[-1]" />
 				</Button>
 				<div class="bg-slate-200/60 w-[1px] min-h-full"></div>
-				<Button variant="secondary" size="xs" onclick={() => showLPane.toggle()}>
-					<Icon icon="mynaui:panel-left" class="size-5  {showLPane.state ? 'text-blue-900' : 'text-slate-400'}" />
+				<Button variant="secondary" size="xs" onclick={() => showLPanel.toggle()} data-testid="show-left-panel">
+					<Icon icon="mynaui:panel-left" class="size-5  {showLPanel.state ? 'text-blue-900' : 'text-slate-400'}" />
 				</Button>
-				<Button variant="secondary" size="xs" onclick={() => showRPane.toggle()}>
-					<Icon icon="mynaui:panel-right" class="size-5 {showRPane.state ? 'text-blue-900' : 'text-slate-400'}" />
+				<Button variant="secondary" size="xs" onclick={() => showRPanel.toggle()} data-testid="show-right-panel">
+					<Icon icon="mynaui:panel-right" class="size-5 {showRPanel.state ? 'text-blue-900' : 'text-slate-400'}" />
 				</Button>
 			</div>
 		{/if}
