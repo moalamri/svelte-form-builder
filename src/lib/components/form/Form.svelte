@@ -64,55 +64,57 @@
 				{@const isActive = form.activeElement && form.activeElement.id === field.id}
 				{@const dropBefore = dndStore.hoverIndex === index && dndStore.dropPosition === 'before'}
 				{@const dropAfter = dndStore.hoverIndex === index && dndStore.dropPosition === 'after'}
-				{#if dropBefore}
-					<DropIndicator />
-				{/if}
 				<div
-					class="relative my-1"
+					class="relative"
 					data-testid="form-field-{field.type}"
 					data-isactive={isActive.toString()}
 					data-form-element={index}
 					id={field.id}
 					use:elementClick={() => (form.activeElement = field)}
 				>
-					<div
-						class={twMerge(
-							'relative flex rounded-sm border shadow-xs shadow-slate-200 hover:shadow-sm bg-white',
-							isActive ? 'border-blue-600' : 'border-slate-200',
-							isPreview.state && 'border-slate-50'
-						)}
-					>
+					{#if dropBefore}
+						<DropIndicator />
+					{/if}
+					<div class="relative py-1">
 						<div
-							class="flex flex-col items-center border-e border-slate-300 bg-slate-50 hover:bg-slate-100 rounded-s-sm p-1 gap-2 w-6"
-							class:hidden={isPreview.state}
-							transition:slide={{ axis: 'x', duration: 100 }}
+							class={twMerge(
+								'relative flex rounded-sm border shadow-xs shadow-slate-200 hover:shadow-sm bg-white',
+								isActive ? 'border-blue-600' : 'border-slate-200',
+								isPreview.state && 'border-slate-50'
+							)}
 						>
-							<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
-							<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-xs">
-								{#snippet trigger()}
-									<button type="button" data-testid="delete-button">
-										<Icon icon="material-symbols:delete-outline-rounded" class="text-slate-600" />
-									</button>
-								{/snippet}
-								<div class="flex items-center space-x-2 p-1" data-testid="delete-popover">
-									<p class="text-white text-xs leading-none">Remove this field?</p>
-									<Button size="sm" class="min-w-10" onclick={() => removeField(field.id)} variant="danger" data-testid="delete-button-yes"
-										>Yes</Button
-									>
-								</div>
-							</Popover>
-						</div>
-						<div class="relative flex flex-col justify-center p-2 w-full bg-white rounded-e-sm">
-							{#if field.category === ELEMENT_TYPES.FORMFIELDS}
-								<Label {field} />
-							{/if}
-							<FormComponent {field} updator={form.updator} />
+							<div
+								class="flex flex-col items-center border-e border-slate-300 bg-slate-50 hover:bg-slate-100 rounded-s-sm p-1 gap-2 w-6"
+								class:hidden={isPreview.state}
+								transition:slide={{ axis: 'x', duration: 100 }}
+							>
+								<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
+								<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-xs">
+									{#snippet trigger()}
+										<button type="button" data-testid="delete-button">
+											<Icon icon="material-symbols:delete-outline-rounded" class="text-slate-600" />
+										</button>
+									{/snippet}
+									<div class="flex items-center space-x-2 p-1" data-testid="delete-popover">
+										<p class="text-white text-xs leading-none">Remove this field?</p>
+										<Button size="sm" class="min-w-10" onclick={() => removeField(field.id)} variant="danger" data-testid="delete-button-yes"
+											>Yes</Button
+										>
+									</div>
+								</Popover>
+							</div>
+							<div class="relative flex flex-col justify-center p-2 w-full bg-white rounded-e-sm">
+								{#if field.category === ELEMENT_TYPES.FORMFIELDS}
+									<Label {field} />
+								{/if}
+								<FormComponent {field} updator={form.updator} />
+							</div>
 						</div>
 					</div>
+					{#if dropAfter}
+						<DropIndicator />
+					{/if}
 				</div>
-				{#if dropAfter}
-					<DropIndicator />
-				{/if}
 			{/each}
 		</div>
 	</div>
