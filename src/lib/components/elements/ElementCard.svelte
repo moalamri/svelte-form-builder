@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import { draggableElement } from '$lib/actions/dnd';
 
 	const { element }: { element: any } = $props();
 </script>
@@ -8,6 +9,7 @@
 	class="transition-all rounded-md box-border shadow-xs border border-blue-800/20 bg-white cursor-grab"
 	data-type={element.type}
 	data-testid="element-{element.type}"
+	use:draggableElement={{ type: element.type }}
 >
 	<div class="flex flex-col items-center p-0.5">
 		<div class="size-7 bg-blue-800/5 rounded-md p-0.5">

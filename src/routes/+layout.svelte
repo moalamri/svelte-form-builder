@@ -8,11 +8,7 @@
 	let innerWidth: number = $state(null);
 
 	function processWidth(w: number) {
-		if (w < 768) {
-			isMobile.state = true;
-		} else {
-			isMobile.state = false;
-		}
+		isMobile.state = w < 768;
 	}
 
 	$effect(() => innerWidth && processWidth(innerWidth));

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ELEMENT_TYPES } from '$lib/utils/enums';
-	import { isPreview, isDragging } from '$lib/stores/flags.svelte';
+	import { isPreview } from '$lib/stores/flags.svelte';
 	import form from '$lib/stores/form.svelte';
 	import { elementClick } from '$lib/actions/elementClick';
 	import { slide } from 'svelte/transition';
@@ -8,10 +8,10 @@
 	import Popover from '$lib/components/Popover.svelte';
 	import elements from '$lib/components/elements';
 	import { twMerge } from 'tailwind-merge';
+	import { dndStore } from '$lib/stores/dnd.svelte';
 
 	// Components
 	import Button from '$lib/components/Button.svelte';
-	import Dropzone from '$lib/components/sortablejs/Dropzone.svelte';
 	import Label from '$lib/components/elements/Label.svelte';
 	import Icon from '@iconify/svelte';
 
@@ -47,25 +47,25 @@
 	class:md:max-w-[80%]={isPreview.state}
 >
 	<div
-		class={['relative border', isDragging.state ? 'border-blue-200 rounded-sm bg-blue-50/50' : 'border-transparent']}
-		data-isdragging={isDragging.state}
+		class={['relative border', dndStore.isDragging ? 'border-blue-200 rounded-sm bg-blue-50/50' : 'border-transparent']}
+		data-isdragging={dndStore.isDragging}
 		data-testid="form"
 	>
 		<!-- Empty form -->
 		{#if form.fields.length === 0}
 			<div class="flex items-center justify-center">
-				<p class="text-sm text-slate-700 -mb-10">Drag and drop fields here</p>
+				<p class="text-sm text-slate-700 -mb-10">Drag and drop elements here</p>
 			</div>
 		{/if}
-		<Dropzone>
-			{#snippet formfield(field, isSorting)}
+		<div class="relative flex flex-col space-y-1.5 min-h-10 p-1.5" data-testid="dropzone" id="dropzone">
+			{#each form.fields as field, index (field.id)}
 				{@const FormComponent = getFieldComponent(field.type)}
 				{@const isActive = form.activeElement && form.activeElement.id === field.id}
 				<div
-					class="relative {isSorting && 'ring-2 ring-blue-600/80 rounded-sm'}"
-					data-fieldid={field.id}
+					class="relative"
 					data-testid="form-field-{field.type}"
 					data-isactive={isActive.toString()}
+					data-form-element={index}
 					id={field.id}
 					use:elementClick={() => (form.activeElement = field)}
 				>
@@ -73,8 +73,7 @@
 						class={twMerge(
 							'relative flex rounded-sm border shadow-xs shadow-slate-200 hover:shadow-sm bg-white',
 							isActive ? 'border-blue-600' : 'border-slate-200',
-							isPreview.state && 'border-slate-50',
-							isSorting && 'opacity-0'
+							isPreview.state && 'border-slate-50'
 						)}
 					>
 						<div
@@ -105,8 +104,8 @@
 						</div>
 					</div>
 				</div>
-			{/snippet}
-		</Dropzone>
+			{/each}
+		</div>
 	</div>
 	<div class="flex space-x-2 mt-2">
 		<Button variant="primary">Submit</Button>
