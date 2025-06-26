@@ -1,6 +1,6 @@
 # Svelte Form Builder
 
-A modern, drag-and-drop form builder built with Svelte 5, featuring an intuitive visual interface for creating dynamic forms without writing code.
+A modern, drag-and-drop form builder built with Svelte 5, featuring an intuitive visual interface for creating dynamic forms.
 
 [![Deploy to Cloudflare Pages](https://github.com/moalamri/svelte-form-builder/actions/workflows/deploy.yml/badge.svg)](https://github.com/moalamri/svelte-form-builder/actions/workflows/deploy.yml)
 [![Playwright Tests](https://github.com/moalamri/svelte-form-builder/actions/workflows/test.yml/badge.svg)](https://github.com/moalamri/svelte-form-builder/actions/workflows/test.yml)
