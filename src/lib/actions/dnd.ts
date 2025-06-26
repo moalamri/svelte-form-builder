@@ -36,8 +36,27 @@ export function draggableElement(node: HTMLElement, config: DraggableProps) {
 	function updateGhost(event: TouchEvent | MouseEvent) {
 		if (!ghostElem) return;
 		const coords = getEventHost(event) as Touch | MouseEvent;
-		ghostElem.style.left = `${coords.clientX - offsetX}px`;
-		ghostElem.style.top = `${coords.clientY - offsetY}px`;
+		// Use transform for better performance (no layout recalculation)
+		ghostElem.style.transform = `translate(${coords.clientX - offsetX}px, ${coords.clientY - offsetY}px) translateZ(0)`;
+	}
+
+	/**
+	 * Updates drop zone indicators
+	 * @param event - Touch or mouse event containing position data
+	 */
+	function updateDropZone(event: TouchEvent | MouseEvent) {
+		const elemUnder = getElementUnder(event);
+		if (isDropZone(elemUnder)) {
+			const { element, index, rect } = getFieldElement(elemUnder);
+			if (element && rect) {
+				const coords = getEventHost(event) as Touch | MouseEvent;
+				const centerY = rect.top + rect.height / 2;
+				// Determine if we should drop before or after the target element
+				const position = coords.clientY < centerY ? 'before' : 'after';
+				dndStore.dropPosition = position;
+				dndStore.hoverIndex = index;
+			}
+		}
 	}
 
 	/**
@@ -84,20 +103,12 @@ export function draggableElement(node: HTMLElement, config: DraggableProps) {
 	function move(event: TouchEvent | MouseEvent) {
 		if (!dragElem || !ghostElem) return;
 		event.preventDefault();
+
+		// Update ghost position immediately for responsiveness
 		updateGhost(event);
 
-		const elemUnder = getElementUnder(event);
-		if (isDropZone(elemUnder)) {
-			const { element, index, rect } = getFieldElement(elemUnder);
-			if (element && rect) {
-				const coords = getEventHost(event) as Touch | MouseEvent;
-				const centerY = rect.top + rect.height / 2;
-				// Determine if we should drop before or after the target element
-				const position = coords.clientY < centerY ? 'before' : 'after';
-				dndStore.dropPosition = position;
-				dndStore.hoverIndex = index;
-			}
-		}
+		// Update drop zone indicators
+		updateDropZone(event);
 	}
 
 	/**
@@ -139,6 +150,9 @@ export function draggableElement(node: HTMLElement, config: DraggableProps) {
 		 * Removes all event listeners to prevent memory leaks.
 		 */
 		destroy() {
+			// Clean up
+			removeGhost();
+
 			// Remove touch event listeners
 			node.removeEventListener('touchstart', start);
 			node.removeEventListener('touchmove', move);

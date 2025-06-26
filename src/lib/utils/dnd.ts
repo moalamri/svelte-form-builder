@@ -25,8 +25,13 @@ export function createGhost(element: HTMLElement, event: DragEvent): GhostElemen
 		opacity: '0.7',
 		width: `${element.clientWidth}px`,
 		height: `${element.clientHeight}px`,
-		left: `${coords.clientX - x}px`,
-		top: `${coords.clientY - y}px`
+		left: '0px',
+		top: '0px',
+		// Use transform for positioning - better performance
+		transform: `translate(${coords.clientX - x}px, ${coords.clientY - y}px) translateZ(0)`,
+		willChange: 'transform', // Hint to browser for optimization
+		transition: 'none', // Disable any transitions
+		animation: 'none' // Disable any animations
 	});
 
 	document.body.appendChild(ghost);
