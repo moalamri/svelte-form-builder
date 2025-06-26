@@ -36,7 +36,7 @@ export function getElementUnder(e: TouchEvent | MouseEvent) {
 }
 
 export function getFieldElement(el: HTMLElement): { element: HTMLElement | null, index: number, rect: DOMRect | null } {
-          const fieldElement = el.closest('[data-dform-element]') as HTMLElement;
+          const fieldElement = el.closest('[data-form-element]') as HTMLElement;
           if (!fieldElement) {
                     return { element: null, index: 0, rect: null };
           }
