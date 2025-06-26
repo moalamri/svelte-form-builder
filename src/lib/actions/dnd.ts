@@ -1,4 +1,4 @@
-import { getEventHost, getElementUnder, getFieldElement, getIsDropZone, getDropIndex } from '$lib/utils/dnd';
+import { getEventHost, getElementUnder, getFieldElement, getIsDropZone, getDropIndex, createGhostElement } from '$lib/utils/dnd';
 import { dndStore } from '$lib/stores/dnd.svelte';
 import { addField } from '$lib/utils/form';
 
@@ -16,27 +16,6 @@ export function draggableElement(node: HTMLElement, props: DraggableProps) {
           let ghostElement: HTMLElement | null = null;
           // Dragging element
           let draggingElement: HTMLElement | null = null;
-
-          function createGhostElement(element: HTMLElement, event: TouchEvent | MouseEvent) {
-                    const touches = getEventHost(event) as Touch | MouseEvent;
-                    const rect = element.getBoundingClientRect();
-                    // Store the initial mouse offset from the element's top-left corner
-                    initX = touches.clientX - rect.left;
-                    initY = touches.clientY - rect.top;
-                    // create a clone element to simulate ghost element
-                    ghostElement = element.cloneNode(true) as HTMLElement;
-                    Object.assign(ghostElement.style, {
-                              position: 'fixed',
-                              zIndex: '9000',
-                              pointerEvents: 'none',
-                              opacity: '0.7',
-                              width: `${element.clientWidth}px`,
-                              height: `${element.clientHeight}px`,
-                              left: `${touches.clientX - initX}px`,
-                              top: `${touches.clientY - initY}px`,
-                    });
-                    document.body.appendChild(ghostElement);
-          }
 
           function updateGhostElementPosition(event: TouchEvent | MouseEvent) {
                     const touches = getEventHost(event) as Touch | MouseEvent;
@@ -63,7 +42,10 @@ export function draggableElement(node: HTMLElement, props: DraggableProps) {
                     draggingElement = node;
 
                     // create the ghost element
-                    createGhostElement(node, event);
+                    const { element, x, y } = createGhostElement(node, event);
+                    ghostElement = element;
+                    initX = x;
+                    initY = y;
           }
 
           function handleMove(event: TouchEvent | MouseEvent) {

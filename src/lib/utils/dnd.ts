@@ -1,3 +1,29 @@
+export function createGhostElement(element: HTMLElement, event: TouchEvent | MouseEvent) {
+          const touches = getEventHost(event) as Touch | MouseEvent;
+          const rect = element.getBoundingClientRect();
+          // Store the initial mouse offset from the element's top-left corner
+          const initX = touches.clientX - rect.left;
+          const initY = touches.clientY - rect.top;
+          // create a clone element to simulate ghost element
+          const ghostElement = element.cloneNode(true) as HTMLElement;
+          Object.assign(ghostElement.style, {
+                    position: 'fixed',
+                    zIndex: '9000',
+                    pointerEvents: 'none',
+                    opacity: '0.7',
+                    width: `${element.clientWidth}px`,
+                    height: `${element.clientHeight}px`,
+                    left: `${touches.clientX - initX}px`,
+                    top: `${touches.clientY - initY}px`,
+          });
+          document.body.appendChild(ghostElement);
+          return {
+                    element: ghostElement,
+                    x: initX,
+                    y: initY
+          };
+}
+
 export function getEventHost(e: TouchEvent | MouseEvent) {
           // on touchend event, we have to use `e.changedTouches`
           if (e instanceof MouseEvent) return e;
