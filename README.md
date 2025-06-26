@@ -28,16 +28,19 @@ A modern, drag-and-drop form builder built with Svelte 5, featuring an intuitive
    git clone https://github.com/moalamri/svelte-form-builder.git
    cd svelte-form-builder
    ```
+
 2. **Install dependencies**
 
    ```bash
    npm install
    ```
+
 3. **Start the development server**
 
    ```bash
    npm run dev
    ```
+
 4. **Open your browser**
    Navigate to `http://localhost:5173`
 

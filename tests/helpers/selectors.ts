@@ -4,7 +4,7 @@ export const ELEMENT_TESTID = {
 	DIVIDER: 'element-divider',
 	TITLE: 'element-title',
 	CHECKBOX: 'element-checkbox',
-	RADIO: 'element-radio',
+	RADIO: 'element-radio'
 };
 
 export const FORM_FIELD_TESTID = {

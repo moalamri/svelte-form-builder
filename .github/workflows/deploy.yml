@@ -1,7 +1,7 @@
 name: Deploy to Cloudflare Pages
 on:
   workflow_run:
-    workflows: ["Playwright Tests"]
+    workflows: ['Playwright Tests']
     types:
       - completed
     branches: [main, master]

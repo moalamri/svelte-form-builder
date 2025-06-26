@@ -2,7 +2,6 @@
 	import Icon from '@iconify/svelte';
 
 	let { value, onchange }: { value: any; onchange: any } = $props();
-
 </script>
 
 <button type="button" onclick={onchange} class="flex justify-end outline-hidden w-full">

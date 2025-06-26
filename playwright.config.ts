@@ -9,10 +9,7 @@ const config: PlaywrightTestConfig = {
 	},
 	testDir: 'tests',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
-	reporter: [
-		['html'],
-		['playwright-ctrf-json-reporter', {}]
-	]
+	reporter: [['html'], ['playwright-ctrf-json-reporter', {}]]
 };
 
 export default config;
