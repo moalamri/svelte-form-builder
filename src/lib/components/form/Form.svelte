@@ -57,12 +57,17 @@
 				<p class="text-sm text-slate-700 -mb-10">Drag and drop elements here</p>
 			</div>
 		{/if}
-		<div class="relative flex flex-col space-y-1.5 min-h-10 p-1.5" data-testid="dropzone" id="dropzone">
+		<div class="relative flex flex-col min-h-10 p-1.5" data-testid="dropzone" id="dropzone">
 			{#each form.fields as field, index (field.id)}
 				{@const FormComponent = getFieldComponent(field.type)}
 				{@const isActive = form.activeElement && form.activeElement.id === field.id}
+				{@const dropBefore = dndStore.hoverIndex === index && dndStore.dropPosition === 'before'}
+				{@const dropAfter = dndStore.hoverIndex === index && dndStore.dropPosition === 'after'}
+				{#if dropBefore}
+					<div class="bg-blue-500 w-full h-1 rounded-full"></div>
+				{/if}
 				<div
-					class="relative"
+					class="relative my-1"
 					data-testid="form-field-{field.type}"
 					data-isactive={isActive.toString()}
 					data-form-element={index}
@@ -104,6 +109,9 @@
 						</div>
 					</div>
 				</div>
+				{#if dropAfter}
+					<div class="bg-blue-500 w-full h-1 rounded-full"></div>
+				{/if}
 			{/each}
 		</div>
 	</div>

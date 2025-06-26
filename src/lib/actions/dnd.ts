@@ -1,4 +1,4 @@
-import { getEventHost, getElementUnder, getDropZone, getFieldElement, isDropZone } from '$lib/utils/dnd';
+import { getEventHost, getElementUnder, getFieldElement, getIsDropZone, getDropIndex } from '$lib/utils/dnd';
 import { dndStore } from '$lib/stores/dnd.svelte';
 import { addField } from '$lib/utils/form';
 
@@ -52,9 +52,9 @@ export function draggableElement(node: HTMLElement, props: DraggableProps) {
           }
 
           function end() {
-                    dndStore.isDragging = false;
-                    draggingElement = null;
+                    dndStore.clear();
                     destroyGhostElement();
+                    draggingElement = null;
           }
 
           function handleStart(event: TouchEvent | MouseEvent) {
@@ -70,17 +70,24 @@ export function draggableElement(node: HTMLElement, props: DraggableProps) {
                     if (!draggingElement) return;
                     event.preventDefault();
                     updateGhostElementPosition(event);
+                    const elementUnder = getElementUnder(event);
+                    if (getIsDropZone(elementUnder)) {
+                              let { element, index, rect } = getFieldElement(elementUnder);
+                              if (element) {
+                                        const touches = getEventHost(event) as Touch | MouseEvent;
+                                        dndStore.dropPosition = touches.clientY < rect.top + rect.height / 2 ? 'before' : 'after';
+                                        dndStore.hoverIndex = index;
+                              }
+                    }
           }
 
           function handleEnd(event: TouchEvent | MouseEvent) {
                     if (!draggingElement) return;
-                    const elementUnder = getDropZone(getElementUnder(event) as HTMLElement);
-                    if (isDropZone(elementUnder)) {
-                              let { element, index, rect } = getFieldElement(elementUnder);
+                    const elementUnder = getElementUnder(event);
+                    if (getIsDropZone(elementUnder)) {
+                              let { element, index } = getFieldElement(elementUnder);
                               if (element) {
-                                        const touches = getEventHost(event) as Touch | MouseEvent;
-                                        const touchPosition = touches.clientY < rect.top + rect.height / 2 ? 'before' : 'after';
-                                        index = touchPosition === 'before' ? index : index + 1;
+                                        index = getDropIndex(dndStore.dropPosition, index);
                               }
                               addField(elemType, index);
                     }

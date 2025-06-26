@@ -9,19 +9,22 @@ export function getElementUnder(e: TouchEvent | MouseEvent) {
           return document.elementFromPoint(touches.clientX, touches.clientY) as HTMLElement;
 }
 
-export function getDropZone(el: HTMLElement) {
-          return el?.closest('#dropzone') as HTMLElement;
-}
-
 export function getFieldElement(el: HTMLElement): { element: HTMLElement | null, index: number, rect: DOMRect | null } {
-          const fieldElement = el?.closest('[data-form-element]') as HTMLElement;
+          const fieldElement = el.closest('[data-dform-element]') as HTMLElement;
+          if (!fieldElement) {
+                    return { element: null, index: 0, rect: null };
+          }
           return {
                     element: fieldElement,
-                    index: Number(fieldElement?.getAttribute('data-form-element') || 0),
-                    rect: fieldElement?.getBoundingClientRect()
+                    index: Number(fieldElement.getAttribute('data-form-element')),
+                    rect: fieldElement.getBoundingClientRect()
           }
 }
 
-export function isDropZone(element: HTMLElement) {
-          return element?.id === 'dropzone';
+export function getIsDropZone(element: HTMLElement) {
+          return element.closest('#dropzone')?.id === 'dropzone';
+}
+
+export function getDropIndex(position: string, index: number) {
+          return position === 'before' ? index : index + 1;
 }

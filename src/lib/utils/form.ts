@@ -39,6 +39,7 @@ export function prepareField(type: string): any {
 
 export function addField(type: string, index: number) {
           const newField = prepareField(type);
-          form.fields.splice(index, 0, newField);
+          // Insert the new field at the specified index
+          form.fields = [...form.fields.slice(0, index), newField, ...form.fields.slice(index)];
           form.activeElement = newField;
 }
