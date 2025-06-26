@@ -1,4 +1,5 @@
 <script lang="ts">
+	import DropIndicator from '$lib/components/form/DropIndicator.svelte';
 	import { ELEMENT_TYPES } from '$lib/utils/enums';
 	import { isPreview } from '$lib/stores/flags.svelte';
 	import form from '$lib/stores/form.svelte';
@@ -64,7 +65,7 @@
 				{@const dropBefore = dndStore.hoverIndex === index && dndStore.dropPosition === 'before'}
 				{@const dropAfter = dndStore.hoverIndex === index && dndStore.dropPosition === 'after'}
 				{#if dropBefore}
-					<div class="bg-blue-500 w-full h-1 rounded-full"></div>
+					<DropIndicator />
 				{/if}
 				<div
 					class="relative my-1"
@@ -110,7 +111,7 @@
 					</div>
 				</div>
 				{#if dropAfter}
-					<div class="bg-blue-500 w-full h-1 rounded-full"></div>
+					<DropIndicator />
 				{/if}
 			{/each}
 		</div>
