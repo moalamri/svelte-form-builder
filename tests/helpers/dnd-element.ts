@@ -7,12 +7,20 @@ type BoundingBox = {
           height: number;
 };
 
-export const dndElement = async (page: Page, toDragTestId: string, dropZoneBoundingBox: BoundingBox, steps: number = 4) => {
-          const toDrag = page.getByTestId(toDragTestId);
+type DndElementOptions = {
+          dropZoneBoundingBox: BoundingBox;
+          steps?: number;
+          mouseUp?: boolean;
+};
+
+export const dndElement = async (page: Page, toDragTestId: string, options: DndElementOptions) => {
+          const { dropZoneBoundingBox, steps = 4, mouseUp = true } = options;
           const { x, y, width, height } = dropZoneBoundingBox;
 
-          await toDrag.hover();
+          await page.getByTestId(toDragTestId).hover();
           await page.mouse.down();
           await page.mouse.move(x + width / 2, y + height / 2, { steps });
-          await page.mouse.up();
+          if (mouseUp) {
+                    await page.mouse.up();
+          }
 };

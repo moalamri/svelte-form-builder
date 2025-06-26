@@ -21,15 +21,15 @@ test.describe('Drag and Drop Form Builder', () => {
 
           });
 
-          test('should show drop zone area when dragging over form', async ({ page }) => {
+          test('should show drop zone area when dragging an element', async ({ page }) => {
                     const formArea = page.getByTestId(AREA_TESTID.FORM_AREA);
-
-                    // Drag input element over form area
-                    await page.getByTestId(ELEMENT_TESTID.INPUT).hover();
-                    await page.mouse.down();
+                    const dropZoneBoundingBox = await formArea.boundingBox();
 
                     // Check that drop zone `data-isdragging` attribute is set to `false`
                     expect(await formArea.getAttribute('data-isdragging')).toBe('false');
+
+                    // Drag input element over form area
+                    await dndElement(page, ELEMENT_TESTID.INPUT, { dropZoneBoundingBox, mouseUp: false });
 
                     // Drag over form area
                     await formArea.hover();
@@ -37,8 +37,11 @@ test.describe('Drag and Drop Form Builder', () => {
                     // Check that drop zone `data-isdragging` attribute is set to `true`
                     expect(await formArea.getAttribute('data-isdragging')).toBe('true');
 
-                    // Release mouse
+                    // Release the mouse
                     await page.mouse.up();
+
+                    // Check that drop zone `data-isdragging` attribute is set to `false`
+                    expect(await formArea.getAttribute('data-isdragging')).toBe('false');
           });
 
           test('should successfully drag and drop all elements into form', async ({ page }) => {
@@ -49,18 +52,18 @@ test.describe('Drag and Drop Form Builder', () => {
                     const dropZoneBoundingBox = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
 
                     for (const element in ELEMENT_TESTID) {
-                              await dndElement(page, ELEMENT_TESTID[element], dropZoneBoundingBox);
+                              await dndElement(page, ELEMENT_TESTID[element], { dropZoneBoundingBox });
                     }
 
                     // Verify that all elements are successfully dropped by counting the number of the form fields
-                    await expect(page.locator('[data-fieldid]')).toHaveCount(Object.keys(ELEMENT_TESTID).length);
+                    await expect(page.locator('[data-form-element]')).toHaveCount(Object.keys(ELEMENT_TESTID).length);
           });
 
           test('should show sorting handles for dropped elements', async ({ page }) => {
                     const dropZoneBoundingBox = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
 
                     // Drag input element into drop zone
-                    await dndElement(page, ELEMENT_TESTID.INPUT, dropZoneBoundingBox);
+                    await dndElement(page, ELEMENT_TESTID.INPUT, { dropZoneBoundingBox });
 
                     // Verify drag handles are present
                     await expect(page.locator('.handle')).toHaveCount(1);
@@ -70,8 +73,8 @@ test.describe('Drag and Drop Form Builder', () => {
                     const dropZoneBoundingBox = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
 
                     // Add two elements
-                    await dndElement(page, ELEMENT_TESTID.INPUT, dropZoneBoundingBox);
-                    await dndElement(page, ELEMENT_TESTID.TITLE, dropZoneBoundingBox);
+                    await dndElement(page, ELEMENT_TESTID.INPUT, { dropZoneBoundingBox });
+                    await dndElement(page, ELEMENT_TESTID.TITLE, { dropZoneBoundingBox });
 
                     // Get drag handles
                     const dragHandles = page.locator('.handle');
@@ -83,7 +86,7 @@ test.describe('Drag and Drop Form Builder', () => {
                     await page.mouse.down();
 
                     // Move to position after second element
-                    const secondElement = page.locator('[data-fieldid]').nth(1);
+                    const secondElement = page.locator('[data-form-element]').nth(1);
                     await secondElement.hover();
 
                     // Release to reorder
@@ -98,7 +101,7 @@ test.describe('Drag and Drop Form Builder', () => {
                     const dropZoneBoundingBox = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
 
                     // Drag input element into drop zone
-                    await dndElement(page, ELEMENT_TESTID.INPUT, dropZoneBoundingBox);
+                    await dndElement(page, ELEMENT_TESTID.INPUT, { dropZoneBoundingBox });
 
                     // Verify element was added
                     await expect(page.getByTestId(FORM_FIELD_TESTID.INPUT)).toBeVisible();
@@ -119,7 +122,7 @@ test.describe('Drag and Drop Form Builder', () => {
                     const dropZoneBoundingBox = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
 
                     // Drag input element into drop zone
-                    await dndElement(page, ELEMENT_TESTID.INPUT, dropZoneBoundingBox);
+                    await dndElement(page, ELEMENT_TESTID.INPUT, { dropZoneBoundingBox });
 
                     // Click delete icon
                     const deleteIcon = page.getByTestId(BUTTONS_TESTID.DELETE_BUTTON);
@@ -139,7 +142,7 @@ test.describe('Drag and Drop Form Builder', () => {
                     const dropZoneBoundingBox = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
 
                     // Drag input element into drop zone
-                    await dndElement(page, ELEMENT_TESTID.INPUT, dropZoneBoundingBox);
+                    await dndElement(page, ELEMENT_TESTID.INPUT, { dropZoneBoundingBox });
 
                     // Verify editor panel shows element settings
                     await expect(page.getByTestId(EDITOR_TESTID.INPUT)).toBeVisible();
@@ -149,9 +152,9 @@ test.describe('Drag and Drop Form Builder', () => {
                     const dropZoneBoundingBox = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
 
                     // Drag input element into drop zone
-                    await dndElement(page, ELEMENT_TESTID.INPUT, dropZoneBoundingBox);
+                    await dndElement(page, ELEMENT_TESTID.INPUT, { dropZoneBoundingBox });
                     // Drag title element into drop zone
-                    await dndElement(page, ELEMENT_TESTID.TITLE, dropZoneBoundingBox);
+                    await dndElement(page, ELEMENT_TESTID.TITLE, { dropZoneBoundingBox });
 
                     const inputElement = page.getByTestId(FORM_FIELD_TESTID.INPUT);
                     const titleElement = page.getByTestId(FORM_FIELD_TESTID.TITLE);
@@ -184,9 +187,9 @@ test.describe('Drag and Drop Form Builder', () => {
                     const dropZoneBoundingBox = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
 
                     // Drag input element into drop zone
-                    await dndElement(page, ELEMENT_TESTID.INPUT, dropZoneBoundingBox);
+                    await dndElement(page, ELEMENT_TESTID.INPUT, { dropZoneBoundingBox });
                     // Drag title element into drop zone
-                    await dndElement(page, ELEMENT_TESTID.TITLE, dropZoneBoundingBox);
+                    await dndElement(page, ELEMENT_TESTID.TITLE, { dropZoneBoundingBox });
 
                     // Click on the input element to select it
                     await page.getByTestId(FORM_FIELD_TESTID.INPUT).click();
@@ -196,16 +199,19 @@ test.describe('Drag and Drop Form Builder', () => {
           });
 
           test('should handle drag and drop with different viewport sizes', async ({ page }) => {
+                    // The bounding box of the drop zone
+                    let dropZoneBoundingBox = null;
+
                     // Test mobile viewport
                     await page.setViewportSize({ width: 375, height: 667 });
                     // Hide left panel
                     await page.getByTestId(BUTTONS_TESTID.TOGGLE_LEFT_PANEL).click();
 
                     // Drop zone bounding box for mobile viewport
-                    const dropZoneBoundingBoxMobile = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
+                    dropZoneBoundingBox = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
 
                     // Drag input element into drop zone
-                    await dndElement(page, ELEMENT_TESTID.INPUT, dropZoneBoundingBoxMobile);
+                    await dndElement(page, ELEMENT_TESTID.INPUT, { dropZoneBoundingBox });
                     await expect(page.getByTestId(FORM_FIELD_TESTID.INPUT)).toBeVisible();
 
                     // Test tablet viewport
@@ -214,10 +220,10 @@ test.describe('Drag and Drop Form Builder', () => {
                     await page.getByTestId(AREA_TESTID.ELEMENTS_LIST).waitFor({ state: 'visible' });
 
                     // Drop zone bounding box for tablet viewport
-                    const dropZoneBoundingBoxTablet = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
+                    dropZoneBoundingBox = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
 
                     // Drag input element into drop zone
-                    await dndElement(page, ELEMENT_TESTID.INPUT, dropZoneBoundingBoxTablet);
+                    await dndElement(page, ELEMENT_TESTID.INPUT, { dropZoneBoundingBox });
                     await expect(page.getByTestId(FORM_FIELD_TESTID.INPUT)).toBeVisible();
 
                     // Test desktop viewport
@@ -226,10 +232,10 @@ test.describe('Drag and Drop Form Builder', () => {
                     await page.getByTestId(AREA_TESTID.ELEMENTS_LIST).waitFor({ state: 'visible' });
 
                     // Drop zone bounding box for desktop viewport
-                    const dropZoneBoundingBoxDesktop = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
+                    dropZoneBoundingBox = await page.getByTestId(AREA_TESTID.DROPZONE).boundingBox();
 
                     // Drag input element into drop zone
-                    await dndElement(page, ELEMENT_TESTID.INPUT, dropZoneBoundingBoxDesktop);
+                    await dndElement(page, ELEMENT_TESTID.INPUT, { dropZoneBoundingBox });
                     await expect(page.getByTestId(FORM_FIELD_TESTID.INPUT)).toBeVisible();
           });
 });
