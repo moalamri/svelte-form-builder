@@ -1,37 +1,80 @@
+import type { DropPosition } from '$lib/types';
+
+/**
+ * Reactive store for managing drag and drop state across the application.
+ * Uses Svelte 5's $state runes for fine-grained reactivity.
+ * 
+ * Tracks:
+ * - Whether a drag operation is currently active
+ * - The position where an element should be dropped (before/after)
+ * - The index of the element currently being hovered over
+ */
 class DndStore {
-          #draggingState = $state(false);
-          #dropPosition = $state<string | null>(null);
-          #hoverIndex = $state<number | null>(null);
+          /** Private reactive state for drag operation status */
+          #dragging = $state(false);
+          /** Private reactive state for drop position relative to hovered element */
+          #dropPos = $state<DropPosition | null>(null);
+          /** Private reactive state for the index of the currently hovered form element */
+          #hoverIdx = $state<number | null>(null);
 
-          get isDragging() {
-                    return this.#draggingState;
+          /**
+           * Gets the current dragging state.
+           * @returns True if a drag operation is currently active
+           */
+          get isDragging(): boolean {
+                    return this.#dragging;
           }
 
-          set isDragging(value: boolean) {
-                    this.#draggingState = value;
+          /**
+           * Sets the dragging state.
+           * @param active - Whether a drag operation is active
+           */
+          set isDragging(active: boolean) {
+                    this.#dragging = active;
           }
 
-          get dropPosition() {
-                    return this.#dropPosition;
+          /**
+           * Gets the current drop position relative to the hovered element.
+           * @returns 'before' | 'after' | null
+           */
+          get dropPosition(): DropPosition | null {
+                    return this.#dropPos;
           }
 
-          set dropPosition(value: string | null) {
-                    this.#dropPosition = value;
+          /**
+           * Sets the drop position relative to the hovered element.
+           * @param position - Position where the dragged element should be dropped
+           */
+          set dropPosition(position: DropPosition | null) {
+                    this.#dropPos = position;
           }
 
-          get hoverIndex() {
-                    return this.#hoverIndex;
+          /**
+           * Gets the index of the form element currently being hovered over.
+           * @returns The zero-based index of the hovered element, or null if none
+           */
+          get hoverIndex(): number | null {
+                    return this.#hoverIdx;
           }
 
-          set hoverIndex(value: number | null) {
-                    this.#hoverIndex = value;
+          /**
+           * Sets the index of the form element currently being hovered over.
+           * @param index - The zero-based index of the element being hovered
+           */
+          set hoverIndex(index: number | null) {
+                    this.#hoverIdx = index;
           }
 
-          clear() {
-                    this.#draggingState = false;
-                    this.#dropPosition = null;
-                    this.#hoverIndex = null;
+          /**
+           * Resets all drag and drop state to initial values.
+           * Called when a drag operation ends or is cancelled.
+           */
+          clear(): void {
+                    this.#dragging = false;
+                    this.#dropPos = null;
+                    this.#hoverIdx = null;
           }
 }
 
+/** Singleton instance of the DnD store for use across the application */
 export const dndStore = new DndStore();

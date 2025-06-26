@@ -1,102 +1,160 @@
-import { getEventHost, getElementUnder, getFieldElement, getIsDropZone, getDropIndex, createGhostElement } from '$lib/utils/dnd';
+import {
+          getEventHost,
+          getElementUnder,
+          getFieldElement,
+          isDropZone,
+          getDropIndex,
+          createGhost
+} from '$lib/utils/dnd';
 import { dndStore } from '$lib/stores/dnd.svelte';
 import { addField } from '$lib/utils/form';
+import type { DraggableProps } from '$lib/types';
 
-export type DraggableProps = {
-          type: string;
-}
+/**
+ * Svelte action that makes an element draggable for form building.
+ * Handles both mouse and touch events for cross-platform compatibility.
+ * 
+ * @param node - The HTML element to make draggable
+ * @param config - Configuration object containing the element type
+ * @returns Object with destroy method for cleanup
+ * 
+ * @example
+ * ```svelte
+ * <div use:draggableElement={{ type: 'input' }}>
+ *   Drag me to add an input field
+ * </div>
+ * ```
+ */
+export function draggableElement(node: HTMLElement, config: DraggableProps) {
+          const { type: elemType } = config;
 
-export function draggableElement(node: HTMLElement, props: DraggableProps) {
-          const { type: elemType } = props;
+          // Initial cursor offset from element's top-left corner for ghost positioning
+          let offsetX = 0;
+          let offsetY = 0;
+          // Visual ghost element that follows the cursor during drag
+          let ghostElem: HTMLElement | null = null;
+          // Reference to the currently dragged element
+          let dragElem: HTMLElement | null = null;
 
-          // Initialize initial position
-          let initX = 0;
-          let initY = 0;
-          // Ghost element
-          let ghostElement: HTMLElement | null = null;
-          // Dragging element
-          let draggingElement: HTMLElement | null = null;
-
-          function updateGhostElementPosition(event: TouchEvent | MouseEvent) {
-                    const touches = getEventHost(event) as Touch | MouseEvent;
-                    ghostElement.style.left = `${touches.clientX - initX}px`;
-                    ghostElement.style.top = `${touches.clientY - initY}px`;
+          /**
+           * Updates the position of the ghost element to follow the cursor/touch point.
+           * @param event - Touch or mouse event containing position data
+           */
+          function updateGhost(event: TouchEvent | MouseEvent) {
+                    if (!ghostElem) return;
+                    const coords = getEventHost(event) as Touch | MouseEvent;
+                    ghostElem.style.left = `${coords.clientX - offsetX}px`;
+                    ghostElem.style.top = `${coords.clientY - offsetY}px`;
           }
 
-          function destroyGhostElement() {
-                    if (ghostElement) {
-                              ghostElement.remove();
-                              ghostElement = null;
+          /**
+           * Removes the ghost element from the DOM and cleans up references.
+           */
+          function removeGhost() {
+                    if (ghostElem) {
+                              ghostElem.remove();
+                              ghostElem = null;
                     }
           }
 
+          /**
+           * Ends the drag operation and resets all state.
+           */
           function end() {
                     dndStore.clear();
-                    destroyGhostElement();
-                    draggingElement = null;
+                    removeGhost();
+                    dragElem = null;
           }
 
-          function handleStart(event: TouchEvent | MouseEvent) {
+          /**
+           * Handles the start of a drag operation.
+           * Creates a ghost element and initializes drag state.
+           * @param event - Touch or mouse event that initiated the drag
+           */
+          function start(event: TouchEvent | MouseEvent) {
                     event.preventDefault();
                     dndStore.isDragging = true;
-                    draggingElement = node;
+                    dragElem = node;
 
-                    // create the ghost element
-                    const { element, x, y } = createGhostElement(node, event);
-                    ghostElement = element;
-                    initX = x;
-                    initY = y;
+                    // Create the ghost element that will follow the cursor
+                    const { element, x, y } = createGhost(node, event);
+                    ghostElem = element;
+                    offsetX = x;
+                    offsetY = y;
           }
 
-          function handleMove(event: TouchEvent | MouseEvent) {
-                    if (!draggingElement) return;
+          /**
+           * Handles drag movement, updating ghost position and drop indicators.
+           * Determines if the cursor is over a valid drop zone and calculates drop position.
+           * @param event - Touch or mouse move event
+           */
+          function move(event: TouchEvent | MouseEvent) {
+                    if (!dragElem || !ghostElem) return;
                     event.preventDefault();
-                    updateGhostElementPosition(event);
-                    const elementUnder = getElementUnder(event);
-                    if (getIsDropZone(elementUnder)) {
-                              let { element, index, rect } = getFieldElement(elementUnder);
-                              if (element) {
-                                        const touches = getEventHost(event) as Touch | MouseEvent;
-                                        dndStore.dropPosition = touches.clientY < rect.top + rect.height / 2 ? 'before' : 'after';
+                    updateGhost(event);
+
+                    const elemUnder = getElementUnder(event);
+                    if (isDropZone(elemUnder)) {
+                              const { element, index, rect } = getFieldElement(elemUnder);
+                              if (element && rect) {
+                                        const coords = getEventHost(event) as Touch | MouseEvent;
+                                        const centerY = rect.top + rect.height / 2;
+                                        // Determine if we should drop before or after the target element
+                                        const position = coords.clientY < centerY ? 'before' : 'after';
+                                        dndStore.dropPosition = position;
                                         dndStore.hoverIndex = index;
                               }
                     }
           }
 
-          function handleEnd(event: TouchEvent | MouseEvent) {
-                    if (!draggingElement) return;
-                    const elementUnder = getElementUnder(event);
-                    if (getIsDropZone(elementUnder)) {
-                              let { element, index } = getFieldElement(elementUnder);
+          /**
+           * Handles the end of a drag operation.
+           * If dropped over a valid zone, adds the field to the form.
+           * @param event - Touch or mouse event that ended the drag
+           */
+          function drop(event: TouchEvent | MouseEvent) {
+                    if (!dragElem) return;
+                    const elemUnder = getElementUnder(event);
+
+                    if (isDropZone(elemUnder)) {
+                              const { element, index } = getFieldElement(elemUnder);
+                              let insertIndex = index;
+
                               if (element) {
-                                        index = getDropIndex(dndStore.dropPosition, index);
+                                        // Calculate the final drop index based on position
+                                        insertIndex = getDropIndex(dndStore.dropPosition, index);
                               }
-                              addField(elemType, index);
+                              // Add the new field to the form
+                              addField(elemType, insertIndex);
                     }
                     end();
           }
 
-          // Add touch event listeners
-          node.addEventListener('touchstart', handleStart);
-          node.addEventListener('touchmove', handleMove);
-          node.addEventListener('touchend', handleEnd);
-          // Add mouse event listeners (only mousedown on the element)
-          node.addEventListener('mousedown', handleStart);
-          // Add mouse event listeners to document
-          document.addEventListener('mousemove', handleMove);
-          document.addEventListener('mouseup', handleEnd);
+          // Register event listeners for touch and mouse interactions
+          node.addEventListener('touchstart', start);
+          node.addEventListener('touchmove', move);
+          node.addEventListener('touchend', drop);
+          node.addEventListener('mousedown', start);
+
+          // Document-level listeners for mouse events to handle dragging outside the element
+          document.addEventListener('mousemove', move);
+          document.addEventListener('mouseup', drop);
 
           return {
+                    /**
+                     * Cleanup function called when the element is destroyed.
+                     * Removes all event listeners to prevent memory leaks.
+                     */
                     destroy() {
-                              // touch
-                              node.removeEventListener('touchstart', handleStart);
-                              node.removeEventListener('touchmove', handleMove);
-                              node.removeEventListener('touchend', handleEnd);
-                              // mouse
-                              node.removeEventListener('mousedown', handleStart);
-                              // Document mouse
-                              document.removeEventListener('mousemove', handleMove);
-                              document.removeEventListener('mouseup', handleEnd);
+                              // Remove touch event listeners
+                              node.removeEventListener('touchstart', start);
+                              node.removeEventListener('touchmove', move);
+                              node.removeEventListener('touchend', drop);
+                              // Remove mouse event listeners
+                              node.removeEventListener('mousedown', start);
+                              // Remove document-level mouse listeners
+                              document.removeEventListener('mousemove', move);
+                              document.removeEventListener('mouseup', drop);
                     }
           };
 }
