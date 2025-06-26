@@ -27,7 +27,11 @@ export function createGhostElement(element: HTMLElement, event: TouchEvent | Mou
 export function getEventHost(e: TouchEvent | MouseEvent) {
           // on touchend event, we have to use `e.changedTouches`
           if (e instanceof MouseEvent) return e;
-          if (e instanceof TouchEvent) return e.changedTouches[0];
+          if (e instanceof TouchEvent) {
+                    return e.changedTouches?.length ? e.changedTouches[0] :
+                              e.targetTouches?.length ? e.targetTouches[0] :
+                                        e.touches?.length ? e.touches[0] : e;
+          }
 }
 
 export function getElementUnder(e: TouchEvent | MouseEvent) {
