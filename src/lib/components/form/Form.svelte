@@ -10,6 +10,7 @@
 	import elements from '$lib/components/elements';
 	import { twMerge } from 'tailwind-merge';
 	import { dndStore } from '$lib/stores/dnd.svelte';
+	import { sort } from '$lib/actions/sort';
 
 	// Components
 	import Button from '$lib/components/Button.svelte';
@@ -88,7 +89,9 @@
 								class:hidden={isPreview.state}
 								transition:slide={{ axis: 'x', duration: 100 }}
 							>
-								<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
+								<div use:sort>
+									<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
+								</div>
 								<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-xs">
 									{#snippet trigger()}
 										<button type="button" data-testid="delete-button">

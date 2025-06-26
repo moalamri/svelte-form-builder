@@ -1,44 +1,14 @@
-import { getEventHost, getElementUnder, getFieldElement, isDropZone, getDropIndex, createGhost } from '$lib/utils/dnd';
+import { getEventHost, getElementUnder, getFieldElement, isDropZone, getDropIndex } from '$lib/utils/dnd/helpers';
+import ghost from '$lib/utils/dnd/ghost';
 import { dndStore } from '$lib/stores/dnd.svelte';
 import { addField } from '$lib/utils/form';
-import type { DraggableProps } from '$lib/types';
+import type { CloneOptions } from '$lib/types';
 
-/**
- * Svelte action that makes an element draggable for form building.
- * Handles both mouse and touch events for cross-platform compatibility.
- *
- * @param node - The HTML element to make draggable
- * @param config - Configuration object containing the element type
- * @returns Object with destroy method for cleanup
- *
- * @example
- * ```svelte
- * <div use:draggableElement={{ type: 'input' }}>
- *   Drag me to add an input field
- * </div>
- * ```
- */
-export function draggableElement(node: HTMLElement, config: DraggableProps) {
-	const { type: elemType } = config;
+export function clone(node: HTMLElement, options: CloneOptions) {
+	const { type: elemType } = options;
 
-	// Initial cursor offset from element's top-left corner for ghost positioning
-	let offsetX = 0;
-	let offsetY = 0;
-	// Visual ghost element that follows the cursor during drag
-	let ghostElem: HTMLElement | null = null;
 	// Reference to the currently dragged element
 	let dragElem: HTMLElement | null = null;
-
-	/**
-	 * Updates the position of the ghost element to follow the cursor/touch point.
-	 * @param event - Touch or mouse event containing position data
-	 */
-	function updateGhost(event: TouchEvent | MouseEvent) {
-		if (!ghostElem) return;
-		const coords = getEventHost(event) as Touch | MouseEvent;
-		// Use transform for better performance (no layout recalculation)
-		ghostElem.style.transform = `translate(${coords.clientX - offsetX}px, ${coords.clientY - offsetY}px) translateZ(0)`;
-	}
 
 	/**
 	 * Updates drop zone indicators
@@ -60,21 +30,11 @@ export function draggableElement(node: HTMLElement, config: DraggableProps) {
 	}
 
 	/**
-	 * Removes the ghost element from the DOM and cleans up references.
-	 */
-	function removeGhost() {
-		if (ghostElem) {
-			ghostElem.remove();
-			ghostElem = null;
-		}
-	}
-
-	/**
 	 * Ends the drag operation and resets all state.
 	 */
 	function end() {
 		dndStore.clear();
-		removeGhost();
+		ghost.remove();
 		dragElem = null;
 	}
 
@@ -89,10 +49,7 @@ export function draggableElement(node: HTMLElement, config: DraggableProps) {
 		dragElem = node;
 
 		// Create the ghost element that will follow the cursor
-		const { element, x, y } = createGhost(node, event);
-		ghostElem = element;
-		offsetX = x;
-		offsetY = y;
+		ghost.create(node, event);
 	}
 
 	/**
@@ -101,11 +58,11 @@ export function draggableElement(node: HTMLElement, config: DraggableProps) {
 	 * @param event - Touch or mouse move event
 	 */
 	function move(event: TouchEvent | MouseEvent) {
-		if (!dragElem || !ghostElem) return;
+		if (!dragElem) return;
 		event.preventDefault();
 
 		// Update ghost position immediately for responsiveness
-		updateGhost(event);
+		ghost.update(event);
 
 		// Update drop zone indicators
 		updateDropZone(event);
@@ -151,7 +108,7 @@ export function draggableElement(node: HTMLElement, config: DraggableProps) {
 		 */
 		destroy() {
 			// Clean up
-			removeGhost();
+			ghost.remove();
 
 			// Remove touch event listeners
 			node.removeEventListener('touchstart', start);

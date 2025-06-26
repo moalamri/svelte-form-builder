@@ -1,46 +1,4 @@
-import type { DragEvent, EventHost, FieldElementInfo, GhostElementInfo, DropPosition } from '$lib/types';
-
-/**
- * Creates a visual ghost element that follows the cursor during drag operations.
- * The ghost is a styled clone of the original element with reduced opacity.
- *
- * @param element - The original element to clone for the ghost
- * @param event - The drag event containing initial position data
- * @returns Object containing the ghost element and initial offset values
- */
-export function createGhost(element: HTMLElement, event: DragEvent): GhostElementInfo {
-	const coords = getEventHost(event);
-	const rect = element.getBoundingClientRect();
-
-	// Calculate initial offset from element's top-left corner to cursor position
-	const x = coords.clientX - rect.left;
-	const y = coords.clientY - rect.top;
-
-	// Create a visual clone of the dragged element
-	const ghost = element.cloneNode(true) as HTMLElement;
-	Object.assign(ghost.style, {
-		position: 'fixed',
-		zIndex: '9000',
-		pointerEvents: 'none', // Prevent ghost from interfering with drop detection
-		opacity: '0.7',
-		width: `${element.clientWidth}px`,
-		height: `${element.clientHeight}px`,
-		left: '0px',
-		top: '0px',
-		// Use transform for positioning - better performance
-		transform: `translate(${coords.clientX - x}px, ${coords.clientY - y}px) translateZ(0)`,
-		willChange: 'transform', // Hint to browser for optimization
-		transition: 'none', // Disable any transitions
-		animation: 'none' // Disable any animations
-	});
-
-	document.body.appendChild(ghost);
-	return {
-		element: ghost,
-		x,
-		y
-	};
-}
+import type { DragEvent, EventHost, FieldElementInfo, DropPosition } from '$lib/types';
 
 /**
  * Extracts the appropriate event coordinates (Touch or MouseEvent) from a drag event.

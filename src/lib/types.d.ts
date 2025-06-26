@@ -17,6 +17,6 @@ export type GhostElementInfo = {
 	y: number;
 };
 
-export type DraggableProps = {
+export type CloneOptions = {
 	type: string;
 };
