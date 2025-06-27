@@ -32,7 +32,7 @@ class GhostElement {
 			left: '0px',
 			top: '0px',
 			// Use transform for positioning - better performance
-			transform: `translate(${coords.clientX - this.x}px, ${coords.clientY - this.y}px) translateZ(0)`,
+			transform: `translate(${rect.x}px, ${rect.y}px) translateZ(0)`,
 			willChange: 'transform', // Hint to browser for optimization
 			transition: 'none', // Disable any transitions
 			animation: 'none' // Disable any animations
