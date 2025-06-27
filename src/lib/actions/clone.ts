@@ -26,6 +26,9 @@ export function clone(node: HTMLElement, options: CloneOptions) {
 				dndStore.dropPosition = position;
 				dndStore.hoverIndex = index;
 			}
+		} else {
+			dndStore.dropPosition = null;
+			dndStore.hoverIndex = null;
 		}
 	}
 
