@@ -51,7 +51,8 @@
 	<div
 		class={[
 			'relative border rounded transition-all duration-100',
-			dndStore.isDragging ? 'border-blue-200 bg-blue-50/50 hover:border-blue-300' : 'border-transparent'
+			dndStore.isDragging ? 'border-blue-200 bg-blue-50/50' : 'border-transparent',
+			dndStore.hoverIndex !== null && 'border-blue-400/80'
 		]}
 		data-isdragging={dndStore.isDragging}
 		data-testid="form"
