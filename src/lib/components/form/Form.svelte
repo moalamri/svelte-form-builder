@@ -45,11 +45,14 @@
 <form
 	onsubmit={onSubmit}
 	onreset={onReset}
-	class="relative border-slate-200 shadow-xs border rounded-xs p-1 md:p-2 mb-1 select-none mx-auto"
+	class="relative border-slate-200 shadow-xs border rounded p-1 md:p-2 mb-1 select-none mx-auto"
 	class:md:max-w-[80%]={isPreview.state}
 >
 	<div
-		class={['relative border', dndStore.isDragging ? 'border-blue-200 rounded-sm bg-blue-50/50' : 'border-transparent']}
+		class={[
+			'relative border rounded transition-all duration-100',
+			dndStore.isDragging ? 'border-blue-200 bg-blue-50/50 hover:border-blue-300' : 'border-transparent'
+		]}
 		data-isdragging={dndStore.isDragging}
 		data-testid="form"
 	>
@@ -59,24 +62,22 @@
 				<p class="text-sm text-slate-700 -mb-10">Drag and drop elements here</p>
 			</div>
 		{/if}
-		<div class="relative flex flex-col min-h-10 p-1.5" data-testid="dropzone" id="dropzone">
+		<div class="relative flex flex-col min-h-10 px-0.5 py-1.5" data-testid="dropzone" id="dropzone">
 			{#each form.fields as field, index (field.id)}
 				{@const FormComponent = getFieldComponent(field.type)}
 				{@const isActive = form.activeElement && form.activeElement.id === field.id}
 				{@const dropBefore = dndStore.hoverIndex === index && dndStore.dropPosition === 'before'}
 				{@const dropAfter = dndStore.hoverIndex === index && dndStore.dropPosition === 'after'}
 				<div
-					class="relative"
+					class="relative py-[3px] px-1.5"
 					data-testid="form-field-{field.type}"
-					data-isactive={isActive.toString()}
+					data-isactive={isActive}
 					data-form-element={index}
 					id={field.id}
 					use:elementClick={() => (form.activeElement = field)}
 				>
-					{#if dropBefore}
-						<DropIndicator />
-					{/if}
-					<div class="relative py-1">
+					<DropIndicator active={dropBefore || dropAfter} position={dndStore.dropPosition} />
+					<div class="relative">
 						<div
 							class={twMerge(
 								'relative flex rounded-sm border shadow-xs shadow-slate-200 hover:shadow-sm bg-white',
@@ -114,9 +115,6 @@
 							</div>
 						</div>
 					</div>
-					{#if dropAfter}
-						<DropIndicator />
-					{/if}
 				</div>
 			{/each}
 		</div>
