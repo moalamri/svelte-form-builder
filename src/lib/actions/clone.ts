@@ -17,6 +17,11 @@ export function clone(node: HTMLElement, options: CloneOptions) {
 	function updateDropZone(event: TouchEvent | MouseEvent) {
 		const elemUnder = getElementUnder(event);
 		if (isDropZone(elemUnder)) {
+			if (dndStore.formFields === 0) {
+				dndStore.dropPosition = 'before';
+				dndStore.hoverIndex = 0;
+				return;
+			}
 			const { element, index, rect } = getFieldElement(elemUnder);
 			if (element && rect) {
 				const coords = getEventHost(event) as Touch | MouseEvent;
@@ -76,18 +81,11 @@ export function clone(node: HTMLElement, options: CloneOptions) {
 	 * If dropped over a valid zone, adds the field to the form.
 	 * @param event - Touch or mouse event that ended the drag
 	 */
-	function drop(event: TouchEvent | MouseEvent) {
+	function drop(_: TouchEvent | MouseEvent) {
 		if (!dragElem) return;
-		const elemUnder = getElementUnder(event);
-
-		if (isDropZone(elemUnder)) {
-			const { element, index } = getFieldElement(elemUnder);
-			let insertIndex = index;
-
-			if (element) {
-				// Calculate the final drop index based on position
-				insertIndex = getDropIndex(dndStore.dropPosition, index);
-			}
+		if (dndStore.hoverIndex !== null && dndStore.dropPosition !== null) {
+			// Calculate the final drop index based on position
+			const insertIndex = getDropIndex(dndStore.dropPosition, dndStore.hoverIndex);
 			// Add the new field to the form
 			addField(elemType, insertIndex);
 		}

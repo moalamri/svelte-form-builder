@@ -1,4 +1,5 @@
 import type { DropPosition } from '$lib/types';
+import form from '$lib/stores/form.svelte';
 
 /**
  * Reactive store for managing drag and drop state across the application.
@@ -16,6 +17,8 @@ class DndStore {
 	#dropPos = $state<DropPosition | null>(null);
 	/** Private reactive state for the index of the currently hovered form element */
 	#hoverIdx = $state<number | null>(null);
+	/** Number of fields in the form */
+	#formFields = $derived(form.fields.length);
 
 	/**
 	 * Gets the current dragging state.
@@ -63,6 +66,14 @@ class DndStore {
 	 */
 	set hoverIndex(index: number | null) {
 		this.#hoverIdx = index;
+	}
+
+	/**
+	 * Gets the number of fields in the form.
+	 * @returns The number of fields in the form
+	 */
+	get formFields(): number {
+		return this.#formFields;
 	}
 
 	/**
