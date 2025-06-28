@@ -51,21 +51,21 @@
 	}}
 >
 	{#if showLeftPanel}
-		<Splitter.Panel id={SPLITTER_IDS.ELEMENTS} class="relative p-1 !overflow-auto bg-slate-100/50">
+		<Splitter.Panel id={SPLITTER_IDS.ELEMENTS} class="relative p-1 overflow-auto! bg-slate-100/50">
 			<ElementsListPanel />
 		</Splitter.Panel>
 	{/if}
 	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_ELEMENTS_TO_FORM} class="focus:outline-hidden pe-1">
 		<PaneResizer isActive={activeResizerLeft} />
 	</Splitter.ResizeTrigger>
-	<Splitter.Panel id={SPLITTER_IDS.FORM} class="relative !overflow-auto p-1.5">
+	<Splitter.Panel id={SPLITTER_IDS.FORM} class="relative overflow-auto! p-1.5">
 		<Form />
 	</Splitter.Panel>
 	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_FORM_TO_EDITOR} class="focus:outline-hidden ps-1">
 		<PaneResizer isActive={activeResizerRight} />
 	</Splitter.ResizeTrigger>
 	{#if showRightPanel}
-		<Splitter.Panel id={SPLITTER_IDS.EDITOR} class="relative p-1 !overflow-auto bg-slate-100/50">
+		<Splitter.Panel id={SPLITTER_IDS.EDITOR} class="relative p-1 overflow-auto! bg-slate-100/50">
 			<SettingsPanel />
 		</Splitter.Panel>
 	{/if}

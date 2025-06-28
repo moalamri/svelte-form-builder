@@ -24,7 +24,7 @@
 				<Button variant="secondary" size="xs" onclick={() => history.redo()} disabled={!history.canRedo}>
 					<Icon icon="solar:undo-left-round-square-line-duotone" class="size-5 {history.canRedo ? 'text-blue-900' : 'text-slate-400'} scale-x-[-1]" />
 				</Button>
-				<div class="bg-slate-200/60 w-[1px] min-h-full"></div>
+				<div class="bg-slate-200/60 w-px min-h-full"></div>
 				<Button variant="secondary" size="xs" onclick={() => showLPanel.toggle()} data-testid="toggle-left-panel">
 					<Icon icon="mynaui:panel-left" class="size-5  {showLPanel.state ? 'text-blue-900' : 'text-slate-400'}" />
 				</Button>
