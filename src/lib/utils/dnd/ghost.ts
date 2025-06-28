@@ -1,45 +1,32 @@
-import type { DragEvent } from '$lib/types';
+import Ghost from '$lib/components/elements/Ghost.svelte';
+import { dndStore } from '$lib/stores/dnd.svelte';
 import { getEventHost } from './helpers';
+import { mount, unmount } from 'svelte';
+import type { DragEvent, GhostElementOptions } from '$lib/types';
+
 
 class GhostElement {
-	element: HTMLElement;
 	x: number;
 	y: number;
+	left: number;
+	height: number;
+	options: GhostElementOptions;
+	ghostComponent: any;
 
 	/**
 	 * Creates a visual ghost element that follows the cursor during drag operations.
 	 * The ghost is a styled clone of the original element with reduced opacity.
-	 * @param orignalElement - The original element to clone for the ghost
 	 * @param event - The drag event containing initial position data
+	 * @param rect - The bounding client rect of the original dragged element
 	 */
-	create(orignalElement: HTMLElement, event: DragEvent) {
+	create(originalElement: HTMLElement, event: DragEvent) {
 		const coords = getEventHost(event);
-		const rect = orignalElement.getBoundingClientRect();
 
-		// Calculate initial offset from element's top-left corner to cursor position
+		// Calculate the initial offset from the element's top-left corner to the cursor position
+		const rect = originalElement.getBoundingClientRect();
 		this.x = coords.clientX - rect.left;
 		this.y = coords.clientY - rect.top;
-
-		// Create a visual clone of the dragged element
-		const ghost = orignalElement.cloneNode(true) as HTMLElement;
-		Object.assign(ghost.style, {
-			position: 'fixed',
-			zIndex: '9000',
-			pointerEvents: 'none', // Prevent ghost from interfering with drop detection
-			opacity: '0.7',
-			width: `${orignalElement.clientWidth}px`,
-			height: `${orignalElement.clientHeight}px`,
-			left: '0px',
-			top: '0px',
-			// Use transform for positioning - better performance
-			transform: `translate(${rect.x}px, ${rect.y}px) translateZ(0)`,
-			willChange: 'transform', // Hint to browser for optimization
-			transition: 'none', // Disable any transitions
-			animation: 'none' // Disable any animations
-		});
-
-		document.body.appendChild(ghost);
-		this.element = ghost;
+		// dndStore.ghostElement.style.transform = `translate(${rect.left}px, ${rect.top}px) translateZ(0)`;
 	}
 
 	/**
@@ -47,19 +34,47 @@ class GhostElement {
 	 * @param event - Touch or mouse event containing position data
 	 */
 	update(event: DragEvent) {
+		if (!dndStore.ghostElement) return;
 		const coords = getEventHost(event);
-		this.element.style.transform = `translate(${coords.clientX - this.x}px, ${coords.clientY - this.y}px) translateZ(0)`;
+		dndStore.ghostElement.style.opacity = '0.7';
+		dndStore.ghostElement.style.transform = `translate(${coords.clientX - this.x}px, ${coords.clientY - this.y}px) translateZ(0)`;
 	}
 
 	/**
-	 * Removes the ghost element from the DOM and cleans up references.
+	 * Updates the y position of the ghost element to follow the cursor/touch point (for sorting form fields)
+	 * @param event - Touch or mouse event containing position data
 	 */
-	remove() {
-		if (this.element) {
-			this.element.remove();
-			this.element = null;
+	updateY(event: DragEvent) {
+
+	}
+
+	mount() {
+		if (this.options.mode === 'sort') return;
+		this.ghostComponent = mount(Ghost, {
+			target: document.body,
+			intro: false,
+			props: {
+				type: this.options.elementType,
+			},
+		});
+	}
+
+	unmount() {
+		if (this.ghostComponent) {
+			unmount(this.ghostComponent);
+			this.ghostComponent = null;
 		}
+	}
+
+	clear() {
+		this.unmount();
+	}
+
+	constructor (originalElement: HTMLElement, event: DragEvent, options: GhostElementOptions) {
+		this.options = options;
+		this.mount();
+		this.create(originalElement, event);
 	}
 }
 
-export default new GhostElement();
+export default GhostElement;

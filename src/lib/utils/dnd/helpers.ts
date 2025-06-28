@@ -1,4 +1,4 @@
-import type { DragEvent, EventHost, FieldElementInfo, DropPosition } from '$lib/types';
+import type { DragEvent, EventHost, FieldElementInfo } from '$lib/types';
 
 /**
  * Extracts the appropriate event coordinates (Touch or MouseEvent) from a drag event.
@@ -42,27 +42,16 @@ export function getElementUnder(event: DragEvent): HTMLElement | null {
 /**
  * Finds the closest form field element and extracts its metadata.
  * Looks for elements with the 'data-form-element' attribute.
- *
- * @param element - Starting element to search from
- * @returns Object containing the field element, its index, and bounding rectangle
  */
 export function getFieldElement(element: HTMLElement): FieldElementInfo {
 	const field = element.closest('[data-form-element]') as HTMLElement | null;
-	if (!field) {
-		return {
-			element: null,
-			index: 0,
-			rect: null
-		};
-	}
-
-	const indexAttr = field.getAttribute('data-form-element');
-	const index = indexAttr ? Number(indexAttr) : 0;
+	const indexAttr = field?.getAttribute('data-form-element');
+	const rect = field?.getBoundingClientRect();
 
 	return {
 		element: field,
-		index,
-		rect: field.getBoundingClientRect()
+		index: indexAttr ? Number(indexAttr) : 0,
+		centerY: rect?.top + rect?.height / 2
 	};
 }
 
@@ -80,13 +69,9 @@ export function isDropZone(element: HTMLElement | null): boolean {
 }
 
 /**
- * Calculates the final insertion index based on drop position and target index.
- * 'before' uses the target index, 'after' increments it by 1.
- *
- * @param position - Whether to drop before or after the target element
- * @param index - The index of the target element
- * @returns The calculated insertion index for the new element
+ * Calculates the final insertion index based on cursor position relative to element center.
+ * This directly returns the target index where the item should be placed.
  */
-export function getDropIndex(position: DropPosition | null, index: number): number {
-	return position === 'before' ? index : index + 1;
+export function getDropIndex(coordY: number, centerY: number, index: number): number {
+	return coordY < centerY ? index : index + 1;
 }

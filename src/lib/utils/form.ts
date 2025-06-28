@@ -1,6 +1,7 @@
 import elements from '$lib/components/elements';
 import { generateRandomId } from '$lib/utils/helpers';
 import { ELEMENT_TYPES } from '$lib/utils/enums';
+import type { FieldElement } from '$lib/types';
 import form from '$lib/stores/form.svelte';
 import clone from 'clone';
 
@@ -36,9 +37,28 @@ export function prepareField(type: string): any {
 	return newField;
 }
 
-export function addField(type: string, index: number) {
+/**
+ * Inserts a new field at the specified index.
+ * @param type - The type of the field to insert
+ * @param index - The index at which to insert the field
+ */
+export function insertField(type: string, index: number) {
 	const newField = prepareField(type);
 	// Insert the new field at the specified index
-	form.fields = [...form.fields.slice(0, index), newField, ...form.fields.slice(index)];
+	form.fields.splice(index, 0, newField);
 	form.activeElement = newField;
 }
+
+/**
+ * Returns the component for a given field type.
+ * @param type - The type of the field
+ * @returns The component for the field and the field object that has element data
+ */
+export const getFieldComponent = (type: string): FieldElement | null => {
+	if (!type) return null;
+	const field = elements.find((f) => f.type === type);
+	return {
+		RenderComponent: field.component.render,
+		field
+	};
+};

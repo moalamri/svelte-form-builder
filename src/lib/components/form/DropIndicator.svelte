@@ -1,11 +1,7 @@
 <script lang="ts">
-	const { active, position } = $props();
+	import { dndStore } from '$lib/stores/dnd.svelte';
+
+	const height = $derived(dndStore.ghostElementHeight);
 </script>
 
-<div class="absolute flex items-center justify-center w-full h-1.5 z-10 left-0 {position === 'before' ? 'top-[-3px]' : 'bottom-[-3px]'}">
-	{#if active}
-		<div class="bg-blue-500 size-[5px] rounded-full"></div>
-		<div class="bg-blue-500/60 w-full h-0.5"></div>
-		<div class="bg-blue-500 size-[5px] rounded-full"></div>
-	{/if}
-</div>
+<div style="height: {height}px; min-height: {height}px" class="bg-white border-[1.5px] border-blue-700/70 border-dotted w-full rounded-sm"></div>
