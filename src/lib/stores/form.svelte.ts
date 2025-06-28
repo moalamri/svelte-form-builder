@@ -2,7 +2,7 @@ export type FormStore = {
 	fields: any[];
 	values: Record<string, any>;
 	valid: boolean;
-	updator(fieldName: string, v: any): void;
+	handleChange(fieldName: string, v: any): void;
 	activeElement: any;
 };
 
@@ -28,7 +28,7 @@ function createFormStore(): FormStore {
 		get values() {
 			return form.values;
 		},
-		updator(fieldName: string, value: any) {
+		handleChange(fieldName: string, value: any) {
 			updateFieldValue(fieldName, value);
 		},
 		get valid() {

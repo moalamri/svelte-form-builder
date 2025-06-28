@@ -1,91 +1,58 @@
-import type { DropPosition } from '$lib/types';
-import form from '$lib/stores/form.svelte';
 
-/**
- * Reactive store for managing drag and drop state across the application.
- * Uses Svelte 5's $state runes for fine-grained reactivity.
- *
- * Tracks:
- * - Whether a drag operation is currently active
- * - The position where an element should be dropped (before/after)
- * - The index of the element currently being hovered over
- */
 class DndStore {
-	/** Private reactive state for drag operation status */
 	#dragging = $state(false);
-	/** Private reactive state for drop position relative to hovered element */
-	#dropPos = $state<DropPosition | null>(null);
-	/** Private reactive state for the index of the currently hovered form element */
-	#hoverIdx = $state<number | null>(null);
-	/** Number of fields in the form */
-	#formFields = $derived(form.fields.length);
+	#ghostElement = $state<HTMLElement | null>(null);
+	#ghostElementHeight = $state(0);
+	#dropIndex = $state<number | null>(null);
+	#dropZoneWidth = $state(0);
 
-	/**
-	 * Gets the current dragging state.
-	 * @returns True if a drag operation is currently active
-	 */
 	get isDragging(): boolean {
 		return this.#dragging;
 	}
 
-	/**
-	 * Sets the dragging state.
-	 * @param active - Whether a drag operation is active
-	 */
+	get dropIndex(): number | null {
+		return this.#dropIndex;
+	}
+
+	set dropIndex(index: number | null) {
+		this.#dropIndex = index;
+	}
+
+	get ghostElement(): HTMLElement | null {
+		return this.#ghostElement;
+	}
+
+	set ghostElement(element: HTMLElement | null) {
+		this.#ghostElement = element;
+	}
+
+	get ghostElementHeight(): number {
+		return this.#ghostElementHeight;
+	}
+
+	set ghostElementHeight(height: number) {
+		this.#ghostElementHeight = height;
+	}
+
 	set isDragging(active: boolean) {
 		this.#dragging = active;
 	}
 
-	/**
-	 * Gets the current drop position relative to the hovered element.
-	 * @returns 'before' | 'after' | null
-	 */
-	get dropPosition(): DropPosition | null {
-		return this.#dropPos;
+	get dropZoneWidth(): number {
+		return this.#dropZoneWidth;
 	}
 
-	/**
-	 * Sets the drop position relative to the hovered element.
-	 * @param position - Position where the dragged element should be dropped
-	 */
-	set dropPosition(position: DropPosition | null) {
-		this.#dropPos = position;
+	set dropZoneWidth(width: number) {
+		this.#dropZoneWidth = width;
 	}
 
-	/**
-	 * Gets the index of the form element currently being hovered over.
-	 * @returns The zero-based index of the hovered element, or null if none
-	 */
-	get hoverIndex(): number | null {
-		return this.#hoverIdx;
-	}
-
-	/**
-	 * Sets the index of the form element currently being hovered over.
-	 * @param index - The zero-based index of the element being hovered
-	 */
-	set hoverIndex(index: number | null) {
-		this.#hoverIdx = index;
-	}
-
-	/**
-	 * Gets the number of fields in the form.
-	 * @returns The number of fields in the form
-	 */
-	get formFields(): number {
-		return this.#formFields;
-	}
-
-	/**
-	 * Resets all drag and drop state to initial values.
-	 * Called when a drag operation ends or is cancelled.
-	 */
 	clear(): void {
 		this.#dragging = false;
-		this.#dropPos = null;
-		this.#hoverIdx = null;
+		this.#ghostElement = null;
+		this.#ghostElementHeight = 0;
+		this.#dropIndex = null;
+		this.#dropZoneWidth = 0;
 	}
 }
 
-/** Singleton instance of the DnD store for use across the application */
 export const dndStore = new DndStore();
