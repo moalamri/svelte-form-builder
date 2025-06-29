@@ -1,9 +1,10 @@
-import { getEventHost, getElementUnder, getFieldElement, isDropZone, getDropIndex } from '$lib/utils/dnd/helpers';
+import { getEventHost, getElementUnder, getFieldElement, isOnDropZone, getDropIndex } from '$lib/utils/dnd/helpers';
 import GhostElement from '$lib/utils/dnd/ghost';
 import { dndStore } from '$lib/stores/dnd.svelte';
 import { insertField } from '$lib/utils/form';
 import type { Attachment } from 'svelte/attachments';
 import form from '$lib/stores/form.svelte';
+import { DRAG_STATE } from '$lib/utils/enums';
 
 function insertAttachment(element: HTMLElement, elementType: string) {
         let dragElem: HTMLElement | null = null;
@@ -14,18 +15,19 @@ function insertAttachment(element: HTMLElement, elementType: string) {
          */
         function updateDropZone(event: TouchEvent | MouseEvent) {
                 const elemUnder = getElementUnder(event);
-                if (isDropZone(elemUnder)) {
+                if (isOnDropZone(elemUnder)) {
+                        dndStore.dragState = DRAG_STATE.INSERTING;
                         if (form.fields.length === 0) {
-                                dndStore.dropIndex = 0;
                                 return;
                         }
                         const { element, index, centerY } = getFieldElement(elemUnder);
                         if (element) {
+                                dndStore.dragState = DRAG_STATE.INSERTING;
                                 const coords = getEventHost(event);
                                 dndStore.dropIndex = getDropIndex(coords.clientY, centerY, index);
                         }
                 } else {
-                        dndStore.dropIndex = null;
+                        dndStore.dragState = DRAG_STATE.DRAGGING;
                 }
         }
 
@@ -44,9 +46,9 @@ function insertAttachment(element: HTMLElement, elementType: string) {
          */
         function start(event: TouchEvent | MouseEvent) {
                 event.preventDefault();
-                dndStore.isDragging = true;
                 dragElem = element;
-                ghost = new GhostElement(element, event, { mode: 'insert', elementType });
+                dndStore.dragState = DRAG_STATE.DRAGGING;
+                ghost = new GhostElement(dragElem, event, { elementType });
         }
 
         /**
@@ -64,9 +66,9 @@ function insertAttachment(element: HTMLElement, elementType: string) {
          * Handles the drop operation
          */
         function drop(_: TouchEvent | MouseEvent) {
-                if (!dragElem) return;
+                if (!dragElem || !ghost) return;
 
-                if (dndStore.dropIndex !== null) {
+                if (dndStore.dragState === DRAG_STATE.INSERTING) {
                         insertField(elementType, dndStore.dropIndex);
                 }
 

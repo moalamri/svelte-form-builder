@@ -1,13 +1,21 @@
+import { DRAG_STATE, INSERT_MODE } from '$lib/utils/enums';
+import form from './form.svelte';
+
 
 class DndStore {
-	#dragging = $state(false);
+	#dragState = $state(DRAG_STATE.IDLE);
 	#ghostElement = $state<HTMLElement | null>(null);
 	#ghostElementHeight = $state(0);
 	#dropIndex = $state<number | null>(null);
 	#dropZoneWidth = $state(0);
+	fieldCount = $derived(form.fields.length);
 
-	get isDragging(): boolean {
-		return this.#dragging;
+	get dragState(): DRAG_STATE {
+		return this.#dragState;
+	}
+
+	set dragState(state: DRAG_STATE) {
+		this.#dragState = state;
 	}
 
 	get dropIndex(): number | null {
@@ -34,10 +42,6 @@ class DndStore {
 		this.#ghostElementHeight = height;
 	}
 
-	set isDragging(active: boolean) {
-		this.#dragging = active;
-	}
-
 	get dropZoneWidth(): number {
 		return this.#dropZoneWidth;
 	}
@@ -46,12 +50,21 @@ class DndStore {
 		this.#dropZoneWidth = width;
 	}
 
+	insertingMode(index: number = null): INSERT_MODE | null {
+		if (this.#dragState !== DRAG_STATE.INSERTING && index === null && this.fieldCount === 0) return INSERT_MODE.NONE;
+		if (this.#dragState === DRAG_STATE.INSERTING && index === null && this.fieldCount === 0) return INSERT_MODE.NEW;
+		if (this.dropIndex === index && this.fieldCount > 0) return INSERT_MODE.INSIDE;
+		if (this.dropIndex === this.fieldCount && this.dropIndex === index + 1 && this.dragState === DRAG_STATE.INSERTING) {
+			return INSERT_MODE.LAST;
+		}
+	}
+
 	clear(): void {
-		this.#dragging = false;
 		this.#ghostElement = null;
 		this.#ghostElementHeight = 0;
 		this.#dropIndex = null;
 		this.#dropZoneWidth = 0;
+		this.#dragState = DRAG_STATE.IDLE;
 	}
 }
 

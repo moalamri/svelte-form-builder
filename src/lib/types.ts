@@ -21,14 +21,7 @@ export type FieldElement = {
 	field: any;
 };
 
-export type GhostElementOptions =
-	| {
-		mode: 'insert';
-		elementType: string;
-		fieldId?: string;
-	}
-	| {
-		mode: 'sort';
-		elementType?: string;
-		fieldId: string;
-	}
+export type GhostElementOptions = {
+	elementType: string;
+	field?: any;
+};

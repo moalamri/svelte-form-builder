@@ -1,6 +1,6 @@
 <script lang="ts">
 	import DropIndicator from '$lib/components/form/DropIndicator.svelte';
-	import { ELEMENT_TYPES } from '$lib/utils/enums';
+	import { DRAG_STATE, ELEMENT_TYPES, INSERT_MODE } from '$lib/utils/enums';
 	import { isPreview } from '$lib/stores/flags.svelte';
 	import form from '$lib/stores/form.svelte';
 	import { elementClick } from '$lib/actions/elementClick';
@@ -46,28 +46,24 @@
 	<div
 		class={twMerge(
 			'relative border rounded transition-all duration-200 border-transparent',
-			dndStore.isDragging && 'border-blue-200 bg-blue-50/50',
-			dndStore.dropIndex !== null && 'border-blue-400'
+			dndStore.dragState === DRAG_STATE.DRAGGING && 'border-blue-200 bg-blue-50/50',
+			dndStore.dragState === DRAG_STATE.INSERTING && 'border-blue-400 bg-blue-50/50'
 		)}
-		data-isdragging={dndStore.isDragging}
+		data-isdragging={dndStore.dragState === DRAG_STATE.DRAGGING}
 		data-testid="form"
 	>
 		<div class="relative p-1.5 min-h-17 {form.fields.length === 0 && 'justify-center items-center'}" data-testid="dropzone" id="dropzone">
 			<div class="relative flex flex-col gap-1" bind:clientWidth={dndStore.dropZoneWidth}>
 				<!-- Empty form -->
-				{#if form.fields.length === 0}
-					{#if dndStore.isDragging && dndStore.dropIndex !== null}
-						<DropIndicator />
-					{:else if !dndStore.isDragging}
-						<Empty />
-					{/if}
+				<Empty />
+				{#if dndStore.insertingMode() === INSERT_MODE.NEW}
+					<DropIndicator />
 				{/if}
 				{#each form.fields as field, index (field.id)}
 					{@const { RenderComponent } = getFieldComponent(field.type)}
 					{@const isActive = form.activeElement && form.activeElement.id === field.id}
-					{@const isFirst = dndStore.dropIndex === 0 && index === 0}
-					{@const show = isFirst || dndStore.dropIndex === index}
-					{@const isLast = dndStore.dropIndex === form.fields.length && dndStore.dropIndex === index + 1}
+					{@const show = dndStore.insertingMode(index) === INSERT_MODE.INSIDE}
+					{@const isLast = dndStore.insertingMode(index) === INSERT_MODE.LAST}
 					{#if show}
 						<DropIndicator />
 					{/if}
@@ -92,7 +88,7 @@
 									class="flex flex-col items-center border-e border-slate-300 bg-slate-50 hover:bg-slate-100 rounded-s-sm p-1 gap-2 w-6"
 									class:hidden={isPreview.state}
 								>
-									<div {@attach sort(index, field.id)}>
+									<div {@attach sort(index, field)}>
 										<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
 									</div>
 									<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-xs">

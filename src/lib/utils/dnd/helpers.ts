@@ -62,7 +62,7 @@ export function getFieldElement(element: HTMLElement): FieldElementInfo {
  * @param element - Element to check
  * @returns True if the element is within a drop zone
  */
-export function isDropZone(element: HTMLElement | null): boolean {
+export function isOnDropZone(element: HTMLElement | null): boolean {
 	if (!element) return false;
 	const zone = element.closest('#dropzone');
 	return zone?.id === 'dropzone';

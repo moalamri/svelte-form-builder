@@ -12,6 +12,7 @@ class GhostElement {
 	height: number;
 	options: GhostElementOptions;
 	ghostComponent: any;
+	ghostElement: HTMLElement;
 
 	/**
 	 * Creates a visual ghost element that follows the cursor during drag operations.
@@ -34,10 +35,13 @@ class GhostElement {
 	 * @param event - Touch or mouse event containing position data
 	 */
 	update(event: DragEvent) {
-		if (!dndStore.ghostElement) return;
+		if (!dndStore.ghostElement) {
+			return;
+		}
+		this.ghostElement = dndStore.ghostElement;
 		const coords = getEventHost(event);
-		dndStore.ghostElement.style.opacity = '0.7';
-		dndStore.ghostElement.style.transform = `translate(${coords.clientX - this.x}px, ${coords.clientY - this.y}px) translateZ(0)`;
+		this.ghostElement.style.opacity = '0.95';
+		this.ghostElement.style.transform = `translate(${coords.clientX - this.x}px, ${coords.clientY - this.y}px) translateZ(0)`;
 	}
 
 	/**
@@ -49,7 +53,6 @@ class GhostElement {
 	}
 
 	mount() {
-		if (this.options.mode === 'sort') return;
 		this.ghostComponent = mount(Ghost, {
 			target: document.body,
 			intro: false,
@@ -59,15 +62,15 @@ class GhostElement {
 		});
 	}
 
-	unmount() {
+	clear() {
 		if (this.ghostComponent) {
 			unmount(this.ghostComponent);
 			this.ghostComponent = null;
 		}
-	}
-
-	clear() {
-		this.unmount();
+		if (this.ghostElement) {
+			this.ghostElement.remove();
+			this.ghostElement = null;
+		}
 	}
 
 	constructor (originalElement: HTMLElement, event: DragEvent, options: GhostElementOptions) {

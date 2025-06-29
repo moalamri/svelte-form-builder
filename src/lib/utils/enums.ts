@@ -30,3 +30,17 @@ export enum SETTING_FIELDS {
 	COLOR = 'color',
 	DATE = 'date'
 }
+
+export enum DRAG_STATE {
+	IDLE,
+	DRAGGING,
+	INSERTING,
+	SORTING
+}
+
+export enum INSERT_MODE {
+	NONE,
+	NEW,
+	INSIDE,
+	LAST
+}
