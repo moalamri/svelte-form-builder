@@ -49,7 +49,7 @@
 			dndStore.dragState === DRAG_STATE.DRAGGING && 'border-blue-200 bg-blue-50/50',
 			dndStore.dragState === DRAG_STATE.INSERTING && 'border-blue-400 bg-blue-50/50'
 		)}
-		data-isdragging={dndStore.dragState === DRAG_STATE.DRAGGING}
+		data-isdragging={dndStore.dragState === DRAG_STATE.INSERTING || dndStore.dragState === DRAG_STATE.SORTING}
 		data-testid="form"
 	>
 		<div class="relative p-1.5 min-h-17 {form.fields.length === 0 && 'justify-center items-center'}" data-testid="dropzone" id="dropzone">
