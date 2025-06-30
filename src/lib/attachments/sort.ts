@@ -1,4 +1,4 @@
-import { getDropIndex, getElementUnder, getEventHost, getFieldElement, isOnDropZone } from '../utils/dnd/helpers';
+import { getDropIndex, getElementAtPosition, getFieldElement } from '../utils/dnd/helpers';
 import type { Attachment } from 'svelte/attachments';
 import { dndStore } from '../stores/dnd.svelte';
 import GhostElement from '../utils/dnd/ghost';
@@ -9,17 +9,12 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, R
         let ghost: GhostElement | null = null;
 
         function updateDropZone(event: TouchEvent | MouseEvent) {
-                const elemUnder = getElementUnder(event);
-                if (isOnDropZone(elemUnder)) {
-                        dndStore.dragState = DRAG_STATE.SORTING;
-                        const { element, index, centerY } = getFieldElement(elemUnder);
-                        if (element) {
-                                const coords = getEventHost(event);
-                                dndStore.dropIndex = getDropIndex(coords.clientY, centerY, index);
-                        }
-                } else {
-                        dndStore.dragState = DRAG_STATE.IDLE;
-                        dndStore.dropIndex = null;
+                ghost.updateY(event);
+                const { coords, element } = getElementAtPosition(ghost.ghostElement);
+                dndStore.dragState = DRAG_STATE.SORTING;
+                const { element: fieldElement, index, centerY } = getFieldElement(element);
+                if (fieldElement) {
+                        dndStore.dropIndex = getDropIndex(coords.clientY, centerY, index);
                 }
         }
 
@@ -50,8 +45,6 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, R
         function move(event: TouchEvent | MouseEvent) {
                 if (!ghost) return;
                 event.preventDefault();
-
-                ghost.updateY(event);
                 updateDropZone(event);
         }
 

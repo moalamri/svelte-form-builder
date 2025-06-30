@@ -26,6 +26,20 @@ export function getEventHost(event: DragEvent): EventHost {
 	return event as EventHost;
 }
 
+export function getElementAtPosition(element: HTMLElement): { coords: { clientX: number; clientY: number }; element: HTMLElement | null } {
+	const coords = getElementCoords(element);
+	if (!coords) return { coords: null, element: null };
+	return {
+		coords,
+		element: document.elementFromPoint(coords.clientX, coords.clientY) as HTMLElement | null
+	};
+}
+
+export function getElementCoords(element: HTMLElement): { clientX: number; clientY: number } {
+	const rect = element.getBoundingClientRect();
+	return { clientX: rect.left, clientY: rect.top };
+}
+
 /**
  * Finds the HTML element currently under the cursor/touch point.
  * Uses document.elementFromPoint for accurate hit detection.

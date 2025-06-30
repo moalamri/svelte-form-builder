@@ -38,7 +38,9 @@ class GhostElement {
 		if (!dndStore.ghostElement) {
 			return;
 		}
-		this.ghostElement = dndStore.ghostElement;
+		if (!this.ghostElement) {
+			this.ghostElement = dndStore.ghostElement;
+		}
 		const coords = getEventHost(event);
 		this.ghostElement.style.opacity = '0.95';
 		this.ghostElement.style.scale = '0.99';
@@ -53,7 +55,9 @@ class GhostElement {
 		if (!dndStore.ghostElement) {
 			return;
 		}
-		this.ghostElement = dndStore.ghostElement;
+		if (!this.ghostElement) {
+			this.ghostElement = dndStore.ghostElement;
+		}
 		const coords = getEventHost(event);
 		this.ghostElement.style.opacity = '0.95';
 		this.ghostElement.style.transform = `translate(${this.left}px, ${coords.clientY - this.y}px) translateZ(0)`;
