@@ -4,7 +4,7 @@ import { dndStore } from '../stores/dnd.svelte';
 import GhostElement from '../utils/dnd/ghost';
 import { DRAG_STATE } from '../utils/enums';
 
-function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any) {
+function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, RenderComponent: any) {
         let ghost: GhostElement | null = null;
 
         function updateDropZone(event: TouchEvent | MouseEvent) {
@@ -39,7 +39,7 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any) {
                 dndStore.dragState = DRAG_STATE.DRAGGING;
                 const { element } = getFieldElement(sortBy);
                 if (!element) return;
-                ghost = new GhostElement(element, event, { elementType: field.type, field });
+                ghost = new GhostElement(element, event, { elementType: field.type, component: RenderComponent, field });
         }
 
         /**
@@ -88,6 +88,6 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any) {
         };
 }
 
-export function sort(elementIndex: number, field: any): Attachment {
-        return (sortElement: HTMLElement) => sortAttachment(sortElement, elementIndex, field);
+export function sort(elementIndex: number, field: any, RenderComponent: any): Attachment {
+        return (sortElement: HTMLElement) => sortAttachment(sortElement, elementIndex, field, RenderComponent);
 }

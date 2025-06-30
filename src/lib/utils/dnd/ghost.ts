@@ -58,6 +58,8 @@ class GhostElement {
 			intro: false,
 			props: {
 				type: this.options.elementType,
+				originalComponent: this.options.component,
+				originalField: this.options.field
 			},
 		});
 	}
