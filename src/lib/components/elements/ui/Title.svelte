@@ -4,7 +4,7 @@
 
 <p
 	class="text-slate-700"
-	style="font-size: {field.settings?.fontStyle?.fontSize || '24'}px; font-weight: {field.settings?.fontStyle?.fontWeight || 'bold'}"
+	style="font-size: {field.settings.fontStyle.fontSize || '24'}px; font-weight: {field.settings.fontStyle.fontWeight || 'bold'}"
 >
-	{field.settings.properties?.text}
+	{field.settings.properties.text}
 </p>
