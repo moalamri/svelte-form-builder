@@ -51,7 +51,7 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, R
                 if (!ghost) return;
                 event.preventDefault();
 
-                ghost.update(event);
+                ghost.updateY(event);
                 updateDropZone(event);
         }
 

@@ -27,7 +27,7 @@ class GhostElement {
 		const rect = originalElement.getBoundingClientRect();
 		this.x = coords.clientX - rect.left;
 		this.y = coords.clientY - rect.top;
-		// dndStore.ghostElement.style.transform = `translate(${rect.left}px, ${rect.top}px) translateZ(0)`;
+		this.left = rect.left;
 	}
 
 	/**
@@ -41,6 +41,7 @@ class GhostElement {
 		this.ghostElement = dndStore.ghostElement;
 		const coords = getEventHost(event);
 		this.ghostElement.style.opacity = '0.95';
+		this.ghostElement.style.scale = '0.99';
 		this.ghostElement.style.transform = `translate(${coords.clientX - this.x}px, ${coords.clientY - this.y}px) translateZ(0)`;
 	}
 
@@ -49,7 +50,13 @@ class GhostElement {
 	 * @param event - Touch or mouse event containing position data
 	 */
 	updateY(event: DragEvent) {
-
+		if (!dndStore.ghostElement) {
+			return;
+		}
+		this.ghostElement = dndStore.ghostElement;
+		const coords = getEventHost(event);
+		this.ghostElement.style.opacity = '0.95';
+		this.ghostElement.style.transform = `translate(${this.left}px, ${coords.clientY - this.y}px) translateZ(0)`;
 	}
 
 	mount() {
