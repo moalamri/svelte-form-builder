@@ -17,11 +17,12 @@ export type GhostElementInfo = {
 };
 
 export type FieldElement = {
-	RenderComponent: Component;
+	Component: Component;
 	field: any;
 };
 
 export type GhostElementOptions = {
 	field: any;
 	component?: any;
+	mode: 'insert' | 'sort';
 };

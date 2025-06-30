@@ -8,6 +8,7 @@ class DndStore {
 	#ghostElementHeight = $state(0);
 	#dropIndex = $state<number | null>(null);
 	#dropZoneWidth = $state(0);
+	#dragIndex = $state<number | null>(null);
 	fieldCount = $derived(form.fields.length);
 
 	get dragState(): DRAG_STATE {
@@ -24,6 +25,14 @@ class DndStore {
 
 	set dropIndex(index: number | null) {
 		this.#dropIndex = index;
+	}
+
+	get dragIndex(): number | null {
+		return this.#dragIndex;
+	}
+
+	set dragIndex(index: number | null) {
+		this.#dragIndex = index;
 	}
 
 	get ghostElement(): HTMLElement | null {
@@ -50,21 +59,32 @@ class DndStore {
 		this.#dropZoneWidth = width;
 	}
 
+	get dropZoneReady(): boolean {
+		return this.#dragState !== DRAG_STATE.IDLE;
+	}
+
+	get dropZoneActive(): boolean {
+		return this.#dragState === DRAG_STATE.INSERTING || this.#dragState === DRAG_STATE.SORTING;
+	}
+
 	insertingMode(index: number = null): INSERT_MODE | null {
 		if (this.#dragState !== DRAG_STATE.INSERTING && index === null && this.fieldCount === 0) return INSERT_MODE.NONE;
 		if (this.#dragState === DRAG_STATE.INSERTING && index === null && this.fieldCount === 0) return INSERT_MODE.NEW;
 		if (this.dropIndex === index && this.fieldCount > 0) return INSERT_MODE.INSIDE;
-		if (this.dropIndex === this.fieldCount && this.dropIndex === index + 1 && this.dragState === DRAG_STATE.INSERTING) {
+		if ((this.dragState === DRAG_STATE.INSERTING || this.dragState === DRAG_STATE.SORTING)
+			&& this.dropIndex === this.fieldCount
+			&& this.dropIndex === index + 1) {
 			return INSERT_MODE.LAST;
 		}
 	}
 
 	clear(): void {
+		this.#dropIndex = null;
+		this.#dragIndex = null;
+		this.#dragState = DRAG_STATE.IDLE;
+		this.#dropZoneWidth = 0;
 		this.#ghostElement = null;
 		this.#ghostElementHeight = 0;
-		this.#dropIndex = null;
-		this.#dropZoneWidth = 0;
-		this.#dragState = DRAG_STATE.IDLE;
 	}
 }
 

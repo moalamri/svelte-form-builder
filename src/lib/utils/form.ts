@@ -49,6 +49,10 @@ export function insertField(type: string, index: number) {
 	form.activeElement = newField;
 }
 
+export function sortField(from: number, to: number) {
+	form.fields.splice(to, 0, form.fields.splice(from, 1)[0]);
+}
+
 /**
  * Returns the component for a given field type.
  * @param type - The type of the field
@@ -58,7 +62,7 @@ export const getFieldComponent = (type: string): FieldElement | null => {
 	if (!type) return null;
 	const field = elements.find((f) => f.type === type);
 	return {
-		RenderComponent: field.component.render,
+		Component: field.component.render,
 		field
 	};
 };

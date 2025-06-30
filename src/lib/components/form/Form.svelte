@@ -44,12 +44,12 @@
 	class:md:max-w-[80%]={isPreview.state}
 >
 	<div
-		class={twMerge(
+		class={[
 			'relative border rounded transition-all duration-200 border-transparent',
-			dndStore.dragState === DRAG_STATE.DRAGGING && 'border-blue-200 bg-blue-50/50',
-			dndStore.dragState === DRAG_STATE.INSERTING && 'border-blue-400 bg-blue-50/50'
-		)}
-		data-isdragging={dndStore.dragState === DRAG_STATE.INSERTING || dndStore.dragState === DRAG_STATE.SORTING}
+			dndStore.dropZoneReady && 'border-blue-200! bg-blue-50/50',
+			dndStore.dropZoneActive && 'border-blue-400!'
+		]}
+		data-isdragging={dndStore.dropZoneActive}
 		data-testid="form"
 	>
 		<div class="relative p-1.5 min-h-17 {form.fields.length === 0 && 'justify-center items-center'}" data-testid="dropzone" id="dropzone">
@@ -60,15 +60,17 @@
 					<DropIndicator />
 				{/if}
 				{#each form.fields as field, index (field.id)}
-					{@const { RenderComponent } = getFieldComponent(field.type)}
+					{@const { Component } = getFieldComponent(field.type)}
 					{@const isActive = form.activeElement && form.activeElement.id === field.id}
+					{@const isSorting = dndStore.dragIndex === index}
 					{@const show = dndStore.insertingMode(index) === INSERT_MODE.INSIDE}
 					{@const isLast = dndStore.insertingMode(index) === INSERT_MODE.LAST}
 					{#if show}
 						<DropIndicator />
 					{/if}
 					<div
-						class="relative"
+						class="relative bg-white"
+						class:opacity-50={isSorting}
 						data-testid="form-field-{field.type}"
 						data-isactive={isActive}
 						data-form-element={index}
@@ -76,10 +78,13 @@
 						use:elementClick={() => (form.activeElement = field)}
 						transition:fade={{ duration: 150 }}
 					>
+						{#if isSorting}
+							<div class="absolute top-0 left-0 w-full h-full bg-blue-500/20 z-10 rounded-sm"></div>
+						{/if}
 						<div class="relative">
 							<div
 								class={twMerge(
-									'relative flex rounded-sm border shadow-xs shadow-slate-200 hover:shadow-sm bg-white',
+									'relative flex rounded-sm border shadow-xs shadow-slate-200 hover:shadow-sm',
 									isActive ? 'border-blue-600' : 'border-slate-200',
 									isPreview.state && 'border-slate-50'
 								)}
@@ -88,7 +93,7 @@
 									class="flex flex-col items-center border-e border-slate-300 bg-slate-50 hover:bg-slate-100 rounded-s-sm p-1 gap-2 w-6"
 									class:hidden={isPreview.state}
 								>
-									<div {@attach sort(index, field, RenderComponent)}>
+									<div {@attach sort(index, field, Component)}>
 										<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
 									</div>
 									<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-xs">
@@ -105,11 +110,11 @@
 										</div>
 									</Popover>
 								</div>
-								<div class="relative flex flex-col justify-center p-2 w-full bg-white rounded-e-sm">
+								<div class="relative flex flex-col justify-center p-2 w-full rounded-e-sm">
 									{#if field.category === ELEMENT_TYPES.FORMFIELDS}
 										<Label {field} />
 									{/if}
-									<RenderComponent onchange={form.handleChange} {field} />
+									<Component onchange={form.handleChange} {field} />
 								</div>
 							</div>
 						</div>

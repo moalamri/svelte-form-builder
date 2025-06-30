@@ -1,6 +1,6 @@
 import Ghost from '$lib/components/elements/Ghost.svelte';
 import { dndStore } from '$lib/stores/dnd.svelte';
-import { getEventHost } from './helpers';
+import { getEventHost } from './host';
 import { mount, unmount } from 'svelte';
 import type { DragEvent, GhostElementOptions } from '$lib/types';
 
@@ -11,6 +11,7 @@ class GhostElement {
 	left: number;
 	height: number;
 	options: GhostElementOptions;
+	originalElement: HTMLElement;
 	ghostComponent: any;
 	ghostElement: HTMLElement;
 
@@ -20,11 +21,11 @@ class GhostElement {
 	 * @param event - The drag event containing initial position data
 	 * @param rect - The bounding client rect of the original dragged element
 	 */
-	create(originalElement: HTMLElement, event: DragEvent) {
+	create(event: DragEvent) {
 		const coords = getEventHost(event);
 
 		// Calculate the initial offset from the element's top-left corner to the cursor position
-		const rect = originalElement.getBoundingClientRect();
+		const rect = this.originalElement.getBoundingClientRect();
 		this.x = coords.clientX - rect.left;
 		this.y = coords.clientY - rect.top;
 		this.left = rect.left;
@@ -66,11 +67,8 @@ class GhostElement {
 	mount() {
 		this.ghostComponent = mount(Ghost, {
 			target: document.body,
-			intro: false,
-			props: {
-				field: this.options.field,
-				originalComponent: this.options.component,
-			},
+			
+			props: this.options,
 		});
 	}
 
@@ -87,8 +85,9 @@ class GhostElement {
 
 	constructor (originalElement: HTMLElement, event: DragEvent, options: GhostElementOptions) {
 		this.options = options;
+		this.originalElement = originalElement;
+		this.create(event);
 		this.mount();
-		this.create(originalElement, event);
 	}
 }
 

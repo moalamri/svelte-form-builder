@@ -1,4 +1,6 @@
-import { getEventHost, getElementUnder, getFieldElement, isOnDropZone, getDropIndex } from '$lib/utils/dnd/helpers';
+import { getEventHost } from '$lib/utils/dnd/host';
+import { isOnDropZone, getDropIndex } from '$lib/utils/dnd/position';
+import { getElementUnder, getFieldElement } from '$lib/utils/dnd/element';
 import GhostElement from '$lib/utils/dnd/ghost';
 import { dndStore } from '$lib/stores/dnd.svelte';
 import { getFieldComponent, insertField } from '$lib/utils/form';

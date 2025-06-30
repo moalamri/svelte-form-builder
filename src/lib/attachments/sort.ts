@@ -1,11 +1,13 @@
-import { getDropIndex, getElementAtPosition, getFieldElement } from '../utils/dnd/helpers';
+import { getElementAtPosition, getFieldElement } from '$lib/utils/dnd/element';
+import { getSortIndex } from '$lib/utils/dnd/position';
 import type { Attachment } from 'svelte/attachments';
-import { dndStore } from '../stores/dnd.svelte';
-import GhostElement from '../utils/dnd/ghost';
-import { DRAG_STATE } from '../utils/enums';
+import { dndStore } from '$lib/stores/dnd.svelte';
+import GhostElement from '$lib/utils/dnd/ghost';
+import { DRAG_STATE } from '$lib/utils/enums';
 import form from '$lib/stores/form.svelte';
+import { sortField } from '$lib/utils/form';
 
-function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, RenderComponent: any) {
+function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, Component: any) {
         let ghost: GhostElement | null = null;
 
         function updateDropZone(event: TouchEvent | MouseEvent) {
@@ -14,7 +16,7 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, R
                 dndStore.dragState = DRAG_STATE.SORTING;
                 const { element: fieldElement, index, centerY } = getFieldElement(element);
                 if (fieldElement) {
-                        dndStore.dropIndex = getDropIndex(coords.clientY, centerY, index);
+                        dndStore.dropIndex = getSortIndex(coords.clientY, centerY, dndStore.dragIndex, index);
                 }
         }
 
@@ -35,8 +37,9 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, R
                 const { element } = getFieldElement(sortBy);
                 if (!element) return;
                 dndStore.dragState = DRAG_STATE.DRAGGING;
+                dndStore.dragIndex = elementIndex;
                 form.activeElement = field;
-                ghost = new GhostElement(element, event, { field: field, component: RenderComponent });
+                ghost = new GhostElement(element, event, { field: field, component: Component, mode: 'sort' });
         }
 
         /**
@@ -53,12 +56,10 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, R
  */
         function drop(_: TouchEvent | MouseEvent) {
                 if (!ghost) return;
-
-                if (dndStore.dragState === DRAG_STATE.SORTING) {
-                        //  insertField(elementType, dndStore.dropIndex);
-                        console.log('drop', dndStore.dropIndex);
+                if (dndStore.dragState === DRAG_STATE.SORTING && dndStore.dropIndex !== null) {
+                        const to = dndStore.dropIndex > dndStore.dragIndex ? dndStore.dropIndex - 1 : dndStore.dropIndex;
+                        sortField(dndStore.dragIndex, to);
                 }
-
                 end();
         }
 
@@ -83,6 +84,6 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, R
         };
 }
 
-export function sort(elementIndex: number, field: any, RenderComponent: any): Attachment {
-        return (sortElement: HTMLElement) => sortAttachment(sortElement, elementIndex, field, RenderComponent);
+export function sort(elementIndex: number, field: any, Component: any): Attachment {
+        return (sortElement: HTMLElement) => sortAttachment(sortElement, elementIndex, field, Component);
 }
