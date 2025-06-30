@@ -3,7 +3,6 @@
 	import { dndStore } from '$lib/stores/dnd.svelte';
 	import Label from './Label.svelte';
 	import Icon from '@iconify/svelte';
-	import { fade } from 'svelte/transition';
 
 	const { field, component, mode }: { field: any; component?: any; mode: 'insert' | 'sort' } = $props();
 
@@ -18,7 +17,6 @@
 	data-testid="ghost-element-{field.type}"
 	bind:this={dndStore.ghostElement}
 	bind:clientHeight={dndStore.ghostElementHeight}
-	in:fade={{ duration: 150 }}
 >
 	<div class="relative flex bg-white border border-blue-600 rounded-sm shadow-slate-200 min-h-16">
 		{#if mode === 'sort'}
