@@ -13,7 +13,7 @@ export const FORM_FIELD_TESTID = {
 	RADIO: 'form-field-radio',
 	TEXTAREA: 'form-field-textarea',
 	DIVIDER: 'form-field-divider',
-	TITLE: 'form-field-title'
+	TITLE: 'form-field-title',
 };
 
 export const AREA_TESTID = {
@@ -40,3 +40,7 @@ export const BUTTONS_TESTID = {
 	TOGGLE_LEFT_PANEL: 'toggle-left-panel',
 	TOGGLE_RIGHT_PANEL: 'toggle-right-panel'
 };
+
+export const FORM = {
+	ELEMENT: 'data-form-element'
+}

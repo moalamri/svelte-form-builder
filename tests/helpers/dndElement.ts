@@ -15,11 +15,11 @@ type DndElementOptions = {
 
 export const dndElement = async (page: Page, toDragTestId: string, options: DndElementOptions) => {
 	const { dropZoneBoundingBox, steps = 4, mouseUp = true } = options;
-	const { x, y, width, height } = dropZoneBoundingBox;
+	const { x, y, height } = dropZoneBoundingBox;
 
 	await page.getByTestId(toDragTestId).hover();
 	await page.mouse.down();
-	await page.mouse.move(x + width / 2, y + height / 2, { steps });
+	await page.mouse.move(x + 20, y + height / 2, { steps });
 	if (mouseUp) {
 		await page.mouse.up();
 	}
