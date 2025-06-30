@@ -43,8 +43,8 @@ test.describe('Sort Form Elements', () => {
                 expect(droppedInput).toHaveAttribute(FORM.ELEMENT, '1');
                 expect(droppedTitle).toHaveAttribute(FORM.ELEMENT, '0');
 
-                const { height: titleHeight } = await page.getByTestId(FORM_FIELD_TESTID.TITLE).boundingBox();
-                const { height: inputHeight, y: inputY } = await page.getByTestId(FORM_FIELD_TESTID.INPUT).boundingBox();
+                const { height: titleHeight } = await droppedTitle.boundingBox();
+                const { height: inputHeight, y: inputY } = await droppedInput.boundingBox();
                 const toY = (inputY + inputHeight) - (titleHeight / 5);
 
                 // Start dragging the first element
