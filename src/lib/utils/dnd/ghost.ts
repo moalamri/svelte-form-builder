@@ -57,9 +57,8 @@ class GhostElement {
 			target: document.body,
 			intro: false,
 			props: {
-				type: this.options.elementType,
+				field: this.options.field,
 				originalComponent: this.options.component,
-				originalField: this.options.field
 			},
 		});
 	}

@@ -41,7 +41,7 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, R
                 if (!element) return;
                 dndStore.dragState = DRAG_STATE.DRAGGING;
                 form.activeElement = field;
-                ghost = new GhostElement(element, event, { elementType: field.type, component: RenderComponent, field });
+                ghost = new GhostElement(element, event, { field: field, component: RenderComponent });
         }
 
         /**

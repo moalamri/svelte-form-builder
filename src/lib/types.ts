@@ -22,7 +22,6 @@ export type FieldElement = {
 };
 
 export type GhostElementOptions = {
-	elementType: string;
-	field?: any;
+	field: any;
 	component?: any;
 };

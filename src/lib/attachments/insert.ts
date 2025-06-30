@@ -1,7 +1,7 @@
 import { getEventHost, getElementUnder, getFieldElement, isOnDropZone, getDropIndex } from '$lib/utils/dnd/helpers';
 import GhostElement from '$lib/utils/dnd/ghost';
 import { dndStore } from '$lib/stores/dnd.svelte';
-import { insertField } from '$lib/utils/form';
+import { getFieldComponent, insertField } from '$lib/utils/form';
 import type { Attachment } from 'svelte/attachments';
 import form from '$lib/stores/form.svelte';
 import { DRAG_STATE } from '$lib/utils/enums';
@@ -48,7 +48,8 @@ function insertAttachment(element: HTMLElement, elementType: string) {
                 event.preventDefault();
                 dragElem = element;
                 dndStore.dragState = DRAG_STATE.DRAGGING;
-                ghost = new GhostElement(dragElem, event, { elementType });
+                const { field } = getFieldComponent(elementType);
+                ghost = new GhostElement(dragElem, event, { field: field });
         }
 
         /**
