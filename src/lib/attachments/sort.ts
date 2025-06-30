@@ -3,6 +3,7 @@ import type { Attachment } from 'svelte/attachments';
 import { dndStore } from '../stores/dnd.svelte';
 import GhostElement from '../utils/dnd/ghost';
 import { DRAG_STATE } from '../utils/enums';
+import form from '$lib/stores/form.svelte';
 
 function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, RenderComponent: any) {
         let ghost: GhostElement | null = null;
@@ -36,9 +37,10 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, R
  */
         function start(event: TouchEvent | MouseEvent) {
                 event.preventDefault();
-                dndStore.dragState = DRAG_STATE.DRAGGING;
                 const { element } = getFieldElement(sortBy);
                 if (!element) return;
+                dndStore.dragState = DRAG_STATE.DRAGGING;
+                form.activeElement = field;
                 ghost = new GhostElement(element, event, { elementType: field.type, component: RenderComponent, field });
         }
 
