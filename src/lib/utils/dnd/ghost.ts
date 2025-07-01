@@ -67,7 +67,7 @@ class GhostElement {
 	mount() {
 		this.ghostComponent = mount(Ghost, {
 			target: document.body,
-			
+			intro: false,
 			props: this.options,
 		});
 	}

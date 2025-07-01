@@ -12,7 +12,7 @@
 </script>
 
 <div
-	class="fixed z-9000 pointer-events-none left-0 top-0 will-change-transform transition-none animate-none opacity-0"
+	class="fixed z-9000 pointer-events-none left-0 top-0 will-change-transform transition-opacity duration-200 animate-none opacity-0"
 	style="width: {dndStore.dropZoneWidth}px;"
 	data-testid="ghost-element-{field.type}"
 	bind:this={dndStore.ghostElement}

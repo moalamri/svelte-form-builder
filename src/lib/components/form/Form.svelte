@@ -1,6 +1,6 @@
 <script lang="ts">
 	import DropIndicator from '$lib/components/form/DropIndicator.svelte';
-	import { DRAG_STATE, ELEMENT_TYPES, INSERT_MODE } from '$lib/utils/enums';
+	import { ELEMENT_TYPES, INSERT_MODE } from '$lib/utils/enums';
 	import { isPreview } from '$lib/stores/flags.svelte';
 	import form from '$lib/stores/form.svelte';
 	import { elementClick } from '$lib/actions/elementClick';
