@@ -29,6 +29,7 @@ function insertAttachment(element: HTMLElement, elementType: string) {
                                 dndStore.dropIndex = getDropIndex(coords.clientY, centerY, index);
                         }
                 } else {
+                        dndStore.dropIndex = null;
                         dndStore.dragState = DRAG_STATE.DRAGGING;
                 }
         }
@@ -51,7 +52,7 @@ function insertAttachment(element: HTMLElement, elementType: string) {
                 dragElem = element;
                 dndStore.dragState = DRAG_STATE.DRAGGING;
                 const { field } = getFieldComponent(elementType);
-                ghost = new GhostElement(dragElem, event, { field: field });
+                ghost = new GhostElement(dragElem, event, { field: field, mode: 'insert' });
         }
 
         /**
