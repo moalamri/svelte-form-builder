@@ -49,6 +49,8 @@ function insertAttachment(element: HTMLElement, elementType: string) {
          */
         function start(event: TouchEvent | MouseEvent) {
                 event.preventDefault();
+                event.stopPropagation();
+
                 dragElem = element;
                 dndStore.dragState = DRAG_STATE.DRAGGING;
                 const { field } = getFieldComponent(elementType);
@@ -59,9 +61,10 @@ function insertAttachment(element: HTMLElement, elementType: string) {
          * Handles drag movement
          */
         function move(event: TouchEvent | MouseEvent) {
-                if (!dragElem || !ghost) return;
                 event.preventDefault();
+                event.stopPropagation();
 
+                if (!dragElem || !ghost) return;
                 ghost.update(event);
                 updateDropZone(event);
         }
@@ -69,7 +72,10 @@ function insertAttachment(element: HTMLElement, elementType: string) {
         /**
          * Handles the drop operation
          */
-        function drop(_: TouchEvent | MouseEvent) {
+        function drop(event: TouchEvent | MouseEvent) {
+                event.preventDefault();
+                event.stopPropagation();
+
                 if (!dragElem || !ghost) return;
 
                 if (dndStore.dragState === DRAG_STATE.INSERTING) {

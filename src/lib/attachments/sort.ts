@@ -33,6 +33,8 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, C
  */
         function start(event: TouchEvent | MouseEvent) {
                 event.preventDefault();
+                event.stopPropagation();
+
                 const { element } = getFieldElement(sortBy);
                 if (!element) return;
                 dndStore.dragState = DRAG_STATE.SORTING;
@@ -45,15 +47,20 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, C
  * Handles drag movement
  */
         function move(event: TouchEvent | MouseEvent) {
-                if (!ghost) return;
                 event.preventDefault();
+                event.stopPropagation();
+
+                if (!ghost) return;
                 updateDropZone(event);
         }
 
         /**
  * Handles the drop operation
  */
-        function drop(_: TouchEvent | MouseEvent) {
+        function drop(event: TouchEvent | MouseEvent) {
+                event.preventDefault();
+                event.stopPropagation();
+
                 if (!ghost) return;
                 if (dndStore.dragState === DRAG_STATE.SORTING && dndStore.dropIndex !== null) {
                         const to = dndStore.dropIndex > dndStore.dragIndex ? dndStore.dropIndex - 1 : dndStore.dropIndex;
