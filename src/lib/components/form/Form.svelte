@@ -4,11 +4,11 @@
 	import { isPreview } from '$lib/stores/flags.svelte';
 	import form from '$lib/stores/form.svelte';
 	import { elementClick } from '$lib/actions/elementClick';
-	import { fade } from 'svelte/transition';
 	import Popover from '$lib/components/Popover.svelte';
 	import { twMerge } from 'tailwind-merge';
 	import { dndStore } from '$lib/stores/dnd.svelte';
 	import { sort } from '$lib/attachments/sort';
+	import autoAnimate from '@formkit/auto-animate';
 	import { getFieldComponent } from '$lib/utils/form';
 	import Empty from '$lib/components/form/Empty.svelte';
 
@@ -53,7 +53,7 @@
 		data-testid="form"
 	>
 		<div class="relative p-1.5 min-h-17 {form.fields.length === 0 && 'justify-center items-center'}" data-testid="dropzone" id="dropzone">
-			<div class="relative flex flex-col gap-1" bind:clientWidth={dndStore.dropZoneWidth}>
+			<div class="relative flex flex-col gap-1" bind:clientWidth={dndStore.dropZoneWidth} use:autoAnimate={{ duration: 150 }}>
 				<!-- Empty form -->
 				<Empty />
 				{#if dndStore.insertingMode() === INSERT_MODE.NEW}
@@ -76,7 +76,6 @@
 						data-form-element={index}
 						id={field.id}
 						use:elementClick={() => (form.activeElement = field)}
-						transition:fade={{ duration: 150 }}
 					>
 						{#if isSorting}
 							<div class="absolute top-0 left-0 w-full h-full bg-blue-500/20 z-10 rounded-sm"></div>

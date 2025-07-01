@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
 	import { dndStore } from '$lib/stores/dnd.svelte';
 	import { DRAG_STATE } from '$lib/utils/enums';
 
@@ -7,7 +6,7 @@
 </script>
 
 {#if show}
-	<div class="flex flex-col items-center justify-center gap-0.5 text-slate-400 min-h-14" in:fade={{ duration: 200, delay: 200 }}>
+	<div class="flex flex-col items-center justify-center gap-0.5 text-slate-400 min-h-14">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
 			><!-- Icon from Lets Icons by Leonid Tsvetkov - https://creativecommons.org/licenses/by/4.0/ --><path
 				fill="currentColor"

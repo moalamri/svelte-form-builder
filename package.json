@@ -14,12 +14,13 @@
 		"prepare": "svelte-kit sync"
 	},
 	"devDependencies": {
-		"@tailwindcss/vite": "^4.1.11",
+		"@formkit/auto-animate": "^0.8.2",
 		"@iconify/svelte": "^5.0.0",
 		"@playwright/test": "^1.53.1",
 		"@sveltejs/adapter-cloudflare": "^7.0.4",
 		"@sveltejs/kit": "^2.22.2",
 		"@sveltejs/vite-plugin-svelte": "^5.1.0",
+		"@tailwindcss/vite": "^4.1.11",
 		"@types/eslint": "^9.6.1",
 		"@types/node": "^24.0.6",
 		"eslint": "^9.30.0",
