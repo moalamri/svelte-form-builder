@@ -21,7 +21,7 @@ class GhostElement {
 	 * @param event - The drag event containing initial position data
 	 * @param rect - The bounding client rect of the original dragged element
 	 */
-	create(event: DragEvent) {
+	private create(event: DragEvent) {
 		const coords = getEventHost(event);
 
 		// Calculate the initial offset from the element's top-left corner to the cursor position
@@ -29,6 +29,9 @@ class GhostElement {
 		this.x = coords.clientX - rect.left;
 		this.y = coords.clientY - rect.top;
 		this.left = rect.left;
+
+		// Change cursor to grabbing/move
+		document.body.style.cursor = this.options.mode === 'insert' ? 'grabbing' : 'move';
 	}
 
 	/**
@@ -36,12 +39,8 @@ class GhostElement {
 	 * @param event - Touch or mouse event containing position data
 	 */
 	update(event: DragEvent) {
-		if (!dndStore.ghostElement) {
-			return;
-		}
-		if (!this.ghostElement) {
-			this.ghostElement = dndStore.ghostElement;
-		}
+		if (!dndStore.ghostElement) return;
+		this.assignGhostElement();
 		const coords = getEventHost(event);
 		this.ghostElement.style.opacity = '0.95';
 		this.ghostElement.style.scale = '0.99';
@@ -53,18 +52,20 @@ class GhostElement {
 	 * @param event - Touch or mouse event containing position data
 	 */
 	updateY(event: DragEvent) {
-		if (!dndStore.ghostElement) {
-			return;
-		}
-		if (!this.ghostElement) {
-			this.ghostElement = dndStore.ghostElement;
-		}
+		if (!dndStore.ghostElement) return;
+		this.assignGhostElement();
 		const coords = getEventHost(event);
 		this.ghostElement.style.opacity = '0.95';
 		this.ghostElement.style.transform = `translate(${this.left}px, ${coords.clientY - this.y}px) translateZ(0)`;
 	}
 
-	mount() {
+	private assignGhostElement() {
+		if (!this.ghostElement) {
+			this.ghostElement = dndStore.ghostElement;
+		}
+	}
+
+	private mount() {
 		this.ghostComponent = mount(Ghost, {
 			target: document.body,
 			intro: false,
@@ -81,6 +82,8 @@ class GhostElement {
 			this.ghostElement.remove();
 			this.ghostElement = null;
 		}
+		// Reset cursor
+		document.body.style.cursor = 'default';
 	}
 
 	constructor (originalElement: HTMLElement, event: DragEvent, options: GhostElementOptions) {
