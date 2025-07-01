@@ -13,7 +13,6 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, C
         function updateDropZone(event: TouchEvent | MouseEvent) {
                 ghost.updateY(event);
                 const { coords, element } = getElementAtPosition(ghost.ghostElement);
-                dndStore.dragState = DRAG_STATE.SORTING;
                 const { element: fieldElement, index, centerY } = getFieldElement(element);
                 if (fieldElement) {
                         dndStore.dropIndex = getSortIndex(coords.clientY, centerY, dndStore.dragIndex, index);
@@ -36,7 +35,7 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, C
                 event.preventDefault();
                 const { element } = getFieldElement(sortBy);
                 if (!element) return;
-                dndStore.dragState = DRAG_STATE.DRAGGING;
+                dndStore.dragState = DRAG_STATE.SORTING;
                 dndStore.dragIndex = elementIndex;
                 form.activeElement = field;
                 ghost = new GhostElement(element, event, { field: field, component: Component, mode: 'sort' });
