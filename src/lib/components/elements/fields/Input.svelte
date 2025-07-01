@@ -1,5 +1,5 @@
 <script lang="ts">
-	const { field, updator }: { field: any; updator: Function } = $props();
+	const { field }: { field: any } = $props();
 </script>
 
 <div class="relative flex items-center w-full">
