@@ -51,7 +51,7 @@ test.describe('Sort Form Elements', () => {
                 const firstHandle = page.locator('.handle').first();
                 await firstHandle.hover();
                 await page.mouse.down();
-                await page.mouse.move(dropZoneBoundingBox.x + 20, toY, { steps: 50 });
+                await page.mouse.move(dropZoneBoundingBox.x + 20, toY, { steps: 10 });
                 // Release to reorder
                 await page.mouse.up();
 
