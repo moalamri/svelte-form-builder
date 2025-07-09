@@ -35,30 +35,30 @@ test.describe('Sort Form Elements', () => {
                 const droppedInput = page.getByTestId(FORM_FIELD_TESTID.INPUT);
                 await expect(droppedInput).toBeVisible();
 
-                await dndElement(page, ELEMENT_TESTID.TITLE, { dropZoneBoundingBox });
-                const droppedTitle = page.getByTestId(FORM_FIELD_TESTID.TITLE);
-                await expect(droppedTitle).toBeVisible();
+                await dndElement(page, ELEMENT_TESTID.CHECKBOX, { dropZoneBoundingBox });
+                const droppedCheckbox = page.getByTestId(FORM_FIELD_TESTID.CHECKBOX);
+                await expect(droppedCheckbox).toBeVisible();
 
-                // The current order is title, input
-                expect(droppedInput).toHaveAttribute(FORM.ELEMENT, '1');
-                expect(droppedTitle).toHaveAttribute(FORM.ELEMENT, '0');
+                // The current order is input, checkbox
+                expect(droppedInput).toHaveAttribute(FORM.ELEMENT, '0');
+                expect(droppedCheckbox).toHaveAttribute(FORM.ELEMENT, '1');
 
-                const { height: titleHeight } = await droppedTitle.boundingBox();
+                const { height: checkboxHeight } = await droppedCheckbox.boundingBox();
                 const { height: inputHeight, y: inputY } = await droppedInput.boundingBox();
-                const toY = (inputY + inputHeight) - (titleHeight / 5);
+                const toY = inputY + inputHeight + checkboxHeight;
 
                 // Start dragging the first element
                 const firstHandle = page.locator('.handle').first();
                 await firstHandle.hover();
                 await page.mouse.down();
-                await page.mouse.move(dropZoneBoundingBox.x + 20, toY, { steps: 5 });
+                await page.mouse.move(dropZoneBoundingBox.x + 20, toY, { steps: 50 });
                 // Release to reorder
                 await page.mouse.up();
 
-                // The new order should be title, input
+                // The new order should be checkbox, input
                 const inputIndex = await page.getByTestId(FORM_FIELD_TESTID.INPUT).getAttribute(FORM.ELEMENT);
-                const titleIndex = await page.getByTestId(FORM_FIELD_TESTID.TITLE).getAttribute(FORM.ELEMENT);
-                expect(inputIndex).toBe('0');
-                expect(titleIndex).toBe('1');
+                const checkboxIndex = await page.getByTestId(FORM_FIELD_TESTID.CHECKBOX).getAttribute(FORM.ELEMENT);
+                expect(inputIndex).toBe('1');
+                expect(checkboxIndex).toBe('0');
         });
 });
