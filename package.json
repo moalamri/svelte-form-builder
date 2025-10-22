@@ -43,7 +43,6 @@
 		"@zag-js/splitter": "^1.26.3",
 		"@zag-js/svelte": "^1.26.3",
 		"clone": "^2.1.2",
-		"runed": "^0.35.1",
 		"tailwind-merge": "^3.3.1",
 		"tailwindcss": "^4.1.15"
 	}
