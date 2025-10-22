@@ -20,6 +20,7 @@ function insertAttachment(element: HTMLElement, elementType: string) {
 		if (isOnDropZone(elemUnder)) {
 			dndStore.dragState = DRAG_STATE.INSERTING;
 			if (form.fields.length === 0) {
+				dndStore.dropIndex = 0;
 				return;
 			}
 			const { element, index, centerY } = getFieldElement(elemUnder);
