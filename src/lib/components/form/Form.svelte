@@ -68,9 +68,6 @@
 						id={field.id}
 						use:elementClick={() => (form.activeElement = field)}
 					>
-						{#if isSorting}
-							<div class="absolute top-0 left-0 w-full h-full bg-blue-500/10 z-10 rounded-sm"></div>
-						{/if}
 						<div class="relative">
 							<div
 								class={twMerge(
