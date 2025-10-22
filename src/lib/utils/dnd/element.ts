@@ -33,7 +33,7 @@ export function getElementUnder(event: DragEvent): HTMLElement | null {
  * Looks for elements with the 'data-form-element' attribute.
  */
 export function getFieldElement(element: HTMLElement): FieldElementInfo {
-	const field = element.closest('[data-form-element]') as HTMLElement | null;
+	const field = element?.closest('[data-form-element]') as HTMLElement | null;
 	const indexAttr = field?.getAttribute('data-form-element');
 	const rect = field?.getBoundingClientRect();
 
