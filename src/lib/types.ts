@@ -26,13 +26,3 @@ export type GhostElementOptions = {
 	component?: any;
 	mode: 'insert' | 'sort';
 };
-
-export type DraggableElementOptions = {
-	type: string;
-};
-
-export type SortableElementOptions = {
-	elementIndex: number;
-	field: any;
-	Component: Component;
-};

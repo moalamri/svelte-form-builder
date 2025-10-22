@@ -7,6 +7,7 @@
 	import Popover from '$lib/components/Popover.svelte';
 	import { twMerge } from 'tailwind-merge';
 	import { dndStore } from '$lib/stores/dnd.svelte';
+	import { sort } from '$lib/attachments/sort';
 	import autoAnimate from '@formkit/auto-animate';
 	import { getFieldComponent } from '$lib/utils/form';
 	import Empty from '$lib/components/form/Empty.svelte';
@@ -15,7 +16,6 @@
 	import Button from '$lib/components/Button.svelte';
 	import Label from '$lib/components/elements/Label.svelte';
 	import Icon from '@iconify/svelte';
-	import { sortableElement } from '$lib/actions/sortableElement';
 
 	// Inspect and log form changes
 	$inspect(form.fields);
@@ -92,7 +92,7 @@
 									class="flex flex-col items-center border-e border-slate-300 bg-slate-50 hover:bg-slate-100 rounded-s-sm p-1 gap-2 w-6"
 									class:hidden={isPreview.state}
 								>
-									<div use:sortableElement={{ elementIndex: index, field, Component }}>
+									<div {@attach sort(index, field, Component)}>
 										<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
 									</div>
 									<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-xs">
