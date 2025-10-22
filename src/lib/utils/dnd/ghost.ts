@@ -4,7 +4,6 @@ import { getEventHost } from './host';
 import { mount, unmount } from 'svelte';
 import type { DragEvent, GhostElementOptions } from '$lib/types';
 
-
 class GhostElement {
 	x: number;
 	y: number;
@@ -69,7 +68,7 @@ class GhostElement {
 		this.ghostComponent = mount(Ghost, {
 			target: document.body,
 			intro: false,
-			props: this.options,
+			props: this.options
 		});
 	}
 
@@ -86,7 +85,7 @@ class GhostElement {
 		document.body.style.cursor = 'default';
 	}
 
-	constructor (originalElement: HTMLElement, event: DragEvent, options: GhostElementOptions) {
+	constructor(originalElement: HTMLElement, event: DragEvent, options: GhostElementOptions) {
 		this.options = options;
 		this.originalElement = originalElement;
 		this.create(event);

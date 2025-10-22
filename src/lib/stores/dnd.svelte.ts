@@ -1,7 +1,6 @@
 import { DRAG_STATE, INSERT_MODE } from '$lib/utils/enums';
 import form from './form.svelte';
 
-
 class DndStore {
 	#dragState = $state(DRAG_STATE.IDLE);
 	#ghostElement = $state<HTMLElement | null>(null);
@@ -71,9 +70,11 @@ class DndStore {
 		if (this.#dragState !== DRAG_STATE.INSERTING && index === null && this.fieldCount === 0) return INSERT_MODE.NONE;
 		if (this.#dragState === DRAG_STATE.INSERTING && index === null && this.fieldCount === 0) return INSERT_MODE.NEW;
 		if (this.dropIndex === index && this.fieldCount > 0) return INSERT_MODE.INSIDE;
-		if ((this.dragState === DRAG_STATE.INSERTING || this.dragState === DRAG_STATE.SORTING)
-			&& this.dropIndex === this.fieldCount
-			&& this.dropIndex === index + 1) {
+		if (
+			(this.dragState === DRAG_STATE.INSERTING || this.dragState === DRAG_STATE.SORTING) &&
+			this.dropIndex === this.fieldCount &&
+			this.dropIndex === index + 1
+		) {
 			return INSERT_MODE.LAST;
 		}
 	}

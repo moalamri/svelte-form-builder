@@ -85,4 +85,4 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: 'svelte-form-builder'
-          directory: '.svelte-kit/cloudflare' 
+          directory: '.svelte-kit/cloudflare'

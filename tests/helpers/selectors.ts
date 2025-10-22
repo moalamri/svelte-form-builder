@@ -13,7 +13,7 @@ export const FORM_FIELD_TESTID = {
 	RADIO: 'form-field-radio',
 	TEXTAREA: 'form-field-textarea',
 	DIVIDER: 'form-field-divider',
-	TITLE: 'form-field-title',
+	TITLE: 'form-field-title'
 };
 
 export const AREA_TESTID = {
@@ -43,4 +43,4 @@ export const BUTTONS_TESTID = {
 
 export const FORM = {
 	ELEMENT: 'data-form-element'
-}
+};
