@@ -44,9 +44,7 @@ export function prepareField(type: string): any {
  */
 export function insertField(type: string, index: number) {
 	const newField = prepareField(type);
-	// Insert the new field at the specified index
-	form.fields.splice(index, 0, newField);
-	form.activeElement = newField;
+	form.addField(newField, index);
 }
 
 export function sortField(from: number, to: number) {
