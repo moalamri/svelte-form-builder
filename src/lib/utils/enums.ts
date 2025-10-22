@@ -1,5 +1,3 @@
-
-
 export enum SPLITTER_IDS {
 	ELEMENTS = 'elements',
 	FORM = 'form',

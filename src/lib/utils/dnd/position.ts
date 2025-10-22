@@ -1,4 +1,4 @@
-import { ACTIVE_ZONE } from "$lib/utils/enums";
+import { ACTIVE_ZONE } from '$lib/utils/enums';
 
 export function closestZone(element: HTMLElement | null): ACTIVE_ZONE | null {
 	if (!element) return null;
