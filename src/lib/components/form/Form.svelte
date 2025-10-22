@@ -17,8 +17,6 @@
 	import Label from '$lib/components/elements/Label.svelte';
 	import Icon from '@iconify/svelte';
 
-	// Inspect and log form changes
-
 	// Submit form.
 	const onSubmit = async (e: Event): Promise<void> => {
 		e.preventDefault();
