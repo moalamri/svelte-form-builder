@@ -1,10 +1,8 @@
 <script lang="ts">
-	const { isActive } = $props();
+	const { ...rest } = $props();
 </script>
 
 <div
-	class={[
-		'relative w-0.5 flex justify-center items-center h-full transition-colors duration-100 ease-linear',
-		isActive ? 'bg-blue-700/50' : 'bg-slate-200 hover:bg-slate-300'
-	]}
+	class={'w-[3px] transition-colors duration-100 ease-linear bg-slate-200 outline-blue-700/50 active:outline active:bg-blue-700/50'}
+	{...rest}
 ></div>

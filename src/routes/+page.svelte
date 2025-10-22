@@ -6,15 +6,24 @@
 	import PaneResizer from './components/PaneResizer.svelte';
 	import Header from './components/Header.svelte';
 	import Form from '$lib/components/form/Form.svelte';
-	import { Splitter } from 'ui-ingredients';
 	import { SPLITTER_IDS } from '$lib/utils/enums';
-
-	let activeResizer = $state();
+	import { machine, connect, type Props } from '@zag-js/splitter';
+	import { useMachine, normalizeProps } from '@zag-js/svelte';
 
 	const showLeftPanel = $derived(!isPreview.state && showLPanel.state);
 	const showRightPanel = $derived(!isPreview.state && showRPanel.state);
-	const activeResizerLeft = $derived(activeResizer === SPLITTER_IDS.TRIGGER_ELEMENTS_TO_FORM);
-	const activeResizerRight = $derived(activeResizer === SPLITTER_IDS.TRIGGER_FORM_TO_EDITOR);
+
+	const id = $props.id();
+	const service = useMachine<any>(machine, {
+		id,
+		defaultSize: [20, 60, 20],
+		panels: [
+			{ id: SPLITTER_IDS.ELEMENTS, minSize: 15, maxSize: 25 },
+			{ id: SPLITTER_IDS.FORM, minSize: 50, maxSize: 100 },
+			{ id: SPLITTER_IDS.EDITOR, minSize: 15, maxSize: 25 }
+		]
+	} as Props);
+	const api = $derived(connect(service, normalizeProps));
 
 	$effect(() => {
 		if (isMobile.state) {
@@ -35,38 +44,20 @@
 	<JsonModal />
 {/if}
 
-<Splitter.Root
-	panels={[
-		{ id: SPLITTER_IDS.ELEMENTS, minSize: 15, maxSize: 25 },
-		{ id: SPLITTER_IDS.FORM, minSize: 50, maxSize: 100 },
-		{ id: SPLITTER_IDS.EDITOR, minSize: 15, maxSize: 25 }
-	]}
-	defaultSize={[20, 60, 20]}
-	style="height: calc(100vh - 38px); justify-content: center;"
-	onResize={(details) => {
-		activeResizer = details.resizeTriggerId;
-	}}
-	onResizeEnd={(_) => {
-		activeResizer = undefined;
-	}}
->
+<div {...api.getRootProps()} class="min-h-[calc(100dvh-38px)]">
 	{#if showLeftPanel}
-		<Splitter.Panel id={SPLITTER_IDS.ELEMENTS} class="relative p-1 overflow-auto! bg-slate-100/50">
+		<div {...api.getPanelProps({ id: SPLITTER_IDS.ELEMENTS })} class="relative p-1 overflow-auto! bg-slate-100/50">
 			<ElementsListPanel />
-		</Splitter.Panel>
+		</div>
+		<PaneResizer {...api.getResizeTriggerProps({ id: SPLITTER_IDS.TRIGGER_ELEMENTS_TO_FORM })} />
 	{/if}
-	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_ELEMENTS_TO_FORM} class="focus:outline-hidden pe-1">
-		<PaneResizer isActive={activeResizerLeft} />
-	</Splitter.ResizeTrigger>
-	<Splitter.Panel id={SPLITTER_IDS.FORM} class="relative overflow-auto! p-1.5">
+	<div {...api.getPanelProps({ id: SPLITTER_IDS.FORM })} class="relative overflow-auto! p-1.5">
 		<Form />
-	</Splitter.Panel>
-	<Splitter.ResizeTrigger id={SPLITTER_IDS.TRIGGER_FORM_TO_EDITOR} class="focus:outline-hidden ps-1">
-		<PaneResizer isActive={activeResizerRight} />
-	</Splitter.ResizeTrigger>
+	</div>
 	{#if showRightPanel}
-		<Splitter.Panel id={SPLITTER_IDS.EDITOR} class="relative p-1 overflow-auto! bg-slate-100/50">
+		<PaneResizer {...api.getResizeTriggerProps({ id: SPLITTER_IDS.TRIGGER_FORM_TO_EDITOR })}></PaneResizer>
+		<div {...api.getPanelProps({ id: SPLITTER_IDS.EDITOR })} class="relative p-1 overflow-auto! bg-slate-100/50">
 			<SettingsPanel />
-		</Splitter.Panel>
+		</div>
 	{/if}
-</Splitter.Root>
+</div>

@@ -1,32 +1,41 @@
 <script lang="ts">
-	import { Popover } from 'ui-ingredients';
-	import type { PopoverProps } from 'ui-ingredients';
-	import { Portal } from 'ui-ingredients';
+	import { machine, connect, type Props } from '@zag-js/popover';
+	import { portal, useMachine, normalizeProps } from '@zag-js/svelte';
 	import { twMerge } from 'tailwind-merge';
+	import type { Snippet } from 'svelte';
 
-	type Props = { title?: string; description?: string; children: any; trigger: any; class?: string } & PopoverProps;
+	type PopoverProps = {
+		title?: string;
+		description?: string;
+		children: Snippet;
+		trigger: Snippet;
+		class?: string;
+	} & Partial<Props>;
 
-	let { title, description, children, trigger, class: cls, ...rest }: Props = $props();
+	let { title, description, children, trigger, class: cls, ...rest }: PopoverProps = $props();
 
-	const defaultClass = 'bg-white rounded-sm border border-slate-400 shadow-xs text-sm z-50';
+	const defaultClass = 'bg-white rounded-sm border border-slate-400 shadow-xs text-sm px-2 z-50';
 	const contentClass = twMerge(defaultClass, cls);
+
+	const id = $props.id();
+	const service = useMachine(machine, {
+		id,
+		positioning: {
+			placement: 'top'
+		}
+	});
+	const api = $derived(connect(service, normalizeProps));
 </script>
 
-<Popover.Root {...rest}>
-	<Popover.Trigger>{@render trigger()}</Popover.Trigger>
-	<Portal>
-		<Popover.Positioner>
-			<Popover.Content class={contentClass}>
-				<div class:p-2={!!title || !!description}>
-					{#if title}
-						<Popover.Title class="text-slate-800 font-semibold">{title}</Popover.Title>
-					{/if}
-					{#if description}
-						<Popover.Description class="text-slate-700">{description}</Popover.Description>
-					{/if}
-				</div>
-				{@render children()}
-			</Popover.Content>
-		</Popover.Positioner>
-	</Portal>
-</Popover.Root>
+<button {...api.getTriggerProps()}>{@render trigger()}</button>
+<div use:portal={{ disabled: !api.portalled }} {...api.getPositionerProps()} {...rest}>
+	<div {...api.getContentProps()} class={contentClass}>
+		{#if title}
+			<div {...api.getTitleProps()} class="text-slate-800 font-semibold p-2">{title}</div>
+		{/if}
+		{#if description}
+			<div {...api.getDescriptionProps()} class="text-slate-700">{description}</div>
+		{/if}
+		{@render children()}
+	</div>
+</div>

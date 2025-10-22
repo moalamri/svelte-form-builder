@@ -18,7 +18,6 @@
 	import Icon from '@iconify/svelte';
 
 	// Inspect and log form changes
-	$inspect(form.fields);
 
 	// Submit form.
 	const onSubmit = async (e: Event): Promise<void> => {
@@ -28,12 +27,6 @@
 	// Reset form.
 	const onReset = async (e: Event): Promise<void> => {
 		e.preventDefault();
-	};
-
-	// Remove field.
-	const removeField = (fieldId: string): void => {
-		form.activeElement = null;
-		form.fields = form.fields.filter((f) => f.id !== fieldId);
 	};
 </script>
 
@@ -93,17 +86,17 @@
 									class:hidden={isPreview.state}
 								>
 									<div {@attach sort(index, field, Component)}>
-										<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
+										<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-500 hover:text-slate-700" />
 									</div>
 									<Popover positioning={{ placement: 'top' }} portalled={true} class="bg-slate-900/60 backdrop-blur-xs">
 										{#snippet trigger()}
 											<button type="button" data-testid="delete-button">
-												<Icon icon="material-symbols:delete-outline-rounded" class="text-slate-600" />
+												<Icon icon="material-symbols:delete-outline-rounded" class="text-slate-500 hover:text-slate-700" />
 											</button>
 										{/snippet}
 										<div class="flex items-center space-x-2 p-1" data-testid="delete-popover">
 											<p class="text-white text-xs leading-none">Remove this field?</p>
-											<Button size="sm" class="min-w-10" onclick={() => removeField(field.id)} variant="danger" data-testid="delete-button-yes"
+											<Button size="sm" class="min-w-10" onclick={() => form.removeField(field.id)} variant="danger" data-testid="delete-button-yes"
 												>Yes</Button
 											>
 										</div>
@@ -113,7 +106,7 @@
 									{#if field.category === ELEMENT_TYPES.FORMFIELDS}
 										<Label {field} />
 									{/if}
-									<Component onchange={form.handleChange} {field} />
+									<Component onchange={form.handleValueChange} {field} />
 								</div>
 							</div>
 						</div>
