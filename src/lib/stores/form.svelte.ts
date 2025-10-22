@@ -22,7 +22,7 @@ function createFormStore(): FormStore {
 	});
 	let activeElement: any = $state();
 	let history = $state<any[]>([]);
-	let historyIndex = $state(- 1);
+	let historyIndex = $state(-1);
 	const canUndo = $derived(historyIndex >= 0);
 	const canRedo = $derived(historyIndex < history.length - 1);
 
@@ -30,7 +30,6 @@ function createFormStore(): FormStore {
 		if (canUndo) {
 			historyIndex -= 1;
 			form.fields = history[historyIndex] || [];
-			console.log('undo to index', historyIndex);
 		}
 	}
 
@@ -46,13 +45,11 @@ function createFormStore(): FormStore {
 	}
 
 	function handleSettingChange(fieldId: string, value: any, section: string, property: string, index?: number) {
-		// Set the active element's setting
-		console.log('handleSettingChange', fieldId, section, property, index, value);
 		const field = form.fields.find((f) => f.id === fieldId);
 		if (!field) {
 			activeElement = null;
 			return;
-		};
+		}
 		if (index !== undefined) {
 			activeElement.settings[section][index][property] = value;
 			field.settings[section][index][property] = value;
@@ -66,7 +63,7 @@ function createFormStore(): FormStore {
 	function updateHistory() {
 		// Trim future history if we are not at the end
 		if (historyIndex < history.length - 1) {
-			history = history.slice(0, historyIndex + 1)
+			history = history.slice(0, historyIndex + 1);
 		}
 		// Add a snapshot of the current fields to history
 		history.push($state.snapshot(form.fields));
@@ -106,7 +103,7 @@ function createFormStore(): FormStore {
 		get history() {
 			return {
 				get canUndo() {
-					return canUndo
+					return canUndo;
 				},
 				get canRedo() {
 					return canRedo;

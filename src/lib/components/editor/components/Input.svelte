@@ -7,8 +7,6 @@
 		index !== undefined ? form.activeElement.settings[section][index][settingFieldName] : form.activeElement.settings[section][settingFieldName]
 	);
 
-	console.log(form.activeElement.settings[section]);
-
 	function handleValueChange(e: Event): void {
 		const newValue = (e.target as HTMLInputElement).value;
 		form.handleSettingChange(form.activeElement.id, newValue, section, settingFieldName, index);
