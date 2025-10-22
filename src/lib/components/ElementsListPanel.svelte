@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Draggable from '$lib/components/sortablejs/Dragzone.svelte';
+	import Draggable from '$lib/components/zone/Dragzone.svelte';
 	import ElementCard from '$lib/components/elements/ElementCard.svelte';
 	import elements from '$lib/components/elements';
 	import Icon from '@iconify/svelte';
