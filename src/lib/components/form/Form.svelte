@@ -43,7 +43,7 @@
 		data-isdragging={dndStore.activeZone === ACTIVE_ZONE.DROPZONE}
 		data-testid="form"
 	>
-		<div class="relative p-1.5 min-h-17 {form.fields.length === 0 && 'justify-center items-center'}" data-testid="dropzone" id="dropzone">
+		<div class="relative p-1.5 min-h-17 {dndStore.fieldCount === 0 && 'justify-center items-center'}" data-testid="dropzone" id="dropzone">
 			<div class="relative flex flex-col gap-1" bind:clientWidth={dndStore.dropZoneWidth} use:autoAnimate={{ duration: 150 }}>
 				<!-- Empty form -->
 				<Empty />

@@ -5,7 +5,6 @@ import GhostElement from '$lib/utils/dnd/ghost';
 import { dndStore } from '$lib/stores/dnd.svelte';
 import { getFieldComponent, insertField } from '$lib/utils/form';
 import type { Attachment } from 'svelte/attachments';
-import form from '$lib/stores/form.svelte';
 import { ACTIVE_ZONE, DRAG_STATE } from '$lib/utils/enums';
 
 function insertAttachment(element: HTMLElement, elementType: string) {
@@ -21,7 +20,7 @@ function insertAttachment(element: HTMLElement, elementType: string) {
 		if (zone === ACTIVE_ZONE.DROPZONE) {
 			dndStore.dragState = DRAG_STATE.INSERTING;
 			dndStore.activeZone = ACTIVE_ZONE.DROPZONE;
-			if (form.fields.length === 0) {
+			if (dndStore.fieldCount === 0) {
 				dndStore.dropIndex = 0;
 				return;
 			}
