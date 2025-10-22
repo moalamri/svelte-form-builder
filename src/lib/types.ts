@@ -26,3 +26,8 @@ export type GhostElementOptions = {
 	component?: any;
 	mode: 'insert' | 'sort';
 };
+
+export type GhostElementProps = GhostElementOptions & {
+	orgHeight: number;
+	orgWidth: number;
+};

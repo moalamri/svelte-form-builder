@@ -1,14 +1,15 @@
+import type { DragEvent, GhostElementOptions } from '$lib/types';
 import Ghost from '$lib/components/elements/Ghost.svelte';
 import { dndStore } from '$lib/stores/dnd.svelte';
 import { getEventHost } from './host';
 import { mount, unmount } from 'svelte';
-import type { DragEvent, GhostElementOptions } from '$lib/types';
 
 class GhostElement {
 	x: number;
 	y: number;
 	left: number;
-	height: number;
+	orgHeight: number;
+	orgWidth: number;
 	options: GhostElementOptions;
 	originalElement: HTMLElement;
 	ghostComponent: any;
@@ -28,6 +29,8 @@ class GhostElement {
 		this.x = coords.clientX - rect.left;
 		this.y = coords.clientY - rect.top;
 		this.left = rect.left;
+		this.orgHeight = rect.height;
+		this.orgWidth = rect.width;
 
 		// Change cursor to grabbing/move
 		document.body.style.cursor = this.options.mode === 'insert' ? 'grabbing' : 'move';
@@ -68,7 +71,11 @@ class GhostElement {
 		this.ghostComponent = mount(Ghost, {
 			target: document.body,
 			intro: false,
-			props: this.options
+			props: {
+				...this.options,
+				orgHeight: this.orgHeight,
+				orgWidth: this.orgWidth
+			}
 		});
 	}
 

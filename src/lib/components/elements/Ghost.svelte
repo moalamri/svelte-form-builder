@@ -1,18 +1,18 @@
 <script lang="ts">
+	import type { GhostElementProps } from '$lib/types';
 	import { getFieldComponent } from '$lib/utils/form';
 	import { dndStore } from '$lib/stores/dnd.svelte';
 	import Label from './Label.svelte';
 	import Icon from '@iconify/svelte';
 	import ElementCard from './ElementCard.svelte';
 	import { ACTIVE_ZONE } from '$lib/utils/enums';
+	import { scale } from 'svelte/transition';
 
-	const { field, component, mode }: { field: any; component?: any; mode: 'insert' | 'sort' } = $props();
+	const { field, component, mode, orgHeight, orgWidth }: GhostElementProps = $props();
 
 	// Get the component to render the field
 	const { Component } = getFieldComponent(field.type);
 	const Render = component || Component;
-
-	$inspect(dndStore.dropZoneWidth);
 </script>
 
 <div
@@ -22,11 +22,15 @@
 	bind:clientHeight={dndStore.ghostElementHeight}
 >
 	{#if dndStore.activeZone === ACTIVE_ZONE.DRAGZONE}
-		<div class="min-w-14 min-h-14 opacity-50">
+		<div class="opacity-60" style="height: {orgHeight}px; width: {orgWidth}px;" in:scale={{ start: 0.8, duration: 200 }}>
 			<ElementCard element={field} />
 		</div>
 	{:else}
-		<div class="relative flex bg-white border border-blue-600 rounded-sm shadow-slate-200 min-h-16" style="width: {dndStore.dropZoneWidth}px;">
+		<div
+			class="relative flex bg-white border border-blue-600 rounded-sm shadow-slate-200 min-h-16"
+			style="width: {dndStore.dropZoneWidth}px;"
+			in:scale={{ start: 0.8, duration: 200 }}
+		>
 			{#if mode === 'sort'}
 				<div class="flex flex-col items-center border-e border-slate-300 bg-slate-50 hover:bg-slate-100 rounded-s-sm p-1 gap-2 w-6">
 					<Icon icon="fluent:drag-24-regular" class="handle cursor-move text-slate-600" />
