@@ -26,10 +26,8 @@
 	const api = $derived(connect(service, normalizeProps));
 
 	$effect(() => {
-		if (isMobile.state) {
-			showLPanel.state = false;
-			showRPanel.state = false;
-		}
+		showLPanel.state = !isMobile.state;
+		showRPanel.state = !isMobile.state;
 	});
 </script>
 
