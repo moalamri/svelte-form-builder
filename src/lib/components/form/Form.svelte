@@ -1,6 +1,6 @@
 <script lang="ts">
 	import DropIndicator from '$lib/components/form/DropIndicator.svelte';
-	import { ELEMENT_TYPES, INSERT_MODE } from '$lib/utils/enums';
+	import { ACTIVE_ZONE, ELEMENT_TYPES, INSERT_MODE } from '$lib/utils/enums';
 	import { isPreview } from '$lib/stores/flags.svelte';
 	import form from '$lib/stores/form.svelte';
 	import { elementClick } from '$lib/actions/elementClick';
@@ -38,9 +38,9 @@
 		class={[
 			'relative border rounded transition-all duration-200 border-transparent',
 			dndStore.dropZoneReady && 'border-blue-200! bg-blue-50/50',
-			dndStore.dropZoneActive && 'border-blue-400!'
+			dndStore.activeZone === ACTIVE_ZONE.DROPZONE && 'border-blue-400!'
 		]}
-		data-isdragging={dndStore.dropZoneActive}
+		data-isdragging={dndStore.activeZone === ACTIVE_ZONE.DROPZONE}
 		data-testid="form"
 	>
 		<div class="relative p-1.5 min-h-17 {form.fields.length === 0 && 'justify-center items-center'}" data-testid="dropzone" id="dropzone">

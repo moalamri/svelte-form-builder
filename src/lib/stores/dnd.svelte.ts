@@ -1,4 +1,4 @@
-import { DRAG_STATE, INSERT_MODE } from '$lib/utils/enums';
+import { ACTIVE_ZONE, DRAG_STATE, INSERT_MODE } from '$lib/utils/enums';
 import form from './form.svelte';
 
 class DndStore {
@@ -8,6 +8,7 @@ class DndStore {
 	#dropIndex = $state<number | null>(null);
 	#dropZoneWidth = $state(0);
 	#dragIndex = $state<number | null>(null);
+	#activeZone = $state<ACTIVE_ZONE | null>(null);
 	fieldCount = $derived(form.fields.length);
 
 	get dragState(): DRAG_STATE {
@@ -62,8 +63,12 @@ class DndStore {
 		return this.#dragState !== DRAG_STATE.IDLE;
 	}
 
-	get dropZoneActive(): boolean {
-		return this.#dragState === DRAG_STATE.INSERTING || this.#dragState === DRAG_STATE.SORTING;
+	get activeZone(): ACTIVE_ZONE | null {
+		return this.#activeZone;
+	}
+
+	set activeZone(zone: ACTIVE_ZONE | null) {
+		this.#activeZone = zone;
 	}
 
 	insertingMode(index: number = null): INSERT_MODE | null {
@@ -83,9 +88,9 @@ class DndStore {
 		this.#dropIndex = null;
 		this.#dragIndex = null;
 		this.#dragState = DRAG_STATE.IDLE;
-		this.#dropZoneWidth = 0;
 		this.#ghostElement = null;
 		this.#ghostElementHeight = 0;
+		this.#activeZone = null;
 	}
 }
 

@@ -1,14 +1,11 @@
+
+
 export enum SPLITTER_IDS {
 	ELEMENTS = 'elements',
 	FORM = 'form',
 	EDITOR = 'editor',
 	TRIGGER_ELEMENTS_TO_FORM = 'elements:form',
 	TRIGGER_FORM_TO_EDITOR = 'form:editor'
-}
-
-export enum SORTABLEJS {
-	// Drag and drop shared group name
-	GROUPNAME = 'formgroup'
 }
 
 export enum ELEMENT_TYPES {
@@ -43,4 +40,9 @@ export enum INSERT_MODE {
 	NEW,
 	INSIDE,
 	LAST
+}
+
+export enum ACTIVE_ZONE {
+	DROPZONE = 'dropzone',
+	DRAGZONE = 'dragzone'
 }

@@ -1,12 +1,12 @@
 import { getEventHost } from '$lib/utils/dnd/host';
-import { isOnDropZone, getDropIndex } from '$lib/utils/dnd/position';
+import { getDropIndex, closestZone } from '$lib/utils/dnd/position';
 import { getElementUnder, getFieldElement } from '$lib/utils/dnd/element';
 import GhostElement from '$lib/utils/dnd/ghost';
 import { dndStore } from '$lib/stores/dnd.svelte';
 import { getFieldComponent, insertField } from '$lib/utils/form';
 import type { Attachment } from 'svelte/attachments';
 import form from '$lib/stores/form.svelte';
-import { DRAG_STATE } from '$lib/utils/enums';
+import { ACTIVE_ZONE, DRAG_STATE } from '$lib/utils/enums';
 
 function insertAttachment(element: HTMLElement, elementType: string) {
 	let dragElem: HTMLElement | null = null;
@@ -17,8 +17,10 @@ function insertAttachment(element: HTMLElement, elementType: string) {
 	 */
 	function updateDropZone(event: TouchEvent | MouseEvent) {
 		const elemUnder = getElementUnder(event);
-		if (isOnDropZone(elemUnder)) {
+		const zone: ACTIVE_ZONE | null = closestZone(elemUnder);
+		if (zone === ACTIVE_ZONE.DROPZONE) {
 			dndStore.dragState = DRAG_STATE.INSERTING;
+			dndStore.activeZone = ACTIVE_ZONE.DROPZONE;
 			if (form.fields.length === 0) {
 				dndStore.dropIndex = 0;
 				return;
@@ -29,8 +31,13 @@ function insertAttachment(element: HTMLElement, elementType: string) {
 				const coords = getEventHost(event);
 				dndStore.dropIndex = getDropIndex(coords.clientY, centerY, index);
 			}
+		} else if (zone === ACTIVE_ZONE.DRAGZONE) {
+			dndStore.dropIndex = null;
+			dndStore.dragState = DRAG_STATE.DRAGGING;
+			dndStore.activeZone = ACTIVE_ZONE.DRAGZONE;
 		} else {
 			dndStore.dropIndex = null;
+			dndStore.activeZone = null;
 			dndStore.dragState = DRAG_STATE.DRAGGING;
 		}
 	}

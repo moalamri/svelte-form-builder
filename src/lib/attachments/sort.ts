@@ -3,7 +3,7 @@ import { getSortIndex } from '$lib/utils/dnd/position';
 import type { Attachment } from 'svelte/attachments';
 import { dndStore } from '$lib/stores/dnd.svelte';
 import GhostElement from '$lib/utils/dnd/ghost';
-import { DRAG_STATE } from '$lib/utils/enums';
+import { ACTIVE_ZONE, DRAG_STATE } from '$lib/utils/enums';
 import form from '$lib/stores/form.svelte';
 import { sortField } from '$lib/utils/form';
 
@@ -37,6 +37,7 @@ function sortAttachment(sortBy: HTMLElement, elementIndex: number, field: any, C
 
 		const { element } = getFieldElement(sortBy);
 		if (!element) return;
+		dndStore.activeZone = ACTIVE_ZONE.DROPZONE;
 		dndStore.dragState = DRAG_STATE.SORTING;
 		dndStore.dragIndex = elementIndex;
 		form.activeElement = field;
